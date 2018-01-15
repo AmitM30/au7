@@ -1,5 +1,5 @@
 .DS_Store
-www/dist
+#www/dist
 
 # Node
 node_modules

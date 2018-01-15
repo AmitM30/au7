@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 
-import 'framework7/dist/css/framework7.material.css'
-import 'framework7/dist/css/framework7.material.colors.css'
+// import 'framework7/dist/css/framework7.material.css'
+// import 'framework7/dist/css/framework7.material.colors.css'
 import 'framework7/dist/js/framework7.js'
 
 // Framework7 Setup to be called by app.js when DOM is ready
