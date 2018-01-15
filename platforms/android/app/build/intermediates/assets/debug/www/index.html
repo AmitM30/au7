@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<!-- This is the default starter index.html provided by Cordova -->
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+<head>
+    <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *"> -->
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>My App</title>
+    <style>
+        html, body, div, p, table {
+            padding: 0; margin: 0;
+        }
+        .splash img {
+            max-width: 100%;
+        }
+    </style>
+
+    <!-- Favicon -->
+    <!-- <link type="image/x-icon" href="favicon.ico" rel="shortcut icon"> -->
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="dist/styles/site.css" crossorigin>
+
+    <!-- Script Libraries -->
+    <script>
+        window.dataLayer=[];
+        window.dataLayer.push({ 'version': 'checkout-v2', 'view': 'full-width' });
+        window.config = {
+            device: 'mobile',
+            lang: window.location.host.substring(0, 2),
+            country: window.location.host.substring(3,5)
+        };
+        window.Polymer = { dom: 'shady', lazyRegister: true };
+        window.translate = function (value) { return value; };
+    </script>
+    <script src="dist/app-launch-v3.js"></script>
+    <script src="dist/ext/swiper.min.js"></script>
+
+    <!-- <link rel="import" href="dist/elements.html"> -->
+</head>
+<body>
+    <div id="wadi" aurelia-app="main">
+        <div class="splash">
+            <img src="dist/images/splash.png" alt="Loading..." />
+        </div>
+        <script src="cordova.js"></script>
+        <script src="dist/bundle.js"></script>
+    </div>
+    <script nonce>
+        var loadCSS = function (href) {
+            var doc = window.document;
+            var ss = doc.createElement("link");
+            var ref;
+            var collection = window.document.getElementsByTagName("style");
+            var ref = collection[collection.length - 1];
+            var sheets = doc.styleSheets;
+            ss.rel = "stylesheet";
+            ss.href = href;
+            // temporarily, set media to something non-matching to ensure it'll fetch without blocking render
+            ss.media = "only x";
+
+            function ready(cb) {
+                if (doc.body) {
+                    return cb()
+                }
+                setTimeout(function() {
+                    ready(cb)
+                })
+            };
+            ready(function () { ref.parentNode.insertBefore(ss, ref.nextSibling) });
+            var onloadcssdefined = function(cb) {
+                var resolvedHref = ss.href;
+                var i = sheets.length;
+                while (i--) {
+                    if (sheets[i].href === resolvedHref) {
+                        return cb()
+                    }
+                }
+                setTimeout(function () { onloadcssdefined(cb) });
+            };
+
+            function loadCB() {
+                if (ss.addEventListener) {
+                ss.removeEventListener("load", loadCB)
+                }
+                ss.media = "all"
+            }
+            if (ss.addEventListener) {
+                ss.addEventListener("load", loadCB)
+            }
+            ss.onloadcssdefined = onloadcssdefined;
+            onloadcssdefined(loadCB);
+            return ss
+        };
+        loadCSS("dist/styles/lib/wadicons.css");
+    </script>
+
+    <!-- Google Tag Manager -->
+    <!-- <gtm><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5WDH43');</script></gtm> -->
+    
+    <script>window.wadiPageData="{}";</script>
+</body>
+<!-- <body aurelia-app="main">
+    <div class="splash">
+        <img src="dist/images/splash.png" alt="Loading..." />
+    </div>
+    <script src="cordova.js"></script>
+    <script src="dist/bundle.js"></script>
+</body> -->
+</html>

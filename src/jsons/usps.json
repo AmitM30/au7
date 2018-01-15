@@ -1,0 +1,18 @@
+{
+  "usps": {
+    "en": {
+      "data": [
+        { "title": "Buy 100% Authentic Products.", "support": "Always." },
+        { "title": "Get Free Returns.", "support": "No Questions Asked." },
+        { "title": "Cash on Delivery.", "support": "Shop now, pay later." }
+      ]
+    },
+    "ar": {
+      "data": [
+        { "title": "اشتري منتجات أصلية 100%.", "support": "دائما." },
+        { "title": "الاسترجاع مجانا.", "support": "بكل تأكيد." },
+        { "title": "الدفع عند الاستلام.", "support": "تسوق الآن، ادفع لاحقا." }
+      ]
+    }
+  }
+}

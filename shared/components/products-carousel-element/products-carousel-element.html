@@ -1,0 +1,325 @@
+<!--
+Example:
+
+    <products-carousel-element></products-carousel-element>
+
+@demo
+-->
+<script src='./lib/perfect-scrollbar.js'></script>
+<dom-module id="products-carousel-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+
+    :host a.view-all {
+      position: relative;
+    }
+  </style>
+
+  <template>
+    <template is="dom-if" if="[[ !isEmpty ]]" restamp="true">
+      <header class="product-carousel-header" style$="color: [[options.colorTheme]];">
+        <template is="dom-if" if="[[ options.title ]]">
+          <h2>[[ options.title ]]</h2>
+        </template>
+        <a class="cta view-all" hidden$="[[ options.hideViewAll ]]" href="[[ options.url ]]">[[ _translate('View All') ]]<paper-ripple></paper-ripple></a>
+      </header>
+      <content></content>
+      <div class="product-carousel-content">
+        <div class="swiper-container js_frame">
+          <div class="swiper-wrapper js_slides">
+
+            <template is="dom-repeat" items="[[ products ]]" as="product" index-as="i" restamp="true">
+              <div class="swiper-slide js_slide">
+                <div class="product-carousel-item">
+                  <a class="product-carousel-link" on-click="_onClick" href$="[[ _fixedUrl(product.link) ]]" index$="[[ i ]]">
+                    <!-- IMAGE AREA START -->
+                    <div class="image-container">
+                      <template is="dom-if" if="[[ !product.flash ]]" restamp="true">
+                        <template is="dom-if" if="[[ product.ribbon.name ]]">
+                          <p class="product-tag">[[ product.ribbon.name ]]</p>
+                        </template>
+                      </template>
+
+                      <template is="dom-if" if="[[ _hasDiscount(product.price, product.offerPrice) ]]" restamp="true">
+                        <p class="discount-tag">[[ product.discount ]]% [[ _translate('off') ]]</p>
+                      </template>
+
+                      <template is="dom-if" if="[[ product.flash ]]" restamp="true">
+                        <p class="product-tag attention">[[ _translate('Flash Sale') ]]</p>
+                      </template>
+
+                      <img lazy-src$="[[ _getProductImage(product.maxImages, product.imageKey) ]]" on-load="_onLazyImageReady" class="swiper-lazy" index$="[[ i ]]" alt="[[ product.name ]]" />
+                      <div class="swiper-lazy-preloader"></div>
+
+                      <!-- FLASH SALE TIMER START -->
+                      <template is="dom-if" if="[[ product.flash ]]" restamp="true">
+                        <timer-element end="[[ product.flash.endAt ]]" total-qty="[[ product.flash.totQty ]]" available-qty="[[ product.flash.availableQty ]]"></timer-element>
+                      </template>
+                      <!-- FLASH SALE TIMER END -->
+                    </div>
+                    <!-- IMAGE AREA END -->
+
+                    <!-- NAME AND PRICE START -->
+                    <div class="details-container">
+                      <p class="product-carousel-name clamp">[[ product.name ]]</p>
+                      <!-- SALE PRICE -->
+                      <template is="dom-if" if="[[ _hasDiscount(product.price, product.offerPrice) ]]" restamp="true">
+                        <p class="core-product-price product-carousel-price">
+                          <span class="pre-reduction">[[ product.price ]] [[ ctx.currency ]]</span>
+                          <span class="selling-price">[[ product.offerPrice ]] [[ ctx.currency ]]</span>
+                        </p>
+                      </template>
+                      <!-- NORMAL PRICE -->
+                      <template is="dom-if" if="[[ !_hasDiscount(product.price, product.offerPrice) ]]" restamp="true">
+                        <p class="core-product-price product-carousel-price">
+                          <span class="selling-price">[[ product.price ]] [[ ctx.currency ]]</span>
+                        </p>
+                      </template>
+                    </div>
+                    <!-- NAME AND PRICE END -->
+                  </a>
+
+                  <!-- DESKTOP QUICK ADD TO CART OVERLAY START -->
+                  <template is="dom-if" if="[[!isMobile]]" restamp="true">
+                      <div class="options-overlay">
+                        <a class="scrim" on-click="_onClick" href$="[[ _fixedUrl(product.link) ]]" index$="[[ i ]]"></a>
+                        <div class="cta-container">
+                          <template is="dom-if" if="[[!_hasVariations(product)]]">
+                            <cart-button-element
+                              item$="[[_addToCartProduct(product.simples.0.suppliers.0.sku, product)]]"
+                              selected-sku="[[product.simples.0.suppliers.0.sku]]"
+                              in-cart="[[productAlreadyInCart]]"
+                              options='{ "className": "core-block-cta cta-full-width" }'
+                            ></cart-button-element>
+                          </template>
+                          <a class="core-block-cta core-block-cta-sml core-block-cta-support cta-full-width" on-click="_onClick" href$="[[ _fixedUrl(product.link) ]]" index$="[[ i ]]">[[ _translate('View Details') ]]</a>
+                        </div>
+                      </div>
+                  </template>
+                  <!-- DESKTOP QUICK ADD TO CART OVERLAY END -->
+                </div>
+              </div>
+            </template>
+            <template is="dom-if" if="[[ products.length ]]" restamp="true">
+              <div class="swiper-slide js_slide view-all-link">
+                <a class="product-carousel-link" href="[[ options.url ]]">[[ options.title ]]</a>
+                <a class="core-block-cta core-block-cta-sml" href="[[ options.url ]]">[[ _translate('View All') ]]</a>
+              </div>
+            </template>
+
+            <!-- LOADER -->
+            <template is="dom-if" if="[[ !hasProductsLoaded ]]" restamp="true">
+              <div class="loader"><i class="wadicon-spinner wadicon-spin"></i></div>
+            </template>
+          </div>
+          <div class="swiper-pagination" hidden$="[[ options.hidePagination ]]"></div>
+          <div class="swiper-button-prev js_prev prev" hidden$="[[ options.hidePrevNext ]]"></div>
+          <div class="swiper-button-next js_next next" hidden$="[[ options.hidePrevNext ]]"></div>
+        </div>
+      </div>
+    </template>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'products-carousel-element',
+
+    properties: {
+
+      /**
+       * Products array that needs to be displayed to UI
+       */
+      products: {
+        type: Object,
+        observer: "_productsChanged"
+      },
+
+      /**
+       * Options supported by carousel element
+       */
+      options: {
+        type: Object,
+        value: {
+          colorTheme: '',
+          hidePagination: false,
+          hidePrevNext: false,
+          hideViewAll: false,
+          sliderOptions: {},
+          cartButtonOptions: {},
+          baseApi: false
+        }
+      },
+
+      isNearViewPort: {
+        type: Boolean,
+        value: false,
+        observer: '_isNearViewPortChanged'
+      },
+
+      hasProductsLoaded: {
+        type: Boolean,
+        value: false
+      }
+    },
+
+    ready: function () {
+      this.internals = {};
+      this.internals.swiperOptions = {
+        rewind        : false,
+        slidesToScroll: 2
+      };
+
+      this.isEmpty = false;
+    },
+
+    attached: function () {
+      for (prop in this.options) {
+        if (this.options.hasOwnProperty(prop) && typeof this.options[prop] === "string") {
+          if (this.options[prop] === "true") {
+            this.set("options."+ prop, true);
+          } else if (this.options[prop] === "false") {
+            this.set("options."+ prop, false);
+          }
+        }
+      }
+
+      this.options.url = this._loadUrl(this.options.url);
+      this.isMobile = window.config.device === 'mobile' ? true : false;
+
+      // Merge default option with element input options
+      Object.assign(this.internals.swiperOptions, this.options.sliderOptions);
+    },
+
+    _isNearViewPortChanged: function (val) {
+      if (this.isNearViewPort && !this.hasProductsLoaded) {
+        this.classList.add("hidden");
+        if (!this.options.baseApi) {
+          this.fire('load-products', { url: this.options.url, ref: this });
+        } else {
+          this.fire('base-api-request', { url: this.options.url, ref: this });
+        }
+      }
+    },
+
+    _computeDiscount: function (product) {
+      return (product.price - product.offerPrice);
+    },
+
+    _getProductImage: function (numImages, key) {
+      var imageSize = this.isMobile ? '/1-catalog.jpg' : '/1-product.jpg';
+
+      return (numImages && numImages > 0) ? '//' + this.ctx.cdn + '/product/' + key + imageSize : '/dist/images/product-default-catalog-' + this.ctx.lang + '.png';
+    },
+
+    _productsChanged: function (res) {
+      if (typeof res === 'string') {
+        res = JSON.parse(res);
+        this.set('products', res);
+      }
+      this.isEmpty = res.length > 0 ? false : true;
+      this.hasProductsLoaded = true;
+      if (!this.isEmpty) {
+        var _self = this;
+        this.classList.remove("hidden");
+        this.async(function () {
+          _self.swiperInstance = window.swiper(_self.querySelector('.product-carousel-content'), _self.internals.swiperOptions);
+          _self.fire('lazy-load-images', _self);
+          _self.addEventListener('while.swiper.sliding', function () { _self.fire('lazy-load-images', this); }, { passive: true });
+          _self.addEventListener('after.swiper.slide', function (slide) { _self.fire('swiper-swiped', { slide: slide, url: _self.options.url }); }, { passive: true });
+
+          // DESKTOP CUSTOM SCROLLBAR
+          // if (!this.isMobile) {
+          //   [].forEach.call(this.getElementsByClassName('swiper-container'), function(el) { Ps.initialize(el); });
+          // }
+
+        });
+      } else {
+        this.classList.add("hidden");
+      }
+    },
+
+    _hasDiscount: function (price, special) {
+      return price > special;
+    },
+
+    _onLazyImageReady: function (event) {
+      index = parseInt(event.currentTarget.getAttribute('index'));
+      this.fire('impressions-product', {
+        "product": this.products[index],
+        "list": this.sourceUrl,
+        "position": index + 1
+      });
+    },
+
+    _onClick: function (event) {
+      index = parseInt(event.currentTarget.getAttribute('index'));
+      this.fire('product-click', {
+        "product": this.products[index],
+        "list": this.sourceUrl,
+        "url": this.options.url,
+        "position": index + 1
+      });
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    },
+
+    _loadUrl: function (url) {
+      if (url && url.indexOf('limit=') >= 0) {
+        var d = url.split('?');
+        var params = JSON.parse('{"' + decodeURI(('?' + d[1]).substring(1)).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
+        params['limit'] = 10;
+        url = d[0] + '?' + Object.keys(params).map(function (key) { return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]); }).join('&');
+      } else {
+        url = url + (url.indexOf('?') >= 0 ? '&limit=10' : '?limit=10')
+      }
+
+      url = url.substr(0, 1) !== '/' ? '/' + url : url;
+
+      return url;
+    },
+
+    _fixedUrl: function (url) {
+      return url.indexOf('/') === 0 ? url : '/' + url;
+    },
+
+    _addToCartProduct: function(sku, item) {
+      var json = {
+        'sku': null,
+        'vendor': null,
+        'price': null
+      };
+
+      if (sku) {
+        json.sku = sku;
+        var found = item.simples.find(function (d) { return d.sku === sku; });
+        if (found.suppliers && found.suppliers.length > 0) {
+          json.vendor = found.suppliers[0].vendor_code;
+          json.price = found.suppliers[0].specialPrice || found.suppliers[0].price;
+        }
+
+        return json;
+      }
+
+      json.sku = item.simples[0].sku;
+      json.vendor = (item.simples[0].suppliers && item.simples[0].suppliers.length) ? item.simples[0].suppliers[0].vendor_code : undefined;
+      json.price = (item.simples[0].suppliers && item.simples[0].suppliers.length) ? item.simples[0].suppliers[0].specialPrice || item.simples[0].suppliers[0].price : item.offerofferPrice || item.price;
+
+      return json;
+    },
+
+    _hasVariations: function (product) {
+      return product.sizes.length > 1;
+    }
+  });
+
+</script>

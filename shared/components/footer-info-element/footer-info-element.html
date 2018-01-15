@@ -1,0 +1,414 @@
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+    <footer-info-element></footer-info-element>
+@demo
+-->
+<dom-module id="footer-info-element">
+    
+      <style>
+        :host {
+          display: block;
+          box-sizing: border-box;
+        }
+      </style>
+    
+      <template>
+        <div class="primary-row">
+          <div class="site-width-container">
+            
+            <!-- LANG/COUNTRY SWITCHER START (DESKTOP IS IN HEADER) -->
+            <template is="dom-if" if=[[isMobile]] restamp>
+              <section class="footer-module">
+                <p class="title">[[_translate('Choose Your Language & Country')]]</p>
+                <p class="additional-info">[[ _translate('We ship to the UAE and Saudi Arabia') ]]</p>
+                <country-language-switcher-element
+                  ctx="[[ctx]]" 
+                  change-language.trigger="changeLanguage()"
+                  change-country.trigger="changeCountry()">
+                </country-language-switcher-element>
+              </section>
+            </template>
+            <!-- LANG/COUNTRY SWITCHER END (DESKTOP IS IN HEADER) -->
+    
+            <!-- APP DOWNLOAD START -->
+            <template is="dom-if" if=[[isMobile]] restamp>
+              <template is="dom-if" if="[[ footer.data.appSection ]]" restamp>
+                <section class="footer-module app-module">
+                  <p class="title">[[ _translate(footer.data.appSection.title) ]]</p>
+                  <p class="additional-info">[[ _translate(footer.data.appSection.subtitle) ]]</p>
+                  <ul class="app-links">
+                    <template is="dom-repeat" items="[[ footer.data.appSection.appLinks ]]" as="appLink">
+                      <li><a href="[[ appLink.url ]]" class$="[[ appLink.className ]]">[[ _translate(appLink.content) ]]</a></li>
+                    </template>
+                  </ul>
+                </section>
+              </template>
+            </template>
+            <!-- APP DOWNLOAD END -->
+
+            <!-- CHECKOUT SECURITY START -->
+            <template is="dom-if" if=[[isCheckout]] restamp>
+              <template is="dom-if" if="[[ footer.data.securitySection ]]" restamp>
+                <section class="footer-module">
+                  <p class="title">[[ _translate(footer.data.securitySection.title) ]]</p>
+                  <p class="additional-info">[[ _translate(footer.data.securitySection.subtitle) ]]</p>
+                  <ul class="checkout-certification">
+                    <template is="dom-repeat" items="[[ footer.data.securitySection.securityMethods ]]" as="securityMethod">
+                      <li class$="[[securityMethod.className]]">[[ _translate(securityMethod.content) ]]</li>
+                    </template>
+                  </ul>
+                </section>
+              </template>
+            </template>
+            <!-- CHECKOUT SECURITY END -->
+    
+            <!-- PAYMENT METHODS START -->
+            <template is="dom-if" if="[[ footer.data.paymentSection ]]" restamp>
+              <section class="footer-module">
+                <p class="title">[[ _translate(footer.data.paymentSection.title) ]]</p>
+                <p class="additional-info">[[ _translate(footer.data.paymentSection.subtitle) ]]</p>
+                <ul class="payment-methods">
+                  <template is="dom-repeat" items="[[ footer.data.paymentSection.paymentMethods ]]" as="paymentMethod">
+                    <li class$="[[paymentMethod.className]]">[[ _translate(paymentMethod.content) ]]</li>
+                  </template>
+                </ul>
+              </section>
+            </template>
+            <!-- PAYMENT METHODS END -->
+    
+            <!-- CONTACT START -->
+            <template is="dom-if" if="[[ footer.data.helpSection ]]" restamp>
+              <section class="footer-module">
+                <p class="title">[[ _translate( footer.data.helpSection.title) ]]</p>
+                <p class="additional-info">[[ _translate( footer.data.helpSection.subtitle) ]]</p>
+                <template is="dom-repeat" items="[[  footer.data.helpSection.contactMethods ]]" as="contactMethod">
+                  <a class="contact-number" href$="tel: [[ cs ]]" dir="ltr"><i class$="[[ contactMethod.iconClass ]]"></i> [[ cs ]]</a>
+                </template>
+                <template is="dom-if" if="[[  footer.data.helpSection.socialIcons ]]" restamp>
+                  <ul class="social-media-links">
+                    <template is="dom-repeat" items="[[  footer.data.helpSection.socialIcons ]]" as="socialIcon">
+                      <li><a href="[[ socialIcon.url ]]"><i class$="[[ socialIcon.iconClass ]]"></i></a></li>
+                    </template>
+                  </ul>
+                </template>
+              </section>
+            </template>
+            <!-- CONTACT START -->
+    
+            <!-- SOCIAL START (DESKTOP ONLY, IN MOBILE ITS IN CONTACT) -->
+            <!---<template is="dom-if" if=[[!isCheckout]] restamp>
+              <template is="dom-if" if="[[ footer.data.socialSection ]]" restamp>
+                <section class="footer-module">
+                  <p class="title">[[ _translate( footer.data.socialSection.title) ]]</p>
+                  <p class="additional-info">[[ _translate( footer.data.socialSection.subtitle) ]]</p>
+                  <ul class="social-media-links">
+                    <template is="dom-repeat" items="[[ footer.data.socialSection.socialIcons ]]" as="socialIcon">
+                      <li><a href="[[ socialIcon.url ]]"><i class$="[[ socialIcon.iconClass ]]"></i></a></li>
+                    </template>
+                  </ul>
+                </section>
+              </template>
+            </template>-->
+            <!-- SOCIAL END (DESKTOP ONLY, IN MOBILE ITS IN CONTACT) -->
+          </div>
+        </div>
+    
+        <template is="dom-if" if=[[!isMobile]] restamp>
+          <div class="secondary-row">
+            <div class="site-width-container">
+              <small-nav-element class="small-nav-flex small-nav-element" nav="[[ nav ]]" ctx="[[ ctx ]]" options="{ 'mainNav': 'false' }"></small-nav-element>
+            </div>
+          </div>
+        </template>
+        <template is="dom-if" if="{{ showSeoContent }}" restamp>
+            <div class="seo_container">
+              <h3>[[ _translate('About Us') ]]</h3>
+              <template is="dom-if" if=[[isSA]] restamp>
+                <p>[[ _translate('wadi_sa') ]]</p>
+              </template>
+              <template is="dom-if" if=[[!isSA]] restamp>
+                <p>[[ _translate('wadi_ae') ]]</p>
+              </template>  
+              <h3>[[ _translate('Wadi Is Easy') ]]</h3>
+              <div>
+                <template is="dom-if" if=[[isSA]] restamp>
+                  <p>[[ _translate('wadihere_sa') ]]</p>
+                </template> 
+                <template is="dom-if" if=[[!isSA]] restamp>
+                  <p>[[ _translate('wadihere_ae') ]]</p>
+                </template>  
+                  <p>[[ _translate('Our approach is based on 3 basic principles:') ]] </p>
+                  <ol>
+                    <li>[[ _translate('Clutter free presentation of products on the website') ]]</li>
+                    <li>[[ _translate('Easier selection process with expert reviews and descriptions') ]] </li>
+                    <li>[[ _translate('Faster and on time delivery') ]]</li>
+                  </ol>
+                  <p>[[ _translate('wemake') ]]</p>
+                  <p>[[ _translate('atwadi') ]] </p>
+                  <p>[[ _translate('wearevery' )]]</p>
+              </div>
+              <h3>[[_translate('Support') ]]</h3>
+              <div>
+                  <p>[[ _translate('customer') ]] <strong>[[ _translate('We are here for you, whenever you want us to.') ]]</strong></p>
+                  <p>[[ _translate('Happy online shopping to you!') ]]</p>
+                  <p>[[ _translate('Wadi.com')]]<br><strong>[[ _translate('EVERYTHING. DELIVERED.') ]]</strong></p>
+              </div>
+              <div style="margin-top:40px;" class="cat_head">
+                <a href="/mobile_phones/?ref=footer">[[ _translate('Mobiles') ]]: </a>
+                <a href="/mobiles_and_accessories-mobile_phones/apple/?ref=footer">[[ _translate('Apple') ]] /</a>
+                <a href="/mobiles_and_accessories-mobile_phones/samsung/?ref=footer">[[ _translate('Samsung') ]]  /</a>
+                <a href="/mobiles_and_accessories-mobile_phones/sony/?ref=footer">[[ _translate('Sony') ]]  /</a>
+                <a href="/mobiles_and_accessories-mobile_phones/htc/?ref=footer">[[ _translate('HTC') ]]  /</a>
+                <a href="/mobiles_and_accessories-mobile_phones/huawei/?ref=footer">[[ _translate('Huawei') ]]  /</a>
+                <a href="/mobiles_and_accessories-mobile_phones/blackberry/?ref=footer">[[ _translate('Blackberry') ]]  /</a>
+                <a href="/mobiles_and_accessories-mobile_phones/infinix/?ref=footer">[[ _translate('Infinix') ]]  /</a>
+                <a href="/electronics-mobiles_tablets-mobile_phones-smartphones/?ref=footer">[[ _translate('All Smart Phones') ]] </a>
+              </div>
+              <div class="cat_head"><a href="/mobiles_and_accessories-tablets/?ref=footer">[[ _translate('Tablets') ]] : </a>
+                <a href="/mobiles_and_accessories-tablets/apple/?ref=footer">[[ _translate('Apple iPads') ]] /</a>
+                <a href="/mobiles_and_accessories-tablets/samsung/?ref=footer">[[ _translate('Samsung Tablets') ]]  /</a>
+                <a href="/3g-4g-tablets/?ref=footer">[[ _translate('3G/4G Tablets') ]]  /</a>
+                <a href="/mobiles_and_accessories-tablets/?ref=footer">[[ _translate('All Tablets') ]] </a>
+              </div>
+              <div class="cat_head">
+                <a href="/mobiles_and_accessories-mobile_and_tablet_accessories/?ref=footer">[[ _translate('Accessories') ]]  : </a>
+                <a href="/mobiles_and_accessories-mobile_and_tablet_accessories/?ref=footer">[[ _translate('Mobile Accessories') ]] /</a>
+                <a href="/mobiles_and_accessories-mobile_and_tablet_accessories-memory_cards/?ref=footer">[[ _translate('Memory Cards') ]]  /</a>
+                <a href="/mobiles_and_accessories-mobile_and_tablet_accessories/?ref=footer">[[ _translate('Tablet Accessories') ]]  /</a>
+                <a href="/mobiles_and_accessories-cases_and_covers/?ref=footer">[[ _translate('Cases & Covers') ]]  /</a>
+                <a href="/mobiles_and_accessories-mobile_and_tablet_accessories-power_banks/?ref=footer">[[ _translate('Power Banks') ]] /</a>
+                <a href="/mobiles_and_accessories-wearable_devices/?ref=footer">[[ _translate('Smart Watches & Fitness Bands') ]]  /</a>
+                <a href="/mobiles_and_accessories-wearable_devices/apple/?ref=footer">[[ _translate('Apple Watches') ]]  /</a>
+                <a href="/mobiles_and_accessories-mobile_and_tablet_accessories/fitbit/?ref=footer">[[ _translate('Fitbit') ]]  /</a>
+                <a href="/mobiles_and_accessories-mobile_and_tablet_accessories/pebble/?ref=footer">[[ _translate('Pebble') ]] </a>
+              </div>
+              <div class="cat_head">
+                  <a href="/home_entertainment-televisions/?ref=footer">[[ _translate('Televisions') ]]  : </a>
+                  <a href="/home_entertainment-televisions/?ref=footer">[[ _translate('3D TVs') ]]  /</a>
+                  <a href="/home_entertainment-televisions/?ref=footer">[[ _translate('4K Ultra HD TVs') ]] /</a>
+                  <a href="/home_entertainment-televisions/samsung/?ref=footer">[[ _translate('Samsung') ]]  /</a>
+                  <a href="/home_entertainment-televisions/lg/?ref=footer">[[ _translate('LG') ]] </a>
+              </div>
+              <div class="cat_head">
+                <a href="/cameras_and_photography/?ref=footer">[[ _translate('Photography') ]]  : </a>
+                <a href="/cameras_and_photography-cameras-dslr_cameras/?ref=footer">[[ _translate('DSLRs') ]]  /</a>
+                <a href="/cameras_and_photography-cameras-point_and_shoots/?ref=footer">[[ _translate('Point & Shoot') ]]  /</a>
+                <a href="/cameras_and_photography-cameras-sports_action_and_video_cameras/?ref=footer">[[ _translate('Sports & Action Cameras') ]]  /</a>
+                <a href="/cameras_and_photography-camera_lenses/?ref=footer">[[ _translate('') ]]Lenses /</a>
+                <a href="/cameras_and_photography-camera_accessories-flashes/?ref=footer">[[ _translate('Flashes') ]]  /</a>
+                <a href="/cameras_and_photography-camera_accessories/?ref=footer">[[ _translate('Camera Accessories') ]]  /</a>
+                <a href="/cameras_and_photography/canon/?ref=footer">[[ _translate('Canon') ]] /</a>
+                <a href="/cameras_and_photography/nikon/?ref=footer">[[ _translate('Nikon') ]] /</a>
+                <a href="/cameras_and_photography/sony/?ref=footer">[[ _translate('Sony') ]]  /</a>
+                <a href="/cameras_and_photography/tamron/?ref=footer">[[ _translate('Tamron') ]]  /</a>
+                <a href="/cameras_and_photography/gopro/?ref=footer">[[ _translate('GoPro') ]] </a>
+              </div>
+              <div class="cat_head">
+                <a href="/computers_laptops_and_storage/?ref=footer">[[ _translate('Laptop & PCs') ]] : </a>
+                <a href="/computers_laptops_and_storage/apple/?ref=footer">[[ _translate('Apple MacBook') ]] /</a>
+                <a href="/computers_laptops_and_storage/dell/?ref=footer">[[ _translate('Dell') ]] /</a>
+                <a href="/computers_laptops_and_storage/lenovo/?ref=footer">[[ _translate('Lenovo') ]] /</a>
+                <a href="/computers_laptops_and_storage/microsoft/?ref=footer">[[ _translate('Microsoft') ]] /</a>
+                <a href="/computers_laptops_and_storage/asus/?ref=footer">[[ _translate('Asus') ]] /</a>
+                <a href="/gaming-gaming_laptops_and_desktops-gaming_laptops/?ref=footer">[[ _translate('Gaming Laptops') ]] /</a>
+                <a href="/computers_laptops_and_storage-desktops/?ref=footer">[[ _translate('All in One Desktop') ]] </a>
+              </div>
+              <div class="cat_head">
+                <a href="/computers_laptops_and_storage-computer_accessories/?ref=footer">[[ _translate('Laptop Accessories') ]] : </a>
+                <a href="/computers_laptops_and_storage-storage_devices/?ref=footer">[[ _translate('Storage Devices') ]] /</a>
+                <a href="/computers_laptops_and_storage-storage_devices-external_hard_drive/?ref=footer">[[ _translate('External Hard Disks') ]]  /</a>
+                <a href="/computers_laptops_and_storage-routers_and_modems/?ref=footer">[[ _translate('Routers & Modems') ]]  /</a>
+                <a href="/computers_laptops_and_storage-computer_accessories-laptop_bags_sleeves/?ref=footer">[[ _translate('Laptop Bags & Sleeves') ]]  /</a>
+                <a href="/computers_laptops_and_storage-computer_accessories-mouse_and_mouse_pads/?ref=footer">[[ _translate('Mouse & Keyboards') ]]  /</a>
+                <a href="/computers_laptops_and_storage-computer_accessories/targus/?ref=footer">[[ _translate('Targus') ]]</a>
+              </div>
+              <div class="cat_head">
+                <a href="/home_entertainment/audio_video_devices/?ref=footer">[[ _translate('Audio & Video') ]] Audio &amp; Video : </a>
+                <a href="/home_entertainment-speaker_systems/?ref=footer">[[ _translate('Speakers') ]]  /</a>
+                <a href="/home_entertainment-speaker_systems-portable_speakers/?ref=footer">[[ _translate('Wireless Speakers') ]]  /</a>
+                <a href="/home_entertainment/JBL/?ref=footer">[[ _translate('JBL') ]]  /</a>
+                <a href="/home_entertainment/skullcandy/?ref=footer">[[ _translate('Skullcandy') ]]  /</a>
+                <a href="/home_entertainment/bose/?ref=footer">[[ _translate('Bose') ]] /</a>
+                <a href="/home_entertainment/beats/?ref=footer">[[ _translate('Beats') ]] </a>
+              </div>
+              <div class="cat_head">
+                <a href="/gaming-gaming_accessories/?ref=footer">[[ _translate('Gaming') ]]  : </a>
+                <a href="/gaming-gaming_consoles/playstation/?ref=footer">[[ _translate('Sony PlayStation') ]] /</a>
+                <a href="/gaming-gaming_consoles/xbox/?ref=footer">[[ _translate('Microsoft Xbox') ]]  /</a>
+                <a href="/gaming-gaming_titles/?ref=footer">[[ _translate('Gaming Titles') ]]  /</a>
+                <a href="/gaming-gaming_accessories/?ref=footer">[[ _translate('Gaming Accessories') ]] </a>
+              </div>
+              <div class="cat_head">
+                <a href="/watches/?ref=footer">[[ _translate('Watches') ]]  : </a>
+                <a href="/watches/men/?ref=footer">[[ _translate('Men Watches') ]] /</a>
+                <a href="/watches/women/?ref=footer">[[ _translate('Women Watches') ]]  /</a>
+                <a href="/watches/men/?ref=footer">[[ _translate('Luxury Watches') ]]  /</a>
+                <a href="/casio/?ref=footer">[[ _translate('Casio') ]]  /</a>
+                <a href="/citizen/?ref=footer">[[ _translate('Citizen') ]] /</a>
+                <a href="/diesel/?ref=footer">[[ _translate('Diesel') ]]  /</a>
+                <a href="/fossil/?ref=footer">[[ _translate('Fossil') ]]  /</a>
+                <a href="/jbw/?ref=footer">[[ _translate('JBW') ]]  /</a>
+                <a href="/dkny/?ref=footer">[[ _translate('DKNY') ]] /</a>
+                <a href="/g_shock/?ref=footer">[[ _translate('G-SHOCK') ]]  /</a>
+                <a href="/skagen/?ref=footer">[[ _translate('SKAGEN') ]]  /</a>
+                <a href="/movado/?ref=footer">[[ _translate('Movado') ]] </a>
+              </div>
+              <div class="cat_head">
+                <a href="/fragrances/?ref=footer">[[ _translate('Fragrances') ]]  : </a>
+                <a href="/davidoff/?ref=footer">[[ _translate('Davidoff') ]] /</a>
+                <a href="/lacoste/?ref=footer">[[ _translate('Lacoste') ]]  /</a>
+                <a href="/calvin_klein/?ref=footer">[[ _translate('Calvin Klein') ]]  /</a>
+                <a href="/hugo_boss/?ref=footer">[[ _translate('Hugo Boss') ]]  /</a>
+                <a href="/paco_rabanne/?ref=footer">[[ _translate('Paco Rabanne') ]]  /</a>
+                <a href="/jaguar/?ref=footer">[[ _translate('Jaguar') ]]  /</a>
+                <a href="/bvlgari/?ref=footer">[[ _translate('Bvlgari') ]]  /</a>
+                <a href="/burberry/?ref=footer">[[ _translate('Burberry') ]]  /</a>
+                <a href="/givenchy/?ref=footer">[[ _translate('Givenchy') ]]  /</a>
+                <a href="/gucci/?ref=footer">[[ _translate('Gucci') ]]  /</a>
+                <a href="/versace/?ref=footer">[[ _translate('Versace') ]]  /</a>
+                <a href="/estee_lauder/?ref=footer">[[ _translate('Estee Lauder') ]]  /</a>
+                <a href="/roberto_cavalli/?ref=footer">[[ _translate('Roberto Cavalli') ]]  /</a>
+                <a href="/carolina_herrera/?ref=footer">[[ _translate('Carolina Herrera') ]]  /</a>
+                <a href="/cartier/?ref=footer">[[ _translate('Cartier') ]]  /</a>
+                <a href="/chanel/?ref=footer">[[ _translate('Chanel') ]] /</a>
+                <a href="/chopard/?ref=footer">[[ _translate('Chopard') ]]  /</a>
+                <a href="/dolce_gabbana/?ref=footer">[[ _translate('Dolce & Gabbana') ]]  /</a>
+                <a href="/escada/?ref=footer">[[ _translate('Escada') ]]  /</a>
+                <a href="/ferrari/?ref=footer">[[ _translate('Ferrari') ]]  /</a>
+                <a href="/Victoriassecret/?ref=footer">[[ _translate('Victoria Secret') ]]  /</a>
+                <a href="/guess/perfume/?ref=footer">[[ _translate('Guess') ]] </a>
+              </div>
+              <div class="cat_head">
+                <a href="/home_kitchen/?ref=footer">[[ _translate('Home & Kitchen') ]] : </a>
+                <a href="/home_and_kitchen-home_furnishing/?ref=footer">[[ _translate('Home Furnishing') ]] /</a>
+                <a href="/home_and_kitchen-home_improvement-home_cleaning/?ref=footer">[[ _translate('Household Supplies') ]]  /</a>
+                <a href="/home_and_kitchen-kitchen_and_dining/?ref=footer">[[ _translate('Kitchenware') ]]  /</a>
+                <a href="/home_and_kitchen/black_decker/?ref=footer">[[ _translate('Black & Decker') ]]  /</a>
+                <a href="/home_and_kitchen/elekta/?ref=footer">[[ _translate('Elekta') ]]  /</a>
+                <a href="/home_and_kitchen-small_appliances/?ref=footer">[[ _translate('Small Appliances') ]]  /</a>
+                <a href="/home_and_kitchen-small_appliances-choppers_and_blenders/?ref=footer">[[ _translate('Choppers & Blenders') ]]  /</a>
+                <a href="/home_and_kitchen-kitchen_appliances-pop_up_toasters/?ref=footer">[[ _translate('Toasters & Grills') ]]  /</a>
+                <a href="/home_and_kitchen-home_appliances-vacuum_cleaners/?ref=footer">[[ _translate('Vacuum Cleaners') ]] /</a>
+                <a href="/home_and_kitchen-kitchen_appliances-coffee_makers/?ref=footer">[[ _translate('Coffee Makers') ]]  /</a>
+                <a href="/home_and_kitchen-home_appliances-microwave_ovens/?ref=footer">[[ _translate('Microwaves') ]]  /</a>
+                <a href="/home_and_kitchen-kitchen_appliances-otg/?ref=footer">[[ _translate('Ovens & OTGs') ]] /</a>
+                <a href="/home_and_kitchen/sonashi/?ref=footer">[[ _translate('Sonashi') ]]  /</a>
+                <a href="/home_and_kitchen-home_decor_and_festive_needs/?ref=footer">[[ _translate('Home Décor') ]]  /</a>
+                <a href="/home_and_kitchen-home_appliances-lightings/?ref=footer">[[ _translate('Lamps & Lightings') ]]  /</a>
+                <a href="/home_and_kitchen-home_decor_and_festive_needs-wall_decor_and_clocks/?ref=footer">[[ _translate('Clocks') ]] /</a>
+                <a href="/home_and_kitchen-home_furnishing-bed_linen/?ref=footer">[[ _translate('Bed Linen') ]]</a>
+              </div>
+              <div class="cat_head">
+                <a href="/baby_care/?ref=footer">[[ _translate('Toys & Auto') ]] : </a>
+                <a href="/automotive/?ref=footer">[[ _translate('Automotive') ]]  /</a>
+                <a href="/automotive-interior_accessories/?ref=footer">[[ _translate('Interior Accessories') ]]  /</a>
+                <a href="/automotive-audio-receivers-gps/?ref=footer">[[ _translate('Car Audio') ]]  /</a>
+                <a href="/automotive/pioneer/?ref=footer">[[ _translate('Pioneer') ]]  /</a>
+                <a href="/sports_and_fitness/?ref=footer">[[ _translate('Sports') ]]  /</a>
+                <a href="/adidas/?ref=footer">[[ _translate('Adidas') ]]  /</a>
+                <a href="/health_and_nutrition/?ref=footer">[[ _translate('Health Devices') ]]  /</a>
+                <a href="/baby_care/?ref=footer">[[ _translate('') ]]    /</a>
+                <a href="/baby_care-strollers_and_activity_gear/?ref=footer">[[ _translate('Games & Activities') ]]  /</a>
+                <a href="/baby_care-baby_toys-rideons/?ref=footer">[[ _translate('Smart Balance Scooters') ]]  /</a>
+                <a href="/baby_care/?ref=footer">[[ _translate('Baby & Toddlers') ]]  /</a>
+                <a href="/toys-board_games/?ref=footer">[[ _translate('Activity Sets') ]] </a>
+              </div>
+            </div>
+        </template>
+    
+        <div class="support-row">
+          <div class="site-width-container">
+            <ul class="footer-support-links">
+              <li><a href="/terms-of-use/?ref=footer">[[ _translate('Terms and Conditions') ]]</a></li>
+              <li><a href="/privacy/?ref=footer">[[ _translate('Privacy Policy') ]]</a></li>
+            </ul>
+            <p class="copyright">&copy; [[ _translate('Wadi') ]] [[year]]. [[ _translate('All Rights Reserved') ]]</p>
+          </div>
+        </div>
+      </template>
+    
+    </dom-module>
+    
+    <script>
+    
+      Polymer({
+    
+        is: 'footer-info-element',
+    
+        properties: {
+    
+          /**
+            * navigation json object to be displayed
+          */
+          nav: {
+            type: Object
+          },
+    
+          /**
+           * navigation json object to be displayed
+           */
+          footer: {
+            type: Object
+          },
+    
+          cs: {
+            type: Object
+          },
+    
+          /**
+           * Options supported by small navigation element
+           */
+          options: {
+            type: Object
+          },
+    
+          ctx: {
+            type: Object,
+            value: function() {
+              return {
+                lang: 'en'
+              };
+            },
+          },
+    
+          state: {
+            type: String,
+            observer: '_stateObserver'
+          },
+
+          route: {
+            type: String,
+            observer: '_routeObserver'
+          }
+        },
+    
+        attached: function () {
+          this.isCheckout = this.state === 'checkout' ? true : false;
+          this.nav = this.nav && this.nav[this.ctx.lang];
+          this.isMobile = window.config.device === 'mobile' ? true : false;
+          this.isSA = this.ctx.country === 'sa';
+          this.year = new Date().getFullYear();
+
+          // this.showSeoContent = false;
+        },
+    
+        json: function (data) {
+          return JSON.stringify(data);
+        },
+    
+        _translate: function (key) {
+          return window.translate(key);
+        },
+
+        _routeObserver: function (val) {
+          this.set('showSeoContent', !this.isMobile && val === '/');
+        },
+    
+        _stateObserver: function () {
+          this.isCheckout = this.state === 'checkout' ? true : false;
+        }
+      });
+    
+    </script>

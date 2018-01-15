@@ -1,12 +1,35 @@
 /* eslint-disable no-undef */
-import 'aurelia-bootstrapper-webpack'
+import 'isomorphic-fetch';
+import 'aurelia-bootstrapper';
+// import 'aurelia-bootstrapper-webpack';
 
-export function configure (aurelia) {
+import { LogManager }           from 'aurelia-framework';
+
+import { Settings }             from './config/settings';
+import { UnhandledError }       from '../shared/source/services/unhandled-error';
+
+export async function configure (aurelia) {
+
+  LogManager.addAppender(aurelia.container.get(UnhandledError));
+  LogManager.setLevel(LogManager.logLevel.debug);
+
+  // console.log('PRODUCTION: ', PRODUCTION);
+
   aurelia.use
-    .basicConfiguration()
-    .developmentLogging()
+    .standardConfiguration()
+    .developmentLogging();
 
-  aurelia.start().then(() => {
-    aurelia.setRoot('app', document.body)
-  })
+  // aurelia.use
+  //   .basicConfiguration()
+  //   .developmentLogging()
+
+  // if (window.location.search.indexOf('..showdebug..=on') >= 0) {
+  //   aurelia.use.developmentLogging();
+  // }
+
+  // aurelia.use.plugin('aurelia-polymer');
+  aurelia.use.plugin('aurelia-html-import-template-loader');
+  aurelia.use.globalResources('../../shared/source/plugins/t');
+
+  aurelia.start().then((a) => a.setRoot('app', document.getElementById('wadi')));
 }

@@ -1,0 +1,280 @@
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+    <banner-element></banner-element>
+@demo
+-->
+<dom-module id="banner-element">
+    <style>
+      :host {
+        display: block;
+        box-sizing: border-box;
+      }
+  
+    </style>
+  
+    <template>
+  
+    <div class$="[[images.type]] banner-flex">
+  
+        <template is="dom-if" if="[[ images.title ]]">
+          <h2><span class="line" style$="background-color: [[images.colorTheme]];"></span>[[ images.title ]]</h2>
+        </template>
+  
+  
+        <div class="banners-wrapper" style$="background-color: [[images.colorTheme]];">
+          <!-- <template is="dom-if" if="[[ images.typeCat ]]"> -->
+            <div class="hero-group">
+              <div class="primary-row">
+                <div class="col">
+                    <template is="dom-if" if="[[ images.mainBanner.width ]]" restamp="true">
+                      <a class="prevent-reflow" href$="[[ _getLink(images.mainBanner.url) ]]">
+                        <div class="banner-preloader" style$="padding-bottom: [[_intrinsicRatio(images.mainBanner.width, images.mainBanner.height)]]%">
+                          <i class="wadicon-spinner wadicon-spin"></i>
+                        </div>
+                        <img lazy-src$="[[ images.mainBanner.path ]]" alt$="[[ _getAltText(images.mainBanner.title) ]]" on-load="_onLazyImageReady" on-click="_onClick" position$="[[ index ]]" data-creative$="[[ images.mainBanner.creative ]]" data-id$="[[ images.mainBanner.id ]]">
+                        <template is="dom-if" if="[[ images.mainBanner.content ]]" restamp="true">
+                          <div class="content-holder">
+                            <p class="title">[[images.mainBanner.content.title]]</p>
+                            <p class="text">[[images.mainBanner.content.text]]</p>
+                            <span class="cta">[[images.mainBanner.content.cta]]</span>
+                          </div>
+                        </template>
+                      </a>
+                    </template>
+                </div>
+              </div>
+  
+              <div class="secondary-row">
+                <template is="dom-repeat" items="[[ images.banners ]]" as="smallImage">
+                  <div class$="[[ _computeClass(isMobile) ]]">
+                    <template is="dom-if" if="[[ _hasSmallBanners ]]" restamp="true">
+                      <!-- <div class$="[[ _computeClass(isMobile) ]]"> -->
+                        <template is="dom-if" if="[[ smallImage.dimensionsRatio ]]" restamp="true">
+                          <a href$="[[ _getLink(smallImage.url) ]]" class="prevent-reflow">
+                            <div class="banner-preloader" style$="padding-bottom: [[_intrinsicRatio(smallImage.dimensionsRatio.width, smallImage.dimensionsRatio.height)]]%">
+                              <i class="wadicon-spinner wadicon-spin"></i>
+                            </div>
+                            <img lazy-src$="[[ smallImage.path ]]" alt="[[ smallImage.alttitle ]]" on-load="_onLazyImageReady" on-click="_onClick" position$="[[ index ]]" data-creative$="[[ smallImage.creative ]]" data-id$="[[ smallImage.id ]]">
+                            <template is="dom-if" if="[[ smallImage ]]" restamp="true">
+                              <p class="text-content">[[smallImage.title]]<strong>[[smallImage.text]]</strong></p>
+                            </template>
+                          </a>
+                        </template> 
+                        <!-- </div> -->
+                    </template>
+                  </div>
+                </template>
+              </div>
+            </div>
+
+            <template is="dom-if" if="[[ _hasSecondaryBanners(images.secondright) ]]" restamp="true">
+              <div class="tertiary-row">
+                <template is="dom-repeat" items="[[ images.secondright ]]" as="smallImage">
+                  <template is="dom-if" if="[[ smallImage.path ]]">
+                    <div class$="[[ _computeClass(isMobile) ]]">
+                      <template is="dom-if" if="[[ _hasSmallBanners ]]">
+                        <!-- <div class$="[[ _computeClass(isMobile) ]]"> -->
+                          <template is="dom-if" if="[[ smallImage.dimensionsRatio ]]" restamp="true">
+                            <a href$="[[ _getLink(smallImage.url) ]]" class="prevent-reflow">
+                              <div class="banner-preloader"  style$="padding-bottom: [[_intrinsicRatio(smallImage.dimensionsRatio.width, smallImage.dimensionsRatio.height)]]%">
+                                <i class="wadicon-spinner wadicon-spin"></i>
+                              </div>
+                              <img lazy-src$="[[ smallImage.path ]]" alt="[[ smallImage.title ]]" on-load="_onLazyImageReady" on-click="_onClick" position$="[[ index ]]" data-creative$="[[ smallImage.creative ]]" data-id$="[[ smallImage.id ]]">
+                              <template is="dom-if" if="[[ smallImage.content ]]" restamp="true">
+                              <p class="text-content">[[smallImage.content.title]]<strong>[[smallImage.content.text]]</strong></p>
+                            </template>
+                            </a>
+                          </template> 
+                        <!-- </div> -->
+                      </template>
+                    </div>
+                  </template>
+                </template>    
+              </div>
+            </template>
+          
+                
+            <!-- <div class="support-row">
+              <template is="dom-repeat" items="[[ images.lastright ]]" as="smallImage">
+                  <div class="col">
+                    <template is="dom-if" if="[[ _hasSmallBanners ]]">
+                      <div class$="[[ _computeClass(isMobile) ]]">
+                        <template is="dom-if" if="[[ smallImage.dimensionsRatio ]]" restamp="true">
+                          <a href$="[[ _getLink(smallImage.url) ]]" class="prevent-reflow">
+                            <div class="banner-preloader" style$="padding-bottom: [[_intrinsicRatio(smallImage.dimensionsRatio.width, smallImage.dimensionsRatio.height)]]%">
+                              <i class="wadicon-spinner wadicon-spin"></i>
+                            </div>
+                            <img lazy-src$="[[ smallImage.path ]]" alt="[[ smallImage.title ]]" on-load="_onLazyImageReady" on-click="_onClick" position$="[[ index ]]" data-creative$="[[ smallImage.creative ]]" data-id$="[[ smallImage.id ]]">
+                            <template is="dom-if" if="[[ smallImage.content ]]" restamp="true">
+                              <p class="text-content">[[smallImage.content.title]]<strong>[[smallImage.content.text]]</strong></p>
+                            </template>
+                          </a>
+                        </template> 
+                        </div>
+                    </template>
+                  </div>
+                </template> 
+            </div> -->
+          <!-- </template> -->
+          <!-- </template> -->
+          <!--<template is="dom-if" if="[[ _hasSmallBanners ]]">
+            <div class="grid-row">
+              <template is="dom-repeat" items="[[ images.banners ]]" as="smallImage">
+                <div class$="[[ _computeClass(isMobile) ]]">
+                  <template is="dom-if" if="[[ !smallImage.dimensionsRatio ]]" restamp="true">
+                    <a href$="[[ _getLink(smallImage.url) ]]" class="support">
+                      <img lazy-src$="[[ smallImage.path ]]" alt="[[ smallImage.title ]]" on-load="_onLazyImageReady" on-click="_onClick" position$="[[ index ]]" data-creative$="[[ smallImage.creative ]]" data-id$="[[ smallImage.id ]]">
+                      <template is="dom-if" if="[[ smallImage.content ]]" restamp="true">
+                        <p class="text-content">[[smallImage.content.title]]<strong>[[smallImage.content.text]]</strong></p>
+                      </template>
+                    </a>
+                  </template>
+  
+                  <!-- IF RATIO IS GIVEN AS OPTION - TO PREVENT REFLOW -->
+                  <!--<template is="dom-if" if="[[ smallImage.dimensionsRatio ]]" restamp="true">
+                    <a class="support" href$="[[ _getLink(smallImage.url) ]]">
+                      <div class="prevent-reflow">
+                        <div class="banner-preloader" style$="padding-bottom: [[_intrinsicRatio(smallImage.dimensionsRatio.width, smallImage.dimensionsRatio.height)]]%"><i class="wadicon-spinner wadicon-spin"></i></div>
+                        <img lazy-src$="[[ smallImage.path ]]" alt="[[ smallImage.title ]]" on-load="_onLazyImageReady" on-click="_onClick" position$="[[ index ]]" data-creative$="[[ smallImage.creative ]]" data-id$="[[ smallImage.id ]]">
+                      </div>
+                      <template is="dom-if" if="[[ smallImage.content ]]" restamp="true">
+                        <p class="text-content">[[smallImage.content.title]]<strong>[[smallImage.content.text]]</strong></p>
+                      </template>
+                    </a>
+                  </template>
+  
+                </div>
+              </template>
+            </div>
+          </template>-->
+        </div>
+      </div>
+    </template>
+  </dom-module>
+  
+  <script>
+  
+    Polymer({
+  
+      is: 'banner-element',
+  
+      properties: {
+  
+        /**
+         * Images array that needs to be displayed to UI
+         */
+        images: {
+          type: Object,
+          value: {
+            mainBanner: {},
+            banners: []
+          }
+        },
+  
+        /**
+         * Options supported by Simple Banner element
+         */
+        options: {
+          type: Object,
+          value: function() {
+            return { columnOptions: 1, cdnUrl: '' };
+          }
+        },
+  
+        /**
+         * application context
+         */
+        ctx: {
+          type: Object,
+          value: function() {
+            return { lang: 'en', country: 'sa' };
+          }
+        },
+
+        isMobile: {
+          type: Boolean,
+          value: false
+        }
+      },
+  
+      ready: function () {
+        this.internals = {};
+        this.internals.imageDefaultOptions = {
+          columnOptions: 1
+        };
+      },
+  
+      attached: function () {
+        this.set("isMobile", (window.config.device === 'mobile'));
+
+        // TODO - Hacking for now. Edit in CMS Panel
+        this._hasSmallBanners = (this.images.banners && this.images.banners.length > 0)
+                                  ? (this.images.banners[0].path ? true : false)
+                                  : false;
+        // Merge default option with element input options
+        Object.assign(this.internals.imageDefaultOptions, this.options);
+      },
+  
+      /**
+       * Change bootstrap class as per user specified No. of columns
+       */
+      _computeClass: function (isMobile) {
+        var numColumn = this.options['columnOptions'];
+        var colPercent = Math.floor(100 / numColumn);
+        return isMobile ? 'column-percent-' + colPercent + '-flex' : 'col auto';
+      },
+  
+       _intrinsicRatio: function (width, height) {
+        return ((height / width) * 100).toFixed(2);
+      },
+  
+      computeImgUrl: function (url) {
+        return url.replace('@lang@', this.ctx.lang).replace('@country@', this.ctx.country);
+      },
+  
+      getRedirectUrl: function (url) {
+        return url[this.ctx.country];
+      },
+  
+      _onLazyImageReady: function (event) {
+        var image = event.currentTarget;
+        var targetHref = image.parentNode.tagName === 'A' ? image.parentNode.getAttribute('href') : '';
+        var creative = image.getAttribute('src').split('/').pop();
+        this.fire('promo-view', {
+          name: image.getAttribute('data-id') || creative,
+          id: (image.getAttribute('data-id') || creative) + '|' + targetHref.split('?')[0],
+          creative: image.getAttribute('src').split('/').pop(),
+          position: '|' + 'banner_slot' + '|' + (parseInt(image.getAttribute('position')) + 1)
+        });
+      },
+  
+      _onClick: function (event) {
+        var image = event.currentTarget;
+        var targetHref = image.parentNode.tagName === 'A' ? image.parentNode.getAttribute('href') : '';
+        var creative = image.getAttribute('src').split('/').pop();
+        this.fire('promo-click', {
+          name: image.getAttribute('data-id') || creative,
+          id: (image.getAttribute('data-id') || creative) + '|' + targetHref.split('?')[0],
+          creative: image.getAttribute('src').split('/').pop(),
+          position: '|' + 'banner_slot' + '|' + (parseInt(image.getAttribute('position')) + 1)
+        });
+      },
+
+      _hasSecondaryBanners: function (images) {
+        // console.log(!!images && images.length > 0 && (!!images[0].path && images[0].path.length > 0))
+
+        return images && images.length > 0 && images[0].path && images[0].path.length > 0;
+      },
+  
+      _getAltText: function (altT) {
+        return altT || null;
+      },
+  
+      _getLink: function (link) {
+        return (link && link.indexOf('/') === 0) ? link : '/' + link;
+      }
+    });
+  
+  </script>

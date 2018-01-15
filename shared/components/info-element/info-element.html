@@ -1,0 +1,148 @@
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+    <info-element></info-element>
+@demo
+-->
+
+<dom-module id="info-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+
+    <div class="site-width-container">
+
+      <template is="dom-if" if="[[ showTitle ]]">
+        <h2>[[_translate('Product Information')]]</h2>
+      </template>
+
+      <template is="dom-if" if="[[ content.introduction ]]">
+        <!-- INTRO - OPEN ALREADY -->
+        <div class="details-module">
+          <template is="dom-if" if="[[ isMobile ]]" restamp="true">
+            <h2>[[ content.title ]]</h2>
+          </template>
+          <template is="dom-if" if="[[ content.subtitle ]]">
+            <h3 class="subtitle-container">[[ content.subtitle ]]</h3>
+          </template>
+          <marked-element markdown="[[ content.introduction ]]">
+            <div class="markdown-html"></div>
+          </marked-element>
+          <template is="dom-if" if="[[ content.image ]]">
+            <div class="image-container">
+              <img src$="[[ _getImageUrl(content.image) ]]" />
+            </div>
+          </template>
+          <template is="dom-if" if="[[ content.video ]]">
+            <div class="video-container">
+              <iframe width="100%" height="281" src$="[[ _getVideoLink(content.video) ]]"></iframe>
+            </div>
+          </template>
+        </div>
+      </template>
+
+      <!-- VIEW FULL DESCRIPTION -->
+      <template is="dom-if" if="[[ content.assets.length ]]">
+        <template is="dom-if" if="[[ content.title ]]">
+          <h3 collapse="#allinfocollapse" on-click="_toggle" hidden$="[[!isMobile]]">[[ content.viewMoreTitle ]]</h3>
+        </template>
+        <iron-collapse id="allinfocollapse" opened="[[!isMobile]]">
+          <div class="content-holder">
+            <template is="dom-repeat" items="[[ content.assets ]]" as="info">
+              <section class="content-section">
+                <template is="dom-if" if="[[ info.title ]]"><h4>[[ info.title ]]</h4></template>
+                <template is="dom-if" if="[[ info.subtitle ]]"><h5>[[ info.subtitle ]]</h5></template>
+                <template is="dom-if" if="[[ info.description ]]">
+                  <p>[[ info.description ]]</p>
+                </template>
+                <template is="dom-if" if="[[ info.video ]]">
+                  <div class="video-container">
+                    <iframe width="400" height="551" src$="[[ _getVideoLink(info.video) ]]"></iframe>
+                  </div>
+                </template>
+                <template is="dom-if" if="[[ info.image ]]">
+                  <div class="image-container"><img src$="[[ _getImageUrl(info.image) ]]" alt="[[ info.title ]]"></div>
+                </template>
+              </section>
+            </template>
+            <!-- <div data-eretailer_ebp="56962159242034.71450161" data-page_ebp="[[service.data.simples[0].barcode_ean]]"></div> -->
+          </div>
+        </iron-collapse>
+      </template>
+    </div>
+
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'info-element',
+
+
+    properties: {
+
+      showTitle: {
+        type: Boolean
+      },
+
+      /**
+       * Products array that needs to be displayed to UI
+       */
+      content: {
+        type: Object
+      },
+
+      /**
+       * Options supported by carousel element
+       */
+      options: {},
+
+      /**
+       * application context
+       */
+      ctx: {
+        type: Object,
+        value: function() {
+          return { lang: 'en', country: 'sa' };
+        }
+      }
+    },
+
+    attached: function () {
+      this.isMobile = window.config.device === 'mobile' ? true : false;
+    },
+
+    json: function (data) {
+      return JSON.stringify(data);
+    },
+
+    _getImageUrl: function (url) {
+      return url.replace('@lang@', this.ctx.lang).replace('@country@', this.ctx.country);
+    },
+
+    _getVideoLink: function (url) {
+      return url.replace('watch?v=', 'embed/') + '?rel=0&showinfo=0';
+    },
+
+    _toggle: function (event) {
+      var node = event.currentTarget.getAttribute('collapse');
+      this.querySelector(node).toggle();
+      event.currentTarget.classList.toggle('opened');
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+  });
+
+</script>

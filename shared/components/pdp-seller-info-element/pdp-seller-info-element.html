@@ -1,0 +1,233 @@
+<!--
+An element that includes core product details e.g. name, price
+
+Example:
+    <pdp-seller-info-element></pdp-seller-info-element>
+@demo
+-->
+
+<dom-module id="pdp-seller-info-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+    <template is="dom-if" if="[[ !outofstock ]]">
+      <div class="default-seller">
+          <p class="title">[[ _translate('Seller') ]]:</p>
+          <div class="supplier-details-row">
+            <p class="supplier-name">[[defaultSupplier.supplier_name]]</p>
+            <span class="supplier-rating-badge">[[defaultSupplier.vendor_rating]] / 5</span>
+          </div>
+          <template is="dom-if" if="[[otherSuppliersCount]]">
+            <p class="other-sellers-cta" on-tap="_scrollToOtherSellers"><span>[[otherSuppliersCount]] [[_translate('other sellers')]]</span> [[_translate('from')]] <strong>[[lowestSuppliersPrice]] [[ctx.currency]]</strong></p>
+          </template>
+          <div class="supplier-additional-info">
+            <div class="delivery-promise-container">
+              <p class="shipping">
+                [[ _getDeliveryPromise(showChangeCity, selectedSku, supplierdata) ]]
+              </p>
+              <template is="dom-if" if="[[!showChangeCity]]">
+                <p class="change-city-link">
+                  <button class="link-button" on-tap="_changeCity">[[ _translate('Change City') ]]</button>
+                </p>
+              </template>
+              <template is="dom-if" if="[[showChangeCity]]">
+                <form class="select-city-form">
+                  <div class="input-field">
+                    <!-- <label>[[ _translate('City') ]]</label> -->
+                    <div class="input-container">
+                      <input-suggest-element suggest-name="city" data-list="[[ citiesList ]]" data-selected="{{ pdpCity }}" view-value="{{ selectedCityValue }}"></input-suggest-element>
+                    </div>
+                  </div>
+                </form>
+              </template>
+            </div>
+            <!-- <p class="shipping">
+              [[ _translate('Ships by') ]] [[ defaultSupplier.shipped_by_date ]] -
+              [[ _translate('Delivered by') ]] [[ defaultSupplier.delivered_by_date ]]
+            </p> -->
+            <template is="dom-if" if="[[ defaultSupplier.warranty_period ]]">
+              <p class="warranty">[[ defaultSupplier.warranty_period ]]</p>
+            </template>
+            <!-- <template is="dom-if" if="[[showChangeCity]]">
+              <form class="select-city-form">
+                <div class="input-field">
+                  <label>[[ _translate('City') ]]</label>
+                  <div class="input-container">
+                    <input-suggest-element suggest-name="city" data-list="[[ citiesList ]]" data-selected="{{ pdpCity }}"></input-suggest-element>
+                  </div>
+                </div>
+              </form>
+            </template> -->
+          </div>
+      </div>
+    </template>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+    is: 'pdp-seller-info-element',
+
+    properties: {
+
+      outofstock: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
+       * app context
+       */
+      ctx: {
+        type: Object
+      },
+
+      selectedSku: {
+        type: String,
+        observer: "_selectedSkuChanged"
+      },
+
+      supplierdata: {
+        type: Object,
+        observer: "_supplierChanged"
+      },
+
+      selectedSize: {
+        type: String,
+        value: null
+      },
+
+      citiesList: {
+        type: Array,
+        value: []
+      },
+
+      pdpCity: {
+        type: String,
+        value: '',
+        observer: '_citiesObserver'
+      },
+
+      showChangeCity: {
+        type: Boolean,
+        value: false
+      },
+
+      selectedCityValue: {
+        type: String,
+        value: ''
+      }
+    },
+
+    // Element Lifecycle
+    attached: function () {
+      this.isSA = this.ctx.country === 'sa' ? true : false;
+      this.isMobile = window.config.device === 'mobile' ? true : false;
+      // this.isElectronics = (this.productdetails.attributes.attribute_set === 'electronics' ? true : false);
+      // this.isOnSale = false;
+      // if (this.productdetails.simples[0].suppliers && this.productdetails.simples[0].suppliers.length) {
+      //   this.isOnSale = (this.productdetails.simples[0].suppliers[0].specialPrice ? true : false);
+      // }
+      // this.isOneSize = this.productdetails.simples[0].size === 'OS' ? true : false;
+      // if (this.isOnSale) {
+      //   this.discountTotal = this.productdetails.simples[0].suppliers[0].price - this.productdetails.simples[0].suppliers[0].specialPrice;
+      // }
+
+      // HAS VARIATIONS
+      // if ((this.productdetails.groups && this.productdetails.groups.color && this._isMoreThanOne(this.productdetails.groups.color)) || (this.productdetails.groups && this.productdetails.groups.size && this._isMoreThanOne(this.productdetails.groups.size) ) || !this.isOneSize) {
+      //   this.hasVariations = true;
+      // }
+    },
+
+    _selectedSkuChanged: function (sku) {
+      var el = document.querySelector("input[value='" + sku + "']");
+      if (el) {
+        el.checked = true;
+      }
+    },
+
+    _supplierChanged: function () {
+      // MULTISELLER
+      this.defaultSupplier = (this.supplierdata.suppliers || this.supplierdata.suppliers.length) ? this.supplierdata.suppliers[0] : undefined;
+      if (this.supplierdata.suppliers.length > 1) {
+        this.otherSuppliers = this.supplierdata.suppliers.slice(0) || [];
+        this.otherSuppliers.splice(0, 1);
+        this.otherSuppliersCount = this.otherSuppliers.length;
+
+        // LOWEST PRICE OF OTHER SUPPLIERS
+        this.lowestSuppliersPrice = this.otherSuppliers[0].specialPrice || this.otherSuppliers[0].price;
+        if (this.otherSuppliers.length > 1) {
+          var currentPrice;
+          for(i = 1; i < this.otherSuppliers.length; i++) {
+            currentPrice = this.otherSuppliers[i].specialPrice || this.otherSuppliers[i].price;
+            if (currentPrice < this.lowestSuppliersPrice) {
+              this.lowestSuppliersPrice = currentPrice;
+            }
+          }
+        }
+      } else {
+        this.otherSuppliers = [];
+        this.otherSuppliersCount = this.otherSuppliers.length;
+      }
+    },
+
+    json: function (data) {
+      return JSON.stringify(data);
+    },
+
+    _getProductImage: function (key) {
+      return "//" + this.ctx.cdn + "/product/" + key + "/1-cart.jpg";
+    },
+
+    _scrollToOtherSellers: function() {
+      this.fire('scroll-to-other-sellers');
+    },      
+
+    _selectSize: function(e) {
+      this.selectedSize = e.target.value;
+      this.fire('size-selected', { sku: this.selectedSize });
+    },
+
+    _getDeliveryPromise: function(showChangeCity, sku, supplierdata) {
+      var promiseText = ((supplierdata && supplierdata.suppliers
+        .find(function(item) {
+          return item.sku === sku;
+        })
+      ));
+
+      return promiseText && promiseText.delivery_info;
+    },
+
+    _changeCity: function() {
+      this.showChangeCity = !this.showChangeCity;
+    },
+
+    _citiesObserver: function(newVal, oldVal) {
+      if (this.pdpCity) {
+        var _self = this;
+        var currentSupplier = ((this.supplierdata && this.supplierdata.suppliers
+          .find(function(item) {
+            return item.sku === _self.selectedSku;
+          })
+        ));
+
+        if (currentSupplier) {
+          this.fire('change-city', { destination: this.pdpCity, sku_simple: this.selectedSku, vendor_code: currentSupplier.vendor_code });
+        }
+      }
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+  });
+
+</script>

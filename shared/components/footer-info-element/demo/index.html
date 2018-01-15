@@ -1,0 +1,171 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>footer-info-element Demo</title>
+    <script src="//idangero.us/swiper/dist/js/swiper.min.js"></script>
+    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../bower_components/polymer/polymer.html">
+    <link rel="import" href="../footer-info-element.html">
+    <link rel="import" href="../../small-nav-element/small-nav-element.html">
+    <link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+  </head>
+  <body>
+
+    <p>An example of <code>&lt;footer-info-element&gt;</code>:</p>
+
+
+    <footer-info-element
+      footer='{"data": [
+      {
+        "social":[
+          {
+            "title": "Stay Connected",
+            "subtitle": "We are Here Listening",
+            "icons" :[
+              {
+              "iconclass":"fa fa-facebook",
+              "url":"https://www.facebook.com/hello.wadi/"
+              },
+              {
+              "iconclass":"fa fa-pinterest",
+              "url":"https://in.pinterest.com/hello_wadi/"
+              },
+              {
+              "iconclass":"fa fa-instagram",
+              "url":"https://instagram.com/wadi/"
+              },
+              {
+              "iconclass":"fa fa-twitter",
+              "url":"https://twitter.com/wadi/"
+              },
+              {
+              "iconclass":"fa fa-google-plus",
+              "url":"https://plus.google.com/101155961134789521035/about"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "help":[
+          {
+            "title": "Can We Help You ?",
+            "subtitle": "8am to 8pm (Saturday – Thursday)",
+            "closed": "Closed Friday",
+            "icons" :[
+            {
+            "iconclass":"fa fa-mobile",
+            "callus" :"+971 800 44 9234"
+            }]
+          }
+        ]
+      },
+      {
+        "payment":[
+          {
+            "title": "Payment Methods",
+            "subtitle": "Secure & Convenient Payment Options",
+            "icons" :[
+            {
+            "imagepath":"https://b.wadicdn.com/cms/phoenix/tinycity/visa.png"
+            },
+            {
+            "imagepath":"https://b.wadicdn.com/cms/phoenix/tinycity/mastercard.jpg"
+            },
+            {
+            "imagepath":"https://b.wadicdn.com/cms/phoenix/tinycity/cod.png"
+            }]
+          }
+        ]
+      }
+      ]}'
+
+      nav='{ "menu": [
+      {
+      "title" : "Customer Service",
+        "children": [
+          {
+          "title": "Get Support",
+          "url": "https://support.wadi.com/hc/en-us?utm_source=wadi&utm_medium=navigation&utm_term=get_support&utm_content=warranty_policy&utm_campaign=wadifooter"
+          },
+          {
+          "title": "Payment Security",
+          "url": "https://support.wadi.com/hc/en-us/articles/206965039?utm_source=wadi&utm_medium=navigation&utm_term=get_support&utm_content=payment_security&utm_campaign=wadifooter"
+          },
+          {
+          "title": "My Account",
+          "url": "//my.wadi.com/"
+          },
+          {
+          "title": "Track My Order",
+          "url": "//track.wadi.com/"
+          }
+        ]
+      },
+      {
+      "title" : "What We Sell",
+        "children": [
+          {
+          "title": "Electronics",
+          "url": "/electronics/"
+          },
+          {
+          "title": "Fashion",
+          "url": "/fashion/"
+          },
+          {
+          "title": "Beauty & Health",
+          "url": "/beauty_health/"
+          },
+          {
+          "title": "Fragrances",
+          "url": "/beauty_health-fragrances/"
+          },
+          {
+          "title": "Sale Items",
+          "url": "/all-products/?sort=discount"
+          }
+        ]
+      },
+      {
+      "title" : "About Us",
+        "children": [
+          {
+          "title": "Payment Methods",
+          "url": "https://support.wadi.com/hc/en-us/sections/201667019-Payment-Methods?utm_source=wadi&utm_medium=navigation&utm_term=about_us&utm_content=payment_methods&utm_campaign=wadifooter"
+          },
+          {
+          "title": "Return Policy",
+          "url": "https://support.wadi.com/hc/en-us/sections/201721825-Returns?utm_source=wadi&utm_medium=navigation&utm_term=about_us&utm_content=return_policy&utm_campaign=wadifooter"
+          },
+          {
+          "title": "Warranty Policy",
+          "url": "https://support.wadi.com/hc/en-us/sections/201721845-Warranty?utm_source=wadi&utm_medium=navigation&utm_term=about_us&utm_content=warranty_policy&utm_campaign=wadifooter"
+          },
+          {
+          "title": "Press Center",
+          "url": "/press/"
+          },
+          {
+          "title": "Careers",
+          "url": "/careers/"
+          }
+        ]
+       }
+      ]}'>
+    </footer-info-element>
+
+  </body>
+</html>

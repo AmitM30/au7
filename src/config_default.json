@@ -1,0 +1,253 @@
+{
+    "domain": "wadi-dev.com",
+    "api": "api",
+    "xdomain": "/data/xdomain.html",
+    "direction": "ltr",
+    "templateURL": "",
+    "templatePath": "_templates",
+    "moduleVersion": "",
+    "locale": {
+        "lang": "en",
+        "country": "sa",
+        "currency": "AED",
+        "setting": {}
+    },
+    "countries": {
+        "sa": {
+            "name": {
+                "en": "Saudi Arabia",
+                "ar": "المملكة العربية السعودية"
+            },
+            "phone": {
+                "isdCode": 966,
+                "carrierCodes": [50, 53, 54, 55, 56, 57, 58, 59, 599],
+                "minLength": 8,
+                "maxLength": 15,
+                "retryTimer": 15,
+                "skipCounter": 1
+            }
+        },
+        "ae": {
+            "name": {
+                "en": "United Arab Emirates",
+                "ar": "الامارات العربية المتحدة"
+            },
+            "phone": {
+                "isdCode": 971,
+                "carrierCodes": [50, 52, 54, 55, 56, 58],
+                "minLength": 8,
+                "maxLength": 15,
+                "retryTimer": 15,
+                "skipCounter": 1
+            }
+        }
+    },
+    "creditCardYearRange":40,
+    "switch": {
+        "lang": "ar",
+        "country": "sa"
+    },
+    "defaultPaymentMethod": "cc",
+    "defaultGiftOption": "f",
+    "device": "mobile",
+    "platform": "web",
+    "CDNUrl": "b.wadicdn.com",
+    "facetTypes": {
+        "category": {
+            "name": "Category",
+            "type": "links"
+        },
+        "offers": {
+            "name": "Offers",
+            "type": "multiselect"
+        },
+        "show_oos": {
+            "name": "Include Out Of Stock",
+            "type": "singleselect"
+        },
+        "brand": {
+            "name": "Brand",
+            "type": "multiselect"
+        },
+        "color": {
+            "name": "Color",
+            "type": "multiselect"
+        },
+        "price": {
+            "name": "Price",
+            "type": "range"
+        }
+    },
+    "currencyMapping": {
+        "sa-en": "SAR",
+        "ae-en": "AED",
+        "sa-ar": "ر.س",
+        "ae-ar": "د.إ"
+    },
+    "customerSupport": {
+        "sa": "9200 1 9234",
+        "ae": "800 HI WADI"
+    },
+    "quantityOptions": [1, 2, 3],
+    "tracking": {
+        "utm": ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"],
+        "lasttouch": ["lasttouch_click", "lasttouch_utm_medium", "lasttouch_utm_campaign", "lasttouch_utm_term", "lasttouch_utm_content", "lasttouch_campaign", "lasttouch_content", "lasttouch_medium", "lasttouch_term"],
+        "SEO": ["google", "bing", "baidu", "aol", "duckduckgo"]
+    },
+
+    "app": {
+        "platforms": [ "ios", "android" ],
+        "link": "wadi",
+        "debugClause": "+debug@wadi.com",
+        "logClause": "+log@wadi.com",
+        "header": {
+            "key": "media",
+            "value": [
+              "app",
+              "fmcg"
+            ]
+        }
+    },
+
+    "meta": {
+      "seo": {
+        "h1html": null,
+        "pageTitle": null,
+        "h1": null,
+        "metaDescription": null,
+        "metaKeywords": null
+      },
+      "content": {
+        "metaKeywords": "mobiles, electronics, clothes online, shoes online, online fashion shopping, online fashion, Shoes, Men Shoes, Women Shoes, Footwear, Clothes, Apparel, Clothing, Fashion, Sports, Top Brands, accessories, gift"
+      },
+      "pdp": {
+        "en": {
+          "seo": {
+            "pageTitle": "[ProductName] - Buy [ProductName] online at lowest price in [CountryName]. Read reviews and specifications | Wadi.com",
+            "metaDescription": "Buy [ProductName] online at best price in [CountryName], read specifications, features and reviews. Great Discounts, 100% Genuine Products, 14 Day Replacement Guarantee Only at Wadi.com"
+          }
+        },
+        "ar": {
+          "seo": {
+            "pageTitle": "[ProductName] - اشتري [ProductName] عبر الإنترنت بأقل سعر في [CountryName]. اقرأ التقييمات والمواصفات | وادي دوت كوم",
+            "metaDescription": "اشتري [ProductName] بأقل سعر عبر الانترنت في [CountryName]، اقرأ الخصائص و المواصفات والتقييمات. خصومات رائعة، منتجات أصلية 100%، ضمان الاستبدال خلال 14 يوم فقط في وادي دوت كوم"
+          }
+        }
+      }
+    },
+
+    "cart": {
+        "buyNowRedirect": "checkout"
+    },
+
+    "token": {
+      "currentCart": "cart",
+      "currentOrder": "currentOrder",
+      "currentUser": "currentUser",
+      "orderAddress": "orderAddresses",
+      "orderGift": "orderGift",
+      "no_payment": "no_payment"
+    },
+
+    "validations": {
+        "phone": {
+            "retry": 2,
+            "verificationCodeLength": 4
+        },
+        "documentUpload": {
+            "types": ["jpg", "jpeg", "png"],
+            "size": 2048
+        }
+    },
+
+    "events": {
+      "maxEventThresholdCount": 30,
+      "maxEventThresholdTime": 30,
+      "handlers": {
+        "impressions": { "data": { "id": null, "name": null, "creative": null, "position": 0 } },
+        "impressions-listing": { "data": { "name": null, "id": null, "price": null, "brand": null, "category": null, "variant": null, "list": null, "position": 0, "visible": 1 } },
+        "impressions-product": { "data": { "name": null, "id": null, "price": null, "brand": null, "category": null, "variant": null, "list": null, "position": 0 } },
+        "checkout-purchase": { "eventName": "transactionComplete", "transaction": { "id": null, "affiliation": null, "revenue": null, "tax": null, "shipping": null, "coupon": null }, "data": { "name": null, "id": null, "price": null, "brand": null, "category": null, "variant": null, "position": 1, "visible": 1 } },
+        "promo-view": { "data": { "id": null, "name": null, "creative": null, "position": 0 } }
+      },
+      "immediate": {
+        "add-product": { "eventName": "addToCart", "data": { "name": null, "id": null, "price": null, "brand": null, "category": null, "variant": null, "quantity": 1, "visible": 1 } },
+        "update-quantity": { "data": { "name": null, "id": null, "sku": null, "visible": 1, "price": null, "brand": null, "category": null, "variant": null, "quantity": 1 } },
+        "remove-item": { "eventName": "removeFromCart", "data": { "name": null, "id": null, "price": null, "brand": null, "category": null, "variant": null, "quantity": 1, "visible": 1 } },
+        "impressions-detail": { "data": { "name": null, "id": null, "price": null, "brand": null, "category": null, "variant": null, "visible": 1 } },
+        "promo-click": { "eventName": "promotionClick", "data": { "id": null, "name": null, "creative": null, "position": 0 } },
+        "product-click": { "eventName": "productClick", "data": { "name": null, "id": null, "price": null, "brand": null, "category": null, "variant": null, "position": 1, "visible": 1 } },
+        "checkout-now": { "eventName": "checkout", "data": { "name": null, "id": null, "price": null, "brand": null, "category": null, "variant": null, "visible": 1 } },
+        "checkout-step": { "eventName": "checkoutStepChange", "data": { } },
+        "cart-load": { "eventName": "CartLoad", "data": { "name": null, "id": null, "price": null, "brand": null, "category": null, "variant": null, "visible": 1 } },
+        "user-loaded": { "eventName": "userLoaded", "data": { "user": { "customer": null, "email": null } } }
+      }
+    },
+
+    "user": {
+        "id": "identity",
+        "fallBackLastName": "...",
+        "fallBackSignupFirstName": "Wadi",
+        "fallBackSignupLastName": "Customer",
+        "defaultAddressType": "Home",
+        "defaulGender": "female",
+        "defaultPassword":"testPassword"
+    },
+
+    "apis": {
+        "version": "v1",
+        "backend": "/api/sawa/v1/u",
+        "apiBase": "/api/sawa/v1",
+        "product": "/api/sawa/v1/products/",
+        "search": "/api/sawa/v1/u/catalog",
+        "suggest": "/api/sawa/v1/suggest",
+        "review": "/api/checkout/order/review",
+        "navigation": "/api/sawa/v1/config/navigation",
+        "facets": "/api/sawa/v1/facets/list",
+        "categories": "/api/sawa/v1/getCategories",
+        "subscribe": "/api/sawa/v1/userSignup",
+        "login": "/api/jerry/login",
+        "logout": "/api/jerry/v1/logout",
+        "passReset": "/api/jerry/v1/password-reset-request/{email}/",
+        "passResetRequestV2": "/api/jerry/v2-password-reset-request/{email}/",
+        "passResetV2":"/api/jerry/customers/password/reset",
+        "userStatus": "/api/jerry/v1/customers/self",
+        "userAddress": "/api/jerry/v2/addresses?depth=1&limit=20",
+        "userExist": "/api/jerry/v2/users/{email}/exists",
+        "uploadDocument": "/api/sawa/v1/customer/idUpload",
+        "idCheck": "/api/sawa/v1/customer/idCheck",
+        "sendOTP":"/api/jerry/v2/phone/verify",
+        "verifyOTP":"/api/jerry/v2/phone/code/verify",
+        "reviews": "//d1le22hyhj2ui8.cloudfront.net/onpage/wadi.com/reviews.js",
+        "order": "/api/checkout/v1/order",
+        "error": "/api/sawa/v1/app/error",
+        "socialLogin": "/api/jerry/connect",
+        "createAddress": "/api/jerry/v2/addresses",
+        "cities":"/api/rose/u/_meta/cities",
+        "areas":"/api/rose/u/_meta/areas",
+        "orderReview":"/api/checkout/v1/order/review",
+        "promotion": "/api/promotion/subscribe",
+        "primaryPhone": "/api/jerry/phones/primary",
+        "createNewUser": "/api/jerry/customers.json",
+        "trackOrder": "/api/sawa/v1/tracking/token",
+        "getCardTokens": "/api/checkout/payment/tokenization/{email}",
+        "deleteCardTokens": "/api/checkout/payment/tokenization/{tokenId}",
+        "promise":"/api/sawa/v1/getpromise",
+        "keys": {
+            "social": {
+                "facebook": {
+                    "wadi-dev.com": "1702109790104450",
+                    "wadi-uat.com": "1702109790104450",
+                    "wadi-stg.com": "1702109790104450",
+                    "wadi.com": "699077540282679"
+                },
+                "google": {
+                    "wadi-dev.com": "1034143548269-us4drm7upkqgsdpe3835n63k77ick6vl.apps.googleusercontent.com",
+                    "wadi-uat.com": "1034143548269-us4drm7upkqgsdpe3835n63k77ick6vl.apps.googleusercontent.com",
+                    "wadi-stg.com": "1034143548269-us4drm7upkqgsdpe3835n63k77ick6vl.apps.googleusercontent.com",
+                    "wadi.com": "1034143548269-us4drm7upkqgsdpe3835n63k77ick6vl.apps.googleusercontent.com"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,173 @@
+<!--
+An element providing timer countdown feature
+
+Example:
+    <timer-element></timer-element>
+@demo
+-->
+
+<dom-module id="timer-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+
+    :host #availableQty.active {
+      width: var(--timer-element-width);
+    }
+  </style>
+
+  <template>
+
+    <template is="dom-if" if="[[ !options.hideProgressBar ]]">
+      <div class="availability-bar">
+        <span id="availableQty" class="available-quantity"></span>
+      </div>
+    </template>
+
+      <div class="details-row">
+        <template is="dom-if" if="[[ !options.hideProgressBar ]]">
+          <span class="remaining">[[ leftPerc ]] [[_translate('Left')]]</span>
+        </template>
+        <span id="timer"></span>
+      </div>
+
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'timer-element',
+
+    properties: {
+
+      /**
+       * Time to End the timer on - UTC
+       */
+      end: {
+        type: String
+      },
+
+      /**
+       * Start timer with provided duration, in secs
+       */
+      duration: {
+        type: Number,
+        observer: '_durationChanged'
+      },
+
+      /**
+       * Total Quantity
+       */
+      totalQty: {
+        type: Number,
+        value: 1
+      },
+
+      /**
+       * Available Quantity
+       */
+      availableQty: {
+        type: Number,
+        value: 0
+      },
+
+      /**
+       * Options supported by the element
+       */
+      options: {
+        type: Object,
+        value: {
+          hideIfZero: false,
+          hideProgressBar: false
+        }
+      }
+    },
+
+    attached: function () {
+      if (typeof this.options === 'string') {
+        try {
+          this.options = JSON.parse(this.options);
+        } catch (e) { }
+      }
+
+      if (this.end) {
+        if (typeof this.end === 'string') {
+          var datestr = this.end.split(/[-T.]/);
+          this.end = new Date(datestr.slice(0,3).join('/') + ' ' + datestr[3]);
+        }
+
+        if (this.end > new Date()) {
+          this._startTimer(((this.end - Date.now()) / 1000) + 1, '#timer');
+        }
+
+        if(this.totalQty > 0 && this.availableQty >= 0) {
+          this.leftPerc = parseInt((this.availableQty / this.totalQty) * 100) + '%';
+          this.customStyle['--timer-element-width'] = this.leftPerc;
+          this.updateStyles();
+
+          var _self = this; // Safari hack
+          window.setTimeout(function () {
+            _self.querySelector('#availableQty').classList.add('active');
+          }, 0);
+        }
+      }
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    },
+
+    _durationChanged: function (val) {
+      if (this.duration) {
+        this._startTimer(this.duration, '#timer');
+      }
+    },
+
+    _startTimer: function (duration, display) {
+      var start = Date.now(),
+          diff,
+          hours,
+          minutes,
+          seconds;
+      // var timerEl = this.$$(display);
+      var timerEl = this.querySelector(display);
+      if (!timerEl) {
+        return;
+      }
+
+      var timer = function () {
+        diff = duration - (((Date.now() - start) / 1000) | 0);
+
+        hours   = (diff / (60 * 60)) | 0;
+        minutes = ((diff / 60) % 60) | 0;
+        seconds = (diff % 60) | 0;
+
+        hours = hours < 10 ? '0' + hours : hours;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+
+        timerEl.textContent = this.options && this.options.hideIfZero
+                              ? (hours > 0 ? hours + ':' : '') + (minutes > 0 ? minutes + ':' : '') + seconds
+                              : hours + ':' + minutes + ':'+ seconds;
+
+        if (diff === 0) {
+          start = Date.now() + 1000;
+          clearInterval(this.startTimer);
+          this.duration = null;
+          this.fire('time-up');
+        }
+      };
+      timer.call(this);
+
+      var _self = this;
+      this.startTimer = setInterval(function () { timer.call(_self); }, 250);
+    }
+  });
+
+</script>

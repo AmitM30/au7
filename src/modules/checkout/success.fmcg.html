@@ -1,0 +1,22 @@
+<template>
+	<section id="checkout-step-success">
+
+		<div class="illustration-container">
+			<img src="/dist/images/checkout-success.png" alt="Thank you for your order!" />
+		</div>
+		<h2>${ 'Thank you for your order' | t }!</h2>
+		<p>${ 'Congratulations! Your order has been successfully placed and is being processed by the Wadi team.' | t }</p>
+		<p>${ 'Your order number is' | t }: <strong>${ cartModel.orderNumber }</strong></p>
+		<p>${ 'We have sent you an email with all the details you need to know about your purchase. You can also keep an eye on your order in ' | t }<a href="//${ config.myAccount }">${ 'My Account' | t }</a>.</p>
+
+		<div class="support-info-container">
+			<a class="core-block-cta core-block-cta-tertiary cta-full-width" tap.trigger="continueShopping()">${ 'Continue Shopping' | t }</a>
+			<p>${ 'Need assistance? Our friendly customer service team are here to help!' | t }</p>
+			<ul>
+				<li><a class="number" href="tel: ${config.locale.setting.cs}">${config.locale.setting.cs}</a></li>
+				<li><a class="email" href="mailto: service@wadi.com">service@wadi.com</a></li>
+			</ul>
+		</div>
+
+	</section>
+</template>

@@ -1,0 +1,29 @@
+{
+  "name": "legacy-login-element",
+  "version": "1.0.0",
+  "authors": [
+    "Vijay S <vijay.singh@wadi.com>"
+  ],
+  "description": "Login / legacy-login functionality",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "legacy-login-element"
+  ],
+  "main": "legacy-login-element.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "/demo/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  }
+}

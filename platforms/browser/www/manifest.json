@@ -1,0 +1,11 @@
+{
+  "background_color": "#FFF",
+  "display": "standalone",
+  "name": "Au7",
+  "short_name": "Au7",
+  "version": "io.cordova.hellocordova",
+  "description": "Lightweight Mobile App Development Platform",
+  "author": "Amit Mangal",
+  "icons": [],
+  "start_url": "index.html"
+}

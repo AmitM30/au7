@@ -1,0 +1,133 @@
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+    <login-element submit.trigger="loginUser()" user.two-way="user.info" options='{ "title": "My Account" }'></login-element>
+@demo
+-->
+
+<dom-module id="login-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+    <validation-email></validation-email>
+    <validation-password></validation-password>
+    <template is="dom-if" if="[[ user.isLoggedIn ]]">
+      <a href$="//my.[[ _getDomain() ]].com" target="_blank" class="user-identifier"><i class="wadicon-account"></i>[[ _translate('Welcome back') ]] <strong>[[ user.firstname ]] [[ user.surname ]]</strong></a>
+    </template>
+    <template is="dom-if" if="[[ !user.isLoggedIn ]]">
+      <div class="trigger" collapse="#myaccountcollapse" on-click="_toggle" hidden="[[!isMobile]]"><i class="wadicon-account"></i> [[ _translate('My Account') ]]</div>
+      <iron-collapse id="myaccountcollapse" opened="[[!isMobile]]">
+        <div class="content-holder">
+          <form is="iron-form" method="GET" novalidate on-submit="_onSubmit">
+            <div class="input-container">
+              <input class$="validity-{{validEmail}}" is="iron-input" bind-value="{{ loginEmail }}" on-input="_clearEmailValidation" type="email" placeholder="[[ _translate('Email') ]]" />
+              <template is="dom-if" if="[[ loginEmail.length ]]">
+                <a on-tap="_clearEmailField" class="field-clear"><i class="wadicon-cancel"></i></a>
+              </template>
+              <p class="input-helper-message" hidden$="[[validEmail]]"><i class="wadicon-alert"></i>[[_translate('Please enter a valid email address')]]</p>
+            </div>
+            <div class="input-container">
+              <input class$="validity-{{validPassword}}" is="iron-input" bind-value="{{ loginPassword }}" on-input="_clearPasswordValidation" type="password" placeholder="[[ _translate('Password') ]]" />
+              <template is="dom-if" if="[[ loginPassword.length ]]">
+                <a on-tap="_clearPasswordField" class="field-clear"><i class="wadicon-cancel"></i></a>
+              </template>
+              <p class="input-helper-message" hidden$="[[validPassword]]"><i class="wadicon-alert"></i>[[_translate('Please enter your password')]]</p>
+            </div>
+            <button class="core-block-cta cta-full-width" type="submit">[[ _translate('Log In') ]]<paper-ripple></paper-ripple></button>
+          </form>
+          <div class="helper-options">
+            <!--<content></content>-->
+            <a class="option" href="//[[ createAccount ]]" target="_blank">[[ _translate('Create New Account') ]]</a>
+            <forget-password-element></forget-password-element>
+          </div>
+        </div>
+      </iron-collapse>
+    </template>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'login-element',
+
+
+    properties: {
+
+      /**
+       * Products array that needs to be displayed to UI
+       */
+      user: {
+        type: Object,
+        value: function () {
+          return {
+
+          };
+        }
+      },
+
+      createAccount: {
+        type: String
+      }
+    },
+
+    attached: function () {
+      this.validatorEmail = new Polymer.IronMeta({type: 'validator'}).byKey('validation-email');
+      this.validatorPassword = new Polymer.IronMeta({type: 'validator'}).byKey('validation-password');
+      this.validEmail = true;
+      this.validPassword = true;
+      this.isMobile = window.config.device === 'mobile' ? true : false;
+    },
+
+    _onSubmit: function(event) {
+      this.validEmail = this.validatorEmail.validate(this.loginEmail);
+      this.validPassword = this.validatorPassword.validate(this.loginPassword);
+      if (!this.validEmail || !this.validPassword) {
+        event.preventDefault();
+      }
+      else {
+        this.fire('login', {"ref": this, "email": this.loginEmail, "password": this.loginPassword});
+      }
+    },
+
+    _clearEmailValidation: function() {
+      this.validEmail = true;
+    },
+
+    _clearPasswordValidation: function() {
+      this.validPassword = true;
+    },
+
+    _toggle: function (event) {
+      var node = event.currentTarget.getAttribute('collapse');
+      this.querySelector(node).toggle();
+      event.currentTarget.classList.toggle('opened');
+    },
+
+    _clearEmailField: function() {
+      this.set('loginEmail', '');
+    },
+
+    _clearPasswordField: function() {
+      this.set('loginPassword', '');
+    },
+
+    _getDomain: function () {
+      return window.location.host.split('.')[1];
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+  });
+
+</script>

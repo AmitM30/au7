@@ -1,0 +1,162 @@
+<!--
+Add To Cart and Buy Now functionality
+
+Example:
+    <multiseller-element></multiseller-element>
+@demo
+-->
+<dom-module id="multiseller-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+
+    <div class="site-width-container">
+      <h2>[[ _translate('Other Sellers') ]] ([[ otherSuppliersCount ]])</h2>
+
+      <div class="suppliers-wrapper">
+        <template is="dom-repeat" items="{{ otherSuppliers }}" as="supplier" index-as="index">
+          <div class="supplier-container">
+            <div class="supplier-details-row">
+              <p class="supplier-name">[[supplier.supplier_name]]</p>
+              <span class="supplier-rating-badge">[[supplier.vendor_rating]] / 5</span>
+            </div>
+            <div class="supplier-additional-info">
+              <p class="shipping">
+                  [[ _translate('Ships by') ]] [[ supplier.shipped_by_date ]] -
+                   [[ _translate('Delivered by') ]] [[ supplier.delivered_by_date ]]
+              </p>
+              <template is="dom-if" if="{{ supplier.warranty_period }}" restamp="true">
+                <p class="warranty">[[supplier.warranty_period]]</p>
+              </template>
+
+              <!-- PAYMENT -->
+              <template is="dom-if" if="[[ !supplier.is_prepaid ]]" restamp="true">
+                  <p class="title cod">[[_translate('This item is eligible for cash on delivery.')]]</p>
+              </template>
+              <template is="dom-if" if="[[ supplier.is_prepaid ]]" restamp="true">
+                  <p>[[_translate('This item can only be purchased using a debit/credit card or voucher.')]]</p>
+              </template>
+
+            </div>
+            <div class="supplier-cta-container">
+              <cart-button-element
+                item$="[[ _getAddToCart(supplier, index) ]]"
+                selected-sku$="[[ supplier.sku ]]"
+                in-cart$="[[ _isInCart(supplier, supplier.sku) ]]"
+                ctx$="[[ ctx ]]"
+                options='{"className": "core-block-cta core-block-cta-tertiary", "showPrice": true}'
+              ></cart-button-element>
+            </div>
+          </div>
+        </template>
+      </div>
+
+    </div>
+
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'multiseller-element',
+
+    // listeners: {
+    //   'tap': 'add'
+    // },
+
+    properties: {
+
+      /**
+       * Options supported by element
+       */
+      options: {
+        type: Object,
+        value: {
+          title: "Other Sellers"
+        }
+      },
+
+      ctx: {
+        type: Object
+      },
+
+      supplierdata: {
+        type: Object,
+        observer: '_updateSupplier'
+      },
+
+      selectedSku: {
+        type: String
+      },
+
+      /**
+       * Product already in cart or not
+       */
+      inCart: {
+        type: Boolean,
+        value: false
+      }
+    },
+
+    attached: function () {
+      this._updateSupplier();
+    },
+
+    _getSupplierPrice: function (index) {
+      return this.otherSuppliers[index].specialPrice || this.otherSuppliers[index].price;
+    },
+
+    _getAddToCart: function (supplier, index) {
+      return json = {
+        "sku"   : this.otherSuppliers[index].sku,
+        "vendor": this.otherSuppliers[index].vendor_code,
+        "price" : this._getSupplierPrice(index)
+      };
+    },
+
+    _isInCart: function(supplier, sku) {
+      var found = this.inCartSku.find(function (item) {
+        return item === sku;
+      });
+
+      return (found && found.length > 0) ? true : false;
+    },
+
+    _updateSupplier: function () {
+      if (this.supplierdata.suppliers.length > 1) {
+        this.otherSuppliers = this.supplierdata.suppliers.slice(0) || [];
+        this.otherSuppliers.splice(0, 1);
+        this.otherSuppliersCount = this.otherSuppliers.length;
+
+        // LOWEST PRICE OF OTHER SUPPLIERS
+        this.lowestSuppliersPrice = this.otherSuppliers[0].specialPrice ? this.otherSuppliers[0].specialPrice : this.otherSuppliers[0].price;
+        if (this.otherSuppliers.length > 1) {
+          var currentPrice;
+          for(i = 1; i < this.otherSuppliers.length; i++) {
+            currentPrice = this.otherSuppliers[i].specialPrice ? this.otherSuppliers[i].specialPrice : this.otherSuppliers[i].price;
+            if (currentPrice < this.lowestSuppliersPrice) {
+              this.lowestSuppliersPrice = currentPrice;
+            }
+          }
+        }
+      } else {
+        this.set('otherSuppliers', []);
+        this.set('otherSuppliersCount', 0);
+      }
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+  });
+
+</script>

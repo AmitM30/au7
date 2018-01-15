@@ -1,0 +1,83 @@
+<!--
+An element proving category link element functionality with support for 1, 2, 3 ...n Category Links
+
+Example:
+    <category-links-element></category-links-element>
+@demo
+-->
+<dom-module id="category-links-element">
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+    <content></content>
+    <template is="dom-if" if="[[ datalinks.title ]]">
+      <h2>[[ datalinks.title ]]</h2>
+    </template>
+    <div class="grid-row">
+      <template is="dom-repeat" items="[[ datalinks.smallcategoryLink ]]" as="smallDataLink">
+        <div class$="[[ _computeClass() ]]">
+          <a class="category-link" href$="[[ _getLink(smallDataLink.smallImageUrl) ]]">
+            <i class$="[[ smallDataLink.smallimageIcon ]]" style$="color: [[smallDataLink.smallImageColor]]"></i>
+            <paper-ripple></paper-ripple>
+            [[ smallDataLink.smallImageTitle ]]
+          </a>
+        </div>
+      </template>
+    </div>
+  </template>
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'category-links-element',
+
+    /**
+     * Change bootstrap class as per user specified No. of columns
+     */
+    _computeClass: function () {
+      var numColumn = this.options['columnOptions'];
+      var realColumn = Math.floor(100 / numColumn);
+      return 'grid-column column-percent-' + realColumn;
+    },
+
+    properties: {
+
+      /**
+       * Data array that needs to be displayed to UI
+       */
+      datalinks: {
+        type: Object
+      },
+
+      /**
+       * Options supported by category Links Element
+       */
+      options: {
+        type: Object
+      }
+    },
+
+    ready: function () {
+      this.internals = {};
+      this.internals.imageDefaultOptions = {
+        columnOptions: 1
+      };
+    },
+
+    attached: function () {
+      Object.assign(this.internals.imageDefaultOptions, this.options);
+    },
+
+    _getLink: function (link) {
+      return (link.indexOf('/') === 0) ? link : '/' + link;
+    }
+  });
+
+</script>

@@ -1,0 +1,295 @@
+<!--
+Widget to add carousel banners with title and navigation option
+
+Example:
+    <pdp-carousel-element></pdp-carousel-element>
+@demo
+-->
+<script src='./lib/img-touch-canvas.js'></script>
+<dom-module id="pdp-carousel-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+    #zoomPanel,
+    #zoomPanelMobile {
+      visibility: hidden;
+    }
+
+  </style>
+
+  <template>
+
+    <!-- MOBILE ZOOM PANEL -->
+    <div id="zoomPanelMobile" on-tap="_hideZoom" hidden$="[[!isMobile]]">
+        <canvas id="mycanvas" style="width: 100%; height: 100%"></canvas>
+    </div>
+
+    <!-- DESKTOP ZOOM PANEL -->
+    <div id="zoomPanel" hidden$="[[isMobile]]">
+      <img id="zoomedImage" on-load="_zoomImageLoaded">
+      <div class="core-product-image-preloader"><i class="wadicon-spinner wadicon-spin"></i></div>
+    </div>
+
+    <!-- MAIN PRODUCT GALLERY START -->
+    <div class="product-gallery-main">
+      <div class="swiper-container js_frame">
+        <div class="swiper-wrapper js_slides">
+          <template is="dom-repeat" items="[[ banners.assets ]]" as="banner" index-as="i">
+            <div class="swiper-slide js_slide">
+              <!-- PDP CAROUSEL -->
+              <div class="image-wrapper">
+                <div class="image-container">
+                  <img
+                    lazy-src$="[[ banner.zoomUrl ]]"
+                    index$="[[ i ]]"
+                    id="zoomTrigger"
+                    on-mousemove="_onMouseMoveZoom"
+                    on-mouseout="_hideZoom"
+                    on-mouseenter="_showZoom"
+                    hidden$="[[isMobile]]"
+                  />
+                  <img
+                    lazy-src$="[[ banner.imageUrl ]]"
+                    index$="[[ i ]]"
+                    id="zoomTrigger"
+                    on-tap="_showZoom"
+                    hidden$="[[!isMobile]]"
+                  />
+                  <div class="swiper-lazy-preloader"></div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- OUT OF STOCK BADGE -->
+      <template is="dom-if" if="[[outOfStock]]">
+        <p class="core-product-badge out-of-stock"><span>[[ _translate('Out Of Stock') ]]</span></p>
+      </template>
+
+      <!-- NOT OUT OF STOCK PDP -->
+      <template is="dom-if" if="[[!outOfStock]]">
+        <template is="dom-if" if="[[ !isFlashSale ]]">
+          <!-- PRODUCT BADGE FOR PDP -->
+          <template is="dom-repeat" items="[[ product.badges ]]" as="badge">
+            <p class$="core-product-badge promo-badge [[badge]]">[[badge]]</p>
+          </template>
+          <!-- PRODUCT TAG FOR PDP -->
+          <template is="dom-if" if="[[ productTag ]]">
+            <p class="product-tag">[[productTag.name]]</p>
+          </template>
+        </template>
+
+        <!-- FLASH SALE TIMER -->
+        <template is="dom-if" if="[[ isFlashSale ]]">
+          <p class="product-tag attention">[[ _translate('Flash Sale') ]]</p>
+          <timer-element end="[[ productFlash.endAt ]]" total-qty="[[ productFlash.totQty ]]" available-qty="[[ productFlash.availableQty ]]"></timer-element>
+        </template>
+
+        <!-- YELLOW DISCOUNT TAG -->
+       <template is="dom-if" if=[[isMobile]]>
+          <template is="dom-if" if="[[ _hasDiscount(productPrice, productOfferPrice) ]]">
+            <p class="discount-tag">[[ productDiscount ]]% [[ _translate('off') ]]</p>
+          </template> 
+        </template>
+
+      </template>
+      <ul class="swiper-pagination js_dots" hidden$="[[options.paginationHide]]"></ul>
+      <div class="swiper-button-prev" hidden$="[[options.hidePrevNext]]"></div>
+      <div class="swiper-button-next" hidden$="[[options.hidePrevNext]]"></div>
+    </div>
+    <!-- MAIN PRODUCT GALLERY END -->
+
+    <!-- THUMBNAILS START -->
+    <div class="product-gallery-thumbnails-container" hidden$="[[isMobile]]">
+      <div class="product-gallery-thumbnails swiper-container js_frame">
+        <div class="swiper-wrapper js_slides">
+          <template is="dom-repeat" items="[[ banners.assets ]]" as="banner" index-as="i">
+            <div class="swiper-slide js_slide">
+              <div class="thumbnail-container">
+                <img src$="[[ banner.imageUrl ]]" on-tap="_moveToSlide" index$="[[i]]">
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+      <div class="swiper-button-prev js_prev prev" id="thumbnails-prev"></div>
+      <div class="swiper-button-next js_next next" id="thumbnails-next"></div>
+    </div>
+    <!-- THUMBNAILS END -->
+
+  </template>
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'pdp-carousel-element',
+
+    properties: {
+
+      /**
+       * Products array that needs to be displayed to UI
+       */
+      banners: {
+        type: Object
+      },
+
+      /**
+       * Options supported by banner element
+       */
+      options: {
+        type: Object,
+        value: {
+          hidePrevNext: true,
+          paginationHide: true,
+          title: true,
+          hideIndexer: false,
+          sliderOptions: {
+            type: Object
+          }
+        }
+      },
+
+      /**
+       * application context
+       */
+      ctx: {
+        type: Object
+      }
+    },
+
+    ready: function () {
+      this.internals = {};
+      this.internals.swiperOptions = {};
+    },
+
+    attached: function () {
+      this.isMobile = window.config.device === 'mobile' ? true : false;
+
+      // Merge default option with element input options
+      Object.assign(this.internals.swiperOptions, this.options);
+      this.swiperInstance = window.swiper(this.querySelector('.product-gallery-main'), this.internals.swiperOptions);
+
+      var _self = this;
+      this.addEventListener('while.swiper.sliding', function () { _self.fire('lazy-load-images'); }, { passive: true });
+
+
+      // THUMBNAILS CAROUSEL
+      this.swiperInstanceThumbs = window.swiper(this.querySelector('.product-gallery-thumbnails-container'), {
+        slidesToScroll: 3
+      });
+
+      if (!this.isMobile) {
+        document.getElementsByClassName('thumbnail-container')[0].classList.add('active');
+      }
+
+      this.isFlashSale = (typeof this.productFlash !== "undefined" ? true : false);
+    },
+
+    json: function (data) {
+      return JSON.stringify(data);
+    },
+
+    _moveToSlide: function (e) {
+      [].forEach.call(this.getElementsByClassName('thumbnail-container'), function(el) { el.classList.remove('active'); });
+      e.target.parentNode.classList.add('active');
+      this.swiperInstance.slideTo(parseInt(e.currentTarget.attributes['index'].value));
+    },
+
+    _translate: function (key) {
+       return window.translate(key);
+	  },
+
+    _hasDiscount: function (price, special) {
+      return price > special;
+    },
+
+    // PRODUCT IMAGE ZOOM
+    _getZoomImage: function (img) {
+      return img.replace('product.jpg', 'zoom.jpg');
+    },
+
+    _zoomImageLoaded: function () {
+      this.$.zoomedImage.style.left = (-0.5 * this.$.zoomedImage.width) + (0.5 * this.$.zoomPanel.offsetWidth) + 'px';
+      this.$.zoomedImage.style.top = (-0.5 * this.$.zoomedImage.height) + (0.5 * this.$.zoomPanel.offsetHeight) + 'px';
+      this.$.zoomedImage.classList.add('loaded');
+    },
+
+    // DESKTOP
+     _onMouseMoveZoom: function (e) {
+      var x = this.querySelector('#zoomTrigger').width / 2;
+      var y = this.querySelector('#zoomTrigger').height / 2;
+
+      var ratioX = ((x - e.offsetX) / this.querySelector('#zoomTrigger').width) * this.$.zoomedImage.width;
+      var ratioY = ((y - e.offsetY) / this.querySelector('#zoomTrigger').height) * this.$.zoomedImage.height;
+
+      var isXin = this.checkIsXIn(
+        this.$.zoomedImage.offsetLeft + ratioX, //a1x
+        this.$.zoomedImage.offsetLeft + ratioX + this.$.zoomedImage.width, //a2x
+        0, //b1x
+        this.$.zoomPanel.offsetWidth //b2x
+      );
+      var isYin = this.checkIsYIn(
+        this.$.zoomedImage.offsetTop + ratioY, //a1y
+        this.$.zoomedImage.offsetTop + ratioY + this.$.zoomedImage.height, //a2y
+        0, //b1y
+        this.$.zoomPanel.offsetHeight //b2y
+      );
+      if (!isXin) {
+        if (this.$.zoomedImage.offsetLeft + ratioX + this.$.zoomedImage.width - this.$.zoomPanel.offsetWidth > 0) {
+            ratioX = this.$.zoomedImage.width / 2 - this.$.zoomPanel.offsetWidth / 2;
+        } else {
+            ratioX = -(this.$.zoomedImage.width / 2 - this.$.zoomPanel.offsetWidth / 2);
+        }
+      }
+      if (!isYin) {
+        if (this.$.zoomedImage.offsetTop + ratioY + this.$.zoomedImage.height - this.$.zoomPanel.offsetHeight > 0) {
+            ratioY = this.$.zoomedImage.height / 2 - this.$.zoomPanel.offsetHeight / 2;
+        } else {
+            ratioY = -(this.$.zoomedImage.height / 2 - this.$.zoomPanel.offsetHeight / 2);
+        }
+      }
+      this.transform('translate(' + ratioX + 'px,' + ratioY + 'px)', this.$.zoomedImage);
+    },
+
+    _showZoom: function (e) {
+      if (this.isMobile) {
+        var gesturableImg = new ImgTouchCanvas({
+          canvas: document.getElementById('mycanvas'),
+          path: e.target.src.replace('product.jpg', 'zoom.jpg')
+        });
+        this.$.zoomPanelMobile.style.visibility = 'visible';
+      }
+      else {
+        this.$.zoomedImage.src = e.target.src.replace('product.jpg', 'zoom.jpg');
+        this.$.zoomPanel.style.visibility = 'visible';
+      }
+    },
+
+    _hideZoom: function () {
+      if (this.isMobile) {
+        this.$.zoomPanelMobile.style.visibility = 'hidden';
+      }
+      else {
+        this.$.zoomPanel.style.visibility = 'hidden';
+        this.$.zoomedImage.src = '';
+        this.$.zoomedImage.classList.remove('loaded');
+      }
+    },
+
+    checkIsXIn: function (a1x, a2x, b1x, b2x) {
+      return a1x <= b1x && b2x <= a2x;
+    },
+
+    checkIsYIn: function (a1y, a2y, b1y, b2y) {
+      return a1y <= b1y && b2y <= a2y;
+    }
+  });
+
+</script>

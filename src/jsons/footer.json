@@ -1,0 +1,133 @@
+{
+  "footer": {
+    "data": {
+      "appSection": {
+        "title": "Get The Free App",
+        "subtitle": "Shopping Just Got Even Easier",
+        "appLinks": [
+          {
+            "url": "//control.kochava.com/v1/cpi/click?campaign_id=kowadi-ios55b79ce03a74b54eb813e695ae&network_id=3042&device_id=device_id&site_id=1",
+            "className": "ios",
+            "content": "Download IOS App"
+          },
+          {
+            "url": "//control.kochava.com/v1/cpi/click?campaign_id=kowadi-android55b79cf831da7b449d1c0c2543&network_id=3042&device_id=device_id&site_id=1&append_app_conv_trk_params=1",
+            "className": "android",
+            "content": "Download Android App"
+          }
+        ]
+      },
+      "helpSection": {
+        "title": "Can We Help You?",
+        "subtitle": "Our Friendly Team - Available 24/7",
+        "contactMethods": [
+          {
+            "iconClass": "wadicon-mobile",
+            "value": "+971 800 2 449234"
+          }
+        ],
+        "socialIcons": [
+          {
+            "iconClass": "wadicon-facebook",
+            "url": "//www.facebook.com/hello.wadi/"
+          },
+          {
+            "iconClass": "wadicon-instagram",
+            "url": "//instagram.com/wadi/"
+          },
+          {
+            "iconClass": "wadicon-twitter",
+            "url": "//twitter.com/wadi/"
+          }
+        ]
+      },
+      "paymentSection": {
+        "title": "Payment Methods",
+        "subtitle": "Secure & Convenient Ways To Pay",
+        "paymentMethods": [
+          {
+            "className": "visa",
+            "content": "Visa"
+          },
+          {
+            "className": "mastercard",
+            "content": "Mastercard"
+          },
+          {
+            "className": "cod",
+            "content": "Cash On Delivery"
+          }
+        ]
+      }
+    }
+  },
+  "nav": {
+    "en": {
+      "menu": [
+          {
+            "title": "Customer Service",
+            "children": [
+              { "title": "Get Support", "url": "//support.wadi.com/hc/en-us?utm_source=wadi&utm_medium=navigation&utm_term=get_support&utm_content=warranty_policy&utm_campaign=wadifooter" },
+              { "title": "Payment Security", "url": "//support.wadi.com/hc/en-us/articles/206965039?utm_source=wadi&utm_medium=navigation&utm_term=get_support&utm_content=payment_security&utm_campaign=wadifooter" },
+              { "title": "My Account", "url": "//my.wadi.com/" },
+              { "title": "Track My Order", "url": "//track.wadi.com/" }
+            ]
+          },
+          {
+            "title": "What We Sell",
+            "children": [
+              { "title": "Electronics", "url": "/electronics/" },
+              { "title": "Fashion", "url": "/fashion/" },
+              { "title": "Beauty & Health", "url": "/beauty_health/" },
+              { "title": "Fragrances", "url": "/beauty_health-fragrances/" },
+              { "title": "Sale Items", "url": "/all-products/?sort=discount" }
+            ]
+          },
+          {
+            "title": "About Us",
+            "children": [
+              { "title": "Payment Methods", "url": "//support.wadi.com/hc/en-us/sections/201667019-Payment-Methods?utm_source=wadi&utm_medium=navigation&utm_term=about_us&utm_content=payment_methods&utm_campaign=wadifooter" },
+              { "title": "Return Policy", "url": "//support.wadi.com/hc/en-us/sections/201721825-Returns?utm_source=wadi&utm_medium=navigation&utm_term=about_us&utm_content=return_policy&utm_campaign=wadifooter" },
+              { "title": "Warranty Policy", "url": "//support.wadi.com/hc/en-us/sections/201721845-Warranty?utm_source=wadi&utm_medium=navigation&utm_term=about_us&utm_content=warranty_policy&utm_campaign=wadifooter" },
+              { "title": "Press Center", "url": "/press/" },
+              { "title": "Careers", "url": "/careers/" }
+            ]
+          }
+        ]
+    },
+    "ar": {
+      "menu": [
+          {
+            "title": "خدمة العملاء",
+            "children": [
+              { "title": "احصل على الدعم", "url": "//support.wadi.com/hc/en-us?utm_source=wadi&utm_medium=navigation&utm_term=get_support&utm_content=warranty_policy&utm_campaign=wadifooter" },
+              { "title": "أمان الدفع", "url": "//support.wadi.com/hc/en-us/articles/206965039?utm_source=wadi&utm_medium=navigation&utm_term=get_support&utm_content=payment_security&utm_campaign=wadifooter" },
+              { "title": "حسابي", "url": "//my.wadi.com/" },
+              { "title": "تتبع طلبيتي", "url": "//track.wadi.com/" }
+            ]
+          },
+          {
+            "title": "ماذا نبيع",
+            "children": [
+              { "title": "إلكترونيات", "url": "/electronics/" },
+              { "title": "موضة", "url": "/fashion/" },
+              { "title": "الجمال والصحة", "url": "/beauty_health/" },
+              { "title": "العطور", "url": "/beauty_health-fragrances/" },
+              { "title": "منتجات مخفضة", "url": "/all-products/?sort=discount" }
+            ]
+          },
+          {
+            "title": "عن وادي",
+            "children": [
+              { "title": "وسائل الدفع", "url": "//support.wadi.com/hc/en-us/sections/201667019-Payment-Methods?utm_source=wadi&utm_medium=navigation&utm_term=about_us&utm_content=payment_methods&utm_campaign=wadifooter" },
+              { "title": "سياسة الإرجاع", "url": "//support.wadi.com/hc/en-us/sections/201721825-Returns?utm_source=wadi&utm_medium=navigation&utm_term=about_us&utm_content=return_policy&utm_campaign=wadifooter" },
+              { "title": "سياسة الضمان", "url": "//support.wadi.com/hc/en-us/sections/201721845-Warranty?utm_source=wadi&utm_medium=navigation&utm_term=about_us&utm_content=warranty_policy&utm_campaign=wadifooter" },
+              { "title": "المركز الصحفي", "url": "/press/" },
+              { "title": "فرص العمل", "url": "/careers/" }
+            ]
+          }
+        ]
+      }
+  }
+}
+

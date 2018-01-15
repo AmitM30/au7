@@ -8,9 +8,19 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
   <title>My App</title>
+  <style>
+    html, body, div, p, table {
+      padding: 0; margin: 0;
+    }
+    img {
+      max-width: 100%;
+    }
+  </style>
 </head>
 <body aurelia-app="main">
-  <div class="splash">Loading...</div>
+  <div class="splash">
+      <img src="dist/images/splash.png" alt="Loading..." />
+  </div>
   <script src="dist/bundle.js"></script>
 </body>
 </html>
