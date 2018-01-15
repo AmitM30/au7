@@ -29,7 +29,7 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *"> -->
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
     <meta charset="utf-8">
@@ -43,6 +43,25 @@
         }
     </style>
     <link rel="stylesheet" href="dist/styles/framework7/framework7.material.css">
+    <link rel="stylesheet" href="dist/styles/site.css">
+    <link rel="stylesheet" href="dist/styles/lib/wadicons.css" >
+
+    <!-- Script Libraries -->
+    <script>
+        window.dataLayer=[];
+        window.dataLayer.push({ 'version': 'checkout-v2', 'view': 'full-width' });
+        window.config = {
+            device: 'mobile',
+            lang: window.location.host.substring(0, 2),
+            country: window.location.host.substring(3,5)
+        };
+        window.Polymer = { dom: 'shady', lazyRegister: true };
+        window.translate = function (value) { return value; };
+    </script>
+    <script src="dist/app-launch-v3.js"></script>
+    <script src="dist/ext/swiper.min.js"></script>
+
+    <link rel="import" href="dist/elements.html">
 </head>
 <body aurelia-app="main">
     <div class="splash">
