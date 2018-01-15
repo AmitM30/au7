@@ -38,17 +38,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>My App</title>
     <style>
-        html, body, div, p, table {
-            padding: 0; margin: 0;
-        }
         .splash img {
             max-width: 100%;
         }
     </style>
-
-    <!-- Favicon -->
-    <!-- <link type="image/x-icon" href="favicon.ico" rel="shortcut icon"> -->
-    <!-- Site CSS -->
+    <link rel="stylesheet" href="dist/styles/framework7/framework7.material.css">
     <link rel="stylesheet" href="dist/styles/site.css">
     <link rel="stylesheet" href="dist/styles/lib/wadicons.css" >
 
@@ -69,8 +63,15 @@
 
     <link rel="import" href="dist/elements.html">
 </head>
-<body>
-    <div id="wadi" aurelia-app="main">
+<!-- <body aurelia-app="main">
+    <div class="splash">
+        <img src="dist/images/splash.png" alt="Loading ... " />
+    </div>
+    <script src="cordova.js"></script>
+    <script src="dist/bundle.js"></script>
+</body> -->
+<body aurelia-app="main">
+    <div id="wadi">
         <div class="splash">
             <img src="dist/images/splash.png" alt="Loading..." />
         </div>
@@ -78,16 +79,8 @@
         <script src="dist/bundle.js"></script>
     </div>
 
-    <!-- Google Tag Manager -->
     <!-- <gtm><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5WDH43');</script></gtm> -->
     
     <script>window.wadiPageData="{}";</script>
 </body>
-<!-- <body aurelia-app="main">
-    <div class="splash">
-        <img src="dist/images/splash.png" alt="Loading..." />
-    </div>
-    <script src="cordova.js"></script>
-    <script src="dist/bundle.js"></script>
-</body> -->
 </html>

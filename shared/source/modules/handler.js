@@ -104,23 +104,26 @@ export class Handler {
       switch (this.response.type) {
         case 'detail': this.initPDP(this.response);
           // TODO - This is a hack. Remove once the API for meta.seo is fixed
-          this.common.setMeta(this.response.meta, navigationInstruction.config.navModel, this.response.type, this.response.data.name);
+          // this.common.setMeta(this.response.meta, navigationInstruction.config.navModel, this.response.type, this.response.data.name);
           break;
         case 'list': this.initPLP(this.response);
-          this.common.setMeta(this.response.meta, navigationInstruction.config.navModel);
+          // this.common.setMeta(this.response.meta, navigationInstruction.config.navModel);
           break;
         case 'static':
-          this.common.setMeta(this.response.meta, navigationInstruction.config.navModel);
+          // this.common.setMeta(this.response.meta, navigationInstruction.config.navModel);
           break;
       }
     };
 
+    console.log('this.common.firstLoad: ', this.common.firstLoad);
+    console.log('this.common.loadAPIData: ', this.common.loadAPIData);
     if (this.common.firstLoad && this.common.loadAPIData) {
       this.response = this.common.loadAPIData;
       fn.call(this);
     } else {
       return this.request.backend(navigationInstruction.fragment + ((navigationInstruction.queryString) ? '?' + navigationInstruction.queryString : ''))
         .then((response) => {
+          console.log('this.response: ', this.response);
           this.response = response;
           fn.call(this);
         });
@@ -244,6 +247,7 @@ export class Handler {
   }
 
   getViewStrategy () {
+    console.log('this.customView: ', this.customView);
     if (this.customView) {
       this.json = Helpers.initAsyncRender(this.response.render);
       this.common.bodyClass = this.response.render.overridingCSS || this.common.bodyClass;

@@ -9,7 +9,7 @@
 
       <div drawer>
         <ul class="level-01 home-link">
-          <li><a href="/"><i class="wadicon-house"></i> ${ 'Home' | t }</a></li>
+          <li><a href="/"><i class="wadicon-house"></i> ${ 'Home' }</a></li>
         </ul>
         <signup-element user.two-way="user.info" options='{ "title": "My Account" }'
           logout.trigger="user.logout()"
@@ -27,7 +27,7 @@
           ctx.bind="common.ctx">
         </signup-element>
         <ul class="level-01 home-link" if.bind="user.info.isLoggedIn">
-          <li><a href="//${ config.myAccount }/wallet" target="_blank"><i class="wadicon-tablets-accessories"></i> ${ 'My Wallet' | t }</a></li>
+          <li><a href="//${ config.myAccount }/wallet" target="_blank"><i class="wadicon-tablets-accessories"></i> ${ 'My Wallet' }</a></li>
         </ul>
 
         <small-nav-element nav.bind="nav" options='{ "mainNav": true }' ctx.bind="common.ctx"></small-nav-element>
@@ -58,7 +58,7 @@
         </header>
         <div id="page-container">
           <router-view></router-view>
-          <compose view-model="../../shared/source/modules/super-view" model.one-way="tsaheyluModel.model" view.one-way="tsaheyluModel.view" containerless ></compose>
+          <compose view-model="../shared/source/modules/super-view" model.one-way="tsaheyluModel.model" view.one-way="tsaheyluModel.view" containerless ></compose>
         </div>
         <app-download-element ctx.bind='common.ctx' if.bind="common.state !== 'checkout' && common.pageType !== 'detail' && common.pageType !== 'cart'"></app-download-element>
         <!-- <div class="fixed-container" if.bind="common.state !== 'checkout' && common.pageType !== 'detail' && common.pageType !== 'cart'">

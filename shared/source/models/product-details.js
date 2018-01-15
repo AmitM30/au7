@@ -1,9 +1,9 @@
 
-import { autoInject, computedFrom } from 'aurelia-framework';
+import { inject, computedFrom } from 'aurelia-framework';
 
 import { Config }               from '../services/config';
 
-// @inject(Config)
+@inject(Config)
 export class ProductDetailsModel {
 
   constructor (config) {
@@ -11,14 +11,14 @@ export class ProductDetailsModel {
     this.product = {};
   }
 
-  // @computedFrom('product')
+  @computedFrom('product')
   get specification () {
     if(Object.keys(this.product.attributesMap.groups).length) {
       return this.product.attributesMap;
     }
   }
 
-  // @computedFrom('product')
+  @computedFrom('product')
   get isOutOfStock () {
     return this.product.visible === 1 ? false : true;
   }

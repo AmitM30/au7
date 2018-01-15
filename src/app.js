@@ -45,8 +45,6 @@ export class App {
     this.unhandled = unhandled;
     this.appWrapper = appWrapper;
     this.cartModel = cartModel;
-
-    console.log('>>> Aurelia <<<');
   }
 
   configureRouter (config, router) {
@@ -319,7 +317,7 @@ export class App {
   }
 
   getViewStrategy () {
-    return new InlineViewStrategy(this.config.appHtml);
+    return this.config.templateURL + 'app.html';
   }
 
   determineActivationStrategy () {

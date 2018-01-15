@@ -1,5 +1,5 @@
 
-import { autoInject, computedFrom } from 'aurelia-framework';
+import { inject, computedFrom } from 'aurelia-framework';
 
 import { Utils }                from '../misc/utils';
 import { Config }               from '../services/config';
@@ -66,7 +66,7 @@ const DEFAULT_TOKENIZATION = {
   cvv: null
 };
 
-// @inject(Config)
+@inject(Config)
 export class CartModel {
 
   constructor (config) {
@@ -79,12 +79,12 @@ export class CartModel {
     this.shop = config.locale.country.toUpperCase();
   }
 
-  // @computedFrom('payment')
+  @computedFrom('payment')
   get isValidPayment () {
     return (this.payment.method === 'cc' && this.payment.card.number) || this.payment.method === 'cod';
   }
 
-  // @computedFrom('addresses')
+  @computedFrom('addresses')
   get isValidAddress () {
     return (this.addresses.shipping && this.addresses.shipping.name) ? true : false;
   }

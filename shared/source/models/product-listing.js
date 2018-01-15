@@ -7,29 +7,29 @@ export class ProductListingModel {
     this.response = {};
   }
 
-  // @computedFrom('response')
+  @computedFrom('response')
   get products () {
     return this.response.data;
   }
 
-  // @computedFrom('response')
+  @computedFrom('response')
   get facets () {
     return this.response.facets;
   }
 
-  // @computedFrom('response')
+  @computedFrom('response')
   get search () {
     return this.response.search;
   }
 
-  // @computedFrom('response.meta', 'response.breadcrumbs')
+  @computedFrom('response.meta', 'response.breadcrumbs')
   get plpTitle () {
     return (this.response.meta.seo && this.response.meta.seo.h1)
             ? this.response.meta.seo.h1
             : (this.response.breadcrumbs.length > 0) ? this.response.breadcrumbs[this.response.breadcrumbs.length - 1].name : undefined;
   }
 
-  // @computedFrom('response')
+  @computedFrom('response')
   get meta () {
     return this.response.meta;
   }
@@ -38,12 +38,12 @@ export class ProductListingModel {
     return this.response.breadcrumbs;
   }
 
-  // @computedFrom('response')
+  @computedFrom('response')
   get totalCount () {
     return this.response.totalCount;
   }
 
-  // @computedFrom('response')
+  @computedFrom('response')
   get pages () {
     return this.response.pages;
   }

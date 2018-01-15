@@ -1,0 +1,16 @@
+
+<link rel="import" href="../components/checkout.html">
+<link rel="import" href="../components/cart.html">
+
+<template>
+	<div id="page-checkout">
+		<div repeat.for="row of router.navigation" if.bind="router.currentInstruction.config.name === row.config.name">
+			<ul class="checkout-timeline">
+				<li repeat.for="row of router.navigation" class="${row.isActive ? 'current' : ''}">
+					<a href="${row.href}?edit">${row.title | t}</a>
+				</li>
+			</ul>
+		</div>
+		<router-view></router-view>
+	</div>
+</template>

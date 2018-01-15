@@ -1,0 +1,16 @@
+
+<template>
+  	<section class="au-animate" id="page-404">
+		<banner-element
+			class="component-area"
+			images.bind='{ "mainBanner": { "path": "/dist/images/404.jpg" } }'
+			options='{ "columnOptions": 2 }'
+			ctx.bind='common.ctx'>
+		</banner-element>
+		<category-links-element
+			class="category-links-container"
+			datalinks.bind='config.home.category_links'
+			options='{ "columnOptions": 3}'>
+		</category-links-element>
+	</section>
+</template>

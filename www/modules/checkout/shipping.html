@@ -1,0 +1,61 @@
+<template>
+	<section id="checkout-step-shipping">
+
+		<div class="checkout-area single-memo-container">
+			<gifting-element
+		        gift-option.two-way="cartModel.gift_option"
+		        gifting-message.two-way="cartModel.gift_message"
+		        gifting-toggle.trigger="giftingOption($event)"
+		        gifting-amount.bind="cartModel.details.giftwrap.base_fee"
+		        ctx.bind="common.ctx"
+		     ></gifting-element>
+		</div>
+
+		<!-- SCENARIO 1: NO PREVIOUSLY SAVED ADDRESSES START -->
+		<div class="checkout-area" if.bind="!user.info.otherAddresses.length && !user.info.defaultAddress.idCustomerAddress">
+			<new-address-element
+				options.bind='{ "opensIndependently": true, "type": "shipping" }'
+				otp-verify.trigger="otpVerify($event)"
+				cities-list.one-way="config.citiesList"
+				areas-list.bind="config.areasList"
+				ctx.bind="common.ctx"
+				phone-config.bind="phoneConfig"
+				otp-request.trigger="otpRequest($event)"
+				new-address.two-way="cartModel.addresses.shipping"
+				can-continue.two-way="canContinue"
+				primary-phone.two-way="user.info.primaryPhone"
+				move-to-summary.trigger="moveToSummary()"
+			></new-address-element>
+		</div>
+		<!-- SCENARIO 1: NO PREVIOUSLY SAVED ADDRESSES END -->
+
+		<!-- SCENARIO 2: SAVED ADDRESSES START -->
+		<div class="checkout-area" if.bind="user.info.otherAddresses.length || user.info.defaultAddress.idCustomerAddress">
+			<address-book-element
+				default-address.one-way="user.info.defaultAddress"
+				address-format.bind="cartModel.getDefaultAddressObject()"
+				other-addresses.one-way="user.info.otherAddresses"
+				shipping-address.two-way="cartModel.addresses.shipping"
+				selected-address-id.one-way = "selectedAddressID.idShippingAddress"
+				ctx.bind="common.ctx"
+				otp-verify.trigger="otpVerify($event)"
+				otp-request.trigger="otpRequest($event)"
+				primary-phone.two-way="user.info.primaryPhone"
+				cities-list.one-way="config.citiesList"
+				areas-list.bind="config.areasList"
+				phone-config.bind="phoneConfig"
+				can-continue.two-way="canContinue"
+				move-to-summary.trigger="moveToSummary()"
+			></address-book-element>
+		</div>
+		<!-- SCENARIO 2: SAVED ADDRESSES END-->
+
+
+		<!-- CONTINUE TO PAYMENT BUTTON START -->
+		<!-- <div class="checkout-area step-cta-container">
+			<button class="core-block-cta core-block-cta-lg cta-full-width" type="button" disabled.bind="!canContinue" tap.trigger="moveToSummary()">${'Continue To Summary' | t}<paper-ripple></paper-ripple></button>
+		</div> -->
+		<!-- CONTINUE TO PAYMENT BUTTON END -->
+
+	</section>
+</template>

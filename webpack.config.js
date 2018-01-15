@@ -17,7 +17,7 @@ const APP_NAME = process.env.APP_ENV && process.env.APP_ENV.toLowerCase() || 'ap
 const title     = 'Wadi.com';
 const baseUrl   = '/';
 const rootDir   = path.resolve();
-const srcDir    = path.resolve('source');
+const srcDir    = path.resolve('src');
 
 // Variables set by npm scripts in package.json
 const isProduction = process.env.NODE_ENV && process.env.NODE_ENV.toLowerCase() || (process.env.NODE_ENV = 'development');
@@ -25,12 +25,7 @@ const platform = 'default' // 'default' by default
 
 const coreBundles = {
   bootstrap: [
-    'aurelia-bootstrapper-webpack',
-    'aurelia-polyfills',
-    'aurelia-pal',
-    'aurelia-pal-browser',
-    'regenerator-runtime',
-    'isomorphic-fetch'
+    './shared/source/plugins/t'
   ]
 }
 
@@ -39,7 +34,7 @@ let config = generateConfig({
 
     entry: {
       main: [
-        './source/main.js'
+        './src/main.js'
       ]
     },
     // entry: {
@@ -65,7 +60,7 @@ let config = generateConfig({
           ]
         },
         { test: /(\.scss|\.css)$/, loader: 'ignore-loader' },
-        // { test: /\.html$/, loader: 'ignore-loader' },
+        { test: /\.html$/, loader: 'ignore-loader' },
         { test: /\.(png|gif|jpg)$/, loader: 'url-loader', options: { limit: '25000' } },
         { test: /\.(ttf|eot|svg)$/, loader: 'file-loader' }
       ]

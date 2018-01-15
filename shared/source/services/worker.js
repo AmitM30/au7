@@ -16,17 +16,17 @@ export class ServiceWorker {
       }
     }
 
-    if ('serviceWorker' in navigator && navigator.userAgent.indexOf("Mobile") === -1) {
-      window.setTimeout(fn, 10000)
-    } else if ('serviceWorker' in navigator && navigator.userAgent.indexOf("Mobile") > -1) {
-        navigator.serviceWorker.getRegistration().then(function (registration) {
-            var serviceWorkerUnregistered = false;
-            if (registration) {
-                registration.unregister();
-                serviceWorkerUnregistered = true;
-            }
-            serviceWorkerUnregistered && window.location.reload();
-        });
-    }
+    // if ('serviceWorker' in navigator && navigator.userAgent.indexOf("Mobile") === -1) {
+    //   window.setTimeout(fn, 10000)
+    // } else if ('serviceWorker' in navigator && navigator.userAgent.indexOf("Mobile") > -1) {
+    //     navigator.serviceWorker.getRegistration().then(function (registration) {
+    //         var serviceWorkerUnregistered = false;
+    //         if (registration) {
+    //             registration.unregister();
+    //             serviceWorkerUnregistered = true;
+    //         }
+    //         serviceWorkerUnregistered && window.location.reload();
+    //     });
+    // }
   }
 }

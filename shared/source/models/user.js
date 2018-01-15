@@ -1,5 +1,5 @@
 
-import { autoInject, computedFrom } from 'aurelia-framework';
+import { inject, computedFrom } from 'aurelia-framework';
 
 import { Utils }                from '../misc/utils';
 
@@ -42,7 +42,7 @@ export class UserModel {
    * create instance of userModel
    */
   constructor () {
-    this.lang = lang;
+    this.lang = window.lang;
     this.isLoggedIn = null;
     this.firstname = null;
     this.surname = null;

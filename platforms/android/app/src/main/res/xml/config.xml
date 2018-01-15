@@ -9,6 +9,8 @@
     <author email="mangalamitash@gmail.com" href="http://doodle.studio">Amit Mangal</author>
     <content src="index.html" />
     <access origin="*" />
+    <access origin="http://*.wadi.com" />
+    <access origin="https://*.wadi.com" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />

@@ -1,0 +1,45 @@
+
+<template>
+  <section class="au-animate" id="page-list">
+
+    <facets-element
+      if.bind="productsListingModel.products.length"
+      facets.bind="productsListingModel.facets"
+      redirect.trigger="applyFacetFilters($event)"
+      selected.bind="productsListingModel.selectedFacets()"
+      query.bind="params"
+      ctx.bind='common.ctx'
+      search.bind="productsListingModel.search"
+    ></facets-element>
+
+    <!-- PRODUCTS -->
+    <products-listing-element
+      if.bind="productsListingModel.products.length"
+      listing.bind="productsListingModel.products"
+      pageslength.bind="productsListingModel.pages"
+      load-more-products.trigger="loadMoreProducts($event)"
+      pagetitle.bind='productsListingModel.plpTitle'
+      totalcount.bind='productsListingModel.totalCount'
+      options.bind='{ "columnOptions": 2 }'
+      ctx.bind='common.ctx'
+    ></products-listing-element>
+
+    <info-element
+      if.bind="productsListingModel.meta.content.bottom_banner_html"
+      content.bind='{ "introduction": productsListingModel.meta.content.bottom_banner_html }'
+      show-title.bind="false"
+      ctx.bind="common.ctx"
+    ></info-element>
+
+    <!-- NO PRODUCTS -->
+    <no-product-results-element if.bind="!productsListingModel.products.length"></no-product-results-element>
+    <category-links-element
+      class="component-area category-links-container"
+      if.bind="!productsListingModel.products.length"
+      datalinks.bind='config.home.category_links'
+      options='{ "columnOptions": 3}'
+      >
+    </category-links-element>
+
+  </section>
+</template>

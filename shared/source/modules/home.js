@@ -32,15 +32,17 @@ export class Home {
 
     let fn = function () {
       this.customView = this.response.code !== 404 && this.response.render && this.response.render.templateId;
-      this.common.setMeta(this.response.meta, routeConfig.navModel);
+      // this.common.setMeta(this.response.meta, routeConfig.navModel);
     };
 
+    console.log('this.common.firstLoad: ', this.common.firstLoad);
     if (this.common.firstLoad && this.common.loadAPIData) {
       this.response = this.common.loadAPIData;
       fn.call(this);
     } else {
       return this.request.backend().then((response) => {
         this.response = response;
+        console.log('this.response: ', this.response);
         fn.call(this);
       });
     }
@@ -51,6 +53,7 @@ export class Home {
   canDeactivate () { }
 
   getViewStrategy () {
+    console.log('this.customView: ', this.customView);
     if (this.customView) {
       this.json = Helpers.initAsyncRender(this.response.render);
       this.common.bodyClass = (this.response.render.overridingCSS) ? this.response.render.overridingCSS : this.common.bodyClass;

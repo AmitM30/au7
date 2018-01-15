@@ -19,11 +19,11 @@ export class API {
     fetch.configure((configuration) => {
       configuration.useStandardConfiguration()
         .withDefaults({
-          credentials: 'same-origin',
           headers: {
             'Accept': 'application/json'
           }
         })
+        // .useStandardConfiguration()
         .withInterceptor({
           // request(request) {
             // console.log(`Requesting ${request.method} ${request.url}`);
@@ -85,10 +85,11 @@ export class API {
           }
         }
         
-      options.headers = headers; 
+      options.headers = headers;
     }
 
-    return this.http.fetch('https://en-sa.wadi.com/' + endpoint + Utils.jsonToQueryString(queryParameters), options);
+    console.log('GET: ', 'https://en-sa.wadi.com' + endpoint + Utils.jsonToQueryString(queryParameters));
+    return this.http.fetch('https://en-sa.wadi.com' + endpoint + Utils.jsonToQueryString(queryParameters), options);
   }
 
   /**
@@ -101,7 +102,7 @@ export class API {
    * @returns {Promise} returns a promise
    */
   postRequest (endpoint, data, parameters) {
-    return this.http.fetch('https://en-sa.wadi.com/' + endpoint, {
+    return this.http.fetch('https://en-sa.wadi.com' + endpoint, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: this.getDefaultHeaders()
@@ -118,7 +119,7 @@ export class API {
    * @returns {Promise} returns a promise
    */
   putRequest (endpoint, data, parameters) {
-    return this.http.fetch('https://en-sa.wadi.com/' + endpoint, {
+    return this.http.fetch('https://en-sa.wadi.com' + endpoint, {
       method: 'PUT',
       body: JSON.stringify(data),
       headers: this.getDefaultHeaders()
@@ -140,7 +141,7 @@ export class API {
     form.append('token', formData.token);
     let defaultHeaders = this.getDefaultHeaders();
     delete defaultHeaders['Content-Type'];
-    return this.http.fetch('https://en-sa.wadi.com/' + endpoint, {
+    return this.http.fetch('https://en-sa.wadi.com' + endpoint, {
       method: 'POST',
       body: form,
       headers: defaultHeaders
@@ -157,7 +158,8 @@ export class API {
    * @returns {Promise} returns a promise
    */
   getCORSRequest (endpoint, queryParameters, parameters) {
-    return this.cors.jsonp('https://en-sa.wadi.com/' + endpoint + Utils.jsonToQueryString(queryParameters), 'callback')
+    console.log('GET CORS: ', 'https://en-sa.wadi.com' + endpoint + Utils.jsonToQueryString(queryParameters));
+    return this.cors.jsonp('https://en-sa.wadi.com' + endpoint + Utils.jsonToQueryString(queryParameters), 'callback')
       .then((httpResponse) => {
         return httpResponse.response;
       }, (error) => {
@@ -175,7 +177,7 @@ export class API {
    * @returns {Promise} returns a promise
    */
   deleteRequest (endpoint, data, parameters) {
-    return this.http.fetch('https://en-sa.wadi.com/' + endpoint, {
+    return this.http.fetch('https://en-sa.wadi.com' + endpoint, {
       method: 'DELETE',
       headers: this.getDefaultHeaders()
     });

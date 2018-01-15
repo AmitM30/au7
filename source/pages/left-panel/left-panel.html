@@ -1,7 +1,7 @@
 <template>
   <div class="navbar">
     <div class="navbar-inner">
-      <div class="center">Left Panel</div>
+      <div class="center">Left Panel ${ name }</div>
     </div>
   </div>
   <div class="list-block">
@@ -16,5 +16,10 @@
         </a>
       </li>
     </ul>
+    <small-nav-element
+      nav.bind="nav"
+      options='{ "mainNav": true }'
+      ctx.bind="common.ctx"
+    ></small-nav-element>
   </div>
 </template>

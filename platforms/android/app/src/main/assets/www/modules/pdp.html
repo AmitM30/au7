@@ -1,0 +1,176 @@
+
+<link rel="import" href="../components/pdp.html">
+
+<template>
+  <section class="au-animate out-of-stock-${productsModel.isOutOfStock}" id="page-pdp">
+
+    <!-- PDP CAROUSEL -->
+    <pdp-carousel-element
+      banners.bind="productsModel.productImages()"
+      options='{ "hidePrevNext": true, "paginationHide": false, "hideIndexer": true, "sliderOptions": { "slidesPerView": 1, "centeredSlides": true, "paginationClickable": true, "spaceBetween": 0 } }'
+      ctx.bind='common.ctx'
+      product-tag.bind='productsModel.product.ribbon'
+      product-flash.bind='productsModel.product.flash'
+      product-price.bind='productsModel.product.price'
+      product-offer-price.bind='productsModel.product.offerPrice'
+      product-discount.bind='productsModel.product.discount'
+      out-of-stock.bind="productsModel.isOutOfStock"
+    ></pdp-carousel-element>
+
+    <!-- PDP CORE DETAILS E.G. NAME, PRICE -->
+    <pdp-core-details-element
+      productdetails.bind='productsModel.product'
+      ctx.bind='common.ctx'
+      reviews.bind='productsModel.reviews'
+      outofstock.bind="productsModel.isOutOfStock"
+      scroll-to-reviews.trigger="scrollToReviews()"
+      in-cart.one-way="productAlreadyInCart"
+      selected-sku.bind="selectedSKU"
+      size-selected.trigger="sizeSelected($event)"
+      selected-size.bind="selectedSize"
+    >
+    </pdp-core-details-element>
+
+    <!-- SELLER INFO -->
+    <section class="pdp-section-area">
+      <pdp-seller-info-element
+        if.bind="!productsModel.isOutOfStock"
+        outofstock.bind="productsModel.isOutOfStock"
+        supplierdata.one-way="selectedSimple"
+        scroll-to-other-sellers.trigger="scrollToOtherSellers()"
+        selected-sku.bind="selectedSKU"
+        size-selected.trigger="sizeSelected($event)"
+        selected-size.bind="selectedSize"
+        change-city.trigger="getPromise($event)"
+        cities-list.one-way="config.citiesList"
+        pdp-city.two-way="cartModel.addresses.shipping.city"
+        ctx.bind='common.ctx'
+      ></pdp-seller-info-element>
+    </section>
+
+    <div id="pdp-static-cta-container" if.bind="!productsModel.isOutOfStock">
+      <cart-button-element
+        item.one-way="defaultProduct"
+        add-product.trigger="addToCart($event)"
+        selected-sku.bind="selectedSKU"
+        in-cart.two-way="productAlreadyInCart"
+        redirect-buy-now.trigger="redirectBuyNow()"
+        options='{ "className": "core-block-cta core-block-cta-lg cta-full-width" }'
+      >
+      </cart-button-element>
+      <cart-button-element
+        item.one-way="defaultProduct"
+        add-product.trigger="addToCart($event)"
+        selected-sku.bind="selectedSKU"
+        in-cart.two-way="productAlreadyInCart"
+        redirect-buy-now.trigger="redirectBuyNow()"
+        options='{ "redirect": true, "className": "core-block-cta core-block-cta-lg core-block-cta-secondary cta-full-width" }'
+      >
+      </cart-button-element>
+    </div> 
+
+    <!-- PDP SUPPORT DETAILS E.G. OVERVIEW, OFFERS -->
+    <pdp-support-details-element
+      productdetails.bind='productsModel.product'
+      ctx.bind='common.ctx'
+      outofstock.bind="productsModel.isOutOfStock"
+    >
+    </pdp-support-details-element>
+
+    <!-- PDP DESCRIPTION & SPEC TABLE -->
+    <section class="pdp-section-area">
+      <info-element content.bind="productsModel.productInfo()" ctx.bind="common.ctx"></info-element>
+      <product-specs-feature-element attributesmap.bind="productsModel.specification" ctx.bind="common.ctx"></product-specs-feature-element>
+    </section>
+
+    <!-- PDP SELLER/OTHER SELLERS AREA -->
+    <multiseller-element
+      id="multiseller-element"
+      class="pdp-section-area"
+      if.bind="selectedSimple && selectedSimple.suppliers && selectedSimple.suppliers.length > 1"
+      supplierdata.one-way="selectedSimple"
+      selected-sku.bind="selectedSKU"
+      in-cart.two-way="productAlreadyInCart"
+      in-cart-sku.one-way="inCartSku"
+      add-product.trigger="addToCart($event)"
+      ctx.bind='common.ctx'
+    >
+    </multiseller-element>
+
+    <products-carousel-element
+      class="component-area recommendations" 
+      load-products.trigger="loadCarouselProducts($event)" 
+      options.bind="getRecommendationsObject(productsModel.product.sku, 0, 'Similar Products')"
+      ctx.bind="common.ctx" 
+      add-product.trigger="addToCart($event)"
+      if.bind="productsModel.product.sku"
+      base-api-request.trigger="baseApiRequest($event)"
+    ></products-carousel-element>
+
+    <product-reviews-element
+      if.bind="productsModel.reviews"
+      id="product-reviews-element"
+      load-expert-reviews.trigger='loadExpertReviews($event)'
+      load-user-reviews.trigger='loadUserReviews($event)'
+      reviews.bind='productsModel.reviews'
+      expertreviews.bind='expertReviews'
+      userreviews.bind='userReviews'
+      ctx.bind='common.ctx'
+    ></product-reviews-element>
+
+    <!-- PDP ADD TO CART BUTTONS -->
+    <div id="pdp-fixed-cta-container" if.bind="!productsModel.isOutOfStock">
+      <cart-button-element
+        item.one-way="defaultProduct"
+        add-product.trigger="addToCart($event)"
+        selected-sku.bind="selectedSKU"
+        in-cart.two-way="productAlreadyInCart"
+        redirect-buy-now.trigger="redirectBuyNow()"
+        options='{ "className": "core-block-cta core-block-cta-lg cta-full-width", "showPrice": true }'
+        ctx.bind='common.ctx'
+      >
+      </cart-button-element>
+    </div>
+
+  <products-carousel-element
+    class="component-area recommendations" 
+    load-products.trigger="loadCarouselProducts($event)" 
+    options.bind="getRecommendationsObject(productsModel.product.sku, 4, 'Complete Your Purchase')"
+    ctx.bind="common.ctx" 
+    add-product.trigger="addToCart($event)"
+    if.bind="productsModel.product.sku"
+    base-api-request.trigger="baseApiRequest($event)"    
+  ></products-carousel-element>
+
+  <!-- <products-carousel-element
+    class="component-area recommendations" 
+    load-products.trigger="loadCarouselProducts($event)" 
+    options.bind="getRecommendationsObject(productsModel.product.sku, 5, 'Frequently Bought Together')"
+    ctx.bind="common.ctx" 
+    add-product.trigger="addToCart($event)"
+    if.bind="productsModel.product.sku"
+    base-api-request.trigger="baseApiRequest($event)"    
+  ></products-carousel-element> -->
+
+  <products-carousel-element
+    class="component-area recommendations" 
+    load-products.trigger="loadCarouselProducts($event)" 
+    options.bind="getRecommendationsObject(productsModel.product.sku, 6, 'What Customers Eventually Bought')"
+    ctx.bind="common.ctx" 
+    add-product.trigger="addToCart($event)"
+    if.bind="productsModel.product.sku"
+    base-api-request.trigger="baseApiRequest($event)"    
+  ></products-carousel-element>
+
+  <products-carousel-element
+    class="component-area recommendations"
+    load-products.trigger="loadCarouselProducts($event)"
+    options.bind="getRecommendationsObject(productsModel.product.sku, 7, 'Your Recently Viewed ')"
+    ctx.bind="common.ctx"
+    add-product.trigger="addToCart($event)"
+    if.bind="productsModel.product.sku"
+    base-api-request.trigger="baseApiRequest($event)"
+  ></products-carousel-element>
+
+  </section>
+</template>

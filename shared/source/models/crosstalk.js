@@ -1,10 +1,10 @@
 
-import { autoInject, computedFrom } from 'aurelia-framework';
+import { inject, computedFrom } from 'aurelia-framework';
 import { InlineViewStrategy }   from 'aurelia-framework';
 
 import { Config }               from '../services/config';
 
-// @inject(Config)
+@inject(Config)
 export class TsaheyluModel {
 
   model = {};
@@ -13,7 +13,7 @@ export class TsaheyluModel {
     this.config = config;
   }
 
-  // @computedFrom('model')
+  @computedFrom('model')
   get view () {
     if (this.model && this.model.render) {
       return new InlineViewStrategy(this.model.render.templateString);

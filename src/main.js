@@ -2,6 +2,7 @@
 import 'isomorphic-fetch';
 import 'aurelia-bootstrapper';
 // import 'aurelia-bootstrapper-webpack';
+import '../shared/source/plugins/t';
 
 import { LogManager }           from 'aurelia-framework';
 
@@ -19,17 +20,13 @@ export async function configure (aurelia) {
     .standardConfiguration()
     .developmentLogging();
 
-  // aurelia.use
-  //   .basicConfiguration()
-  //   .developmentLogging()
-
   // if (window.location.search.indexOf('..showdebug..=on') >= 0) {
   //   aurelia.use.developmentLogging();
   // }
 
   // aurelia.use.plugin('aurelia-polymer');
   aurelia.use.plugin('aurelia-html-import-template-loader');
-  aurelia.use.globalResources('../../shared/source/plugins/t');
+  aurelia.use.globalResources('../shared/source/plugins/t');
 
   aurelia.start().then((a) => a.setRoot('app', document.getElementById('wadi')));
 }
