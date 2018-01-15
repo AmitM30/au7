@@ -233,7 +233,7 @@ export class Checkout {
   }
 
   getViewStrategy () {
-    return this.config.templateURL + '/modules/' + this.viewName + this.config.moduleVersion + '.html';
+    return '/android_asset/www/modules/' + this.viewName + this.config.moduleVersion + '.html';
   }
 
   canDeactivate () {

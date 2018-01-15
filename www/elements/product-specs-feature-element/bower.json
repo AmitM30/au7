@@ -1,0 +1,30 @@
+{
+  "name": "product-specs-feature-element",
+  "version": "1.0.0",
+  "authors": [
+    "Abhinandan Mishra <abhinandan.mishra@wadi.com>"
+  ],
+  "description": "Show Specification and feature table of products",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "specification",
+    "feature"
+  ],
+  "main": "product-specs-feature-element.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "/demo/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  }
+}

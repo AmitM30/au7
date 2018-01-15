@@ -1,0 +1,365 @@
+<!--
+An element that includes core product details e.g. name, price
+
+Example:
+    <pdp-core-details-element></pdp-core-details-element>
+@demo
+-->
+
+<dom-module id="pdp-core-details-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+
+    <section class="primary-section-area">
+      <header class="pdp-header">
+        <!-- ELECTRONIC PRODUCT HEADER -->
+        <template is="dom-if" if="[[ isElectronics ]]">
+          <h1 class$="[[ _hasBrandLogo(productdetails.brand.url) ]]" itemprop="name">
+            [[ productdetails.name_desc.brand ]] [[ productdetails.name_desc.name ]]
+            <span class="subtitle">[[ productdetails.name_desc.subtitle ]]</span>
+            <template is="dom-if" if="[[ !isMobile]]" restamp="true">              
+              <span class="secondary-title">[[ productdetails.sku ]]</span>
+            </template>
+          </h1>
+        </template>
+
+        <!-- NON ELECTRONIC PRODUCT HEADER -->
+        <template is="dom-if" if="[[ !isElectronics ]]">
+          <h1 class$="[[ _hasBrandLogo(productdetails.brand.url) ]]" itemprop="name">
+            [[ productdetails.name_desc.brand ]]
+            <span class="subtitle">
+              <span>[[ productdetails.name_desc.name ]]</span>
+              <template is="dom-if" if="[[ productdetails.name_desc.subtitle ]]">
+                <span>[[ productdetails.name_desc.subtitle ]]</span>
+              </template>
+            </span>
+            <template is="dom-if" if="[[ !isMobile]]" restamp="true">              
+              <span class="secondary-title">[[ productdetails.sku ]]</span>
+            </template>
+          </h1>
+        </template>
+
+        <!-- IF BRAND LOGO -->
+        <template is="dom-if" if="[[ productdetails.brand.url ]]">
+          <a class="pdp-brand-logo" href$="/[[ productdetails.brand.key ]]">
+            <img src$="[[ _getBrandLogo(productdetails.brand.url) ]]" on-error="_logoError" alt$="[[ productdetails.brand.name ]]" />
+          </a>
+        </template>
+      </header>
+
+      <div class="pdp-key-details">
+        <div class="plp-price-review-row">
+          <!-- PRICE -->
+          <template is="dom-if" if="[[ !outofstock ]]">
+            <!-- SALE PRICE -->
+             <template is="dom-if" if="[[ isOnSale ]]">
+              <p class="core-product-price pdp-price">
+                <span class="pre-reduction">[[ productdetails.simples.0.suppliers.0.price ]] [[ ctx.currency ]]</span>
+                <span class="selling-price">[[ productdetails.simples.0.suppliers.0.specialPrice ]] [[ ctx.currency ]]</span>
+                <span class="discount-tag"> [[_translate('Save')]] [[ discountTotal ]] [[ ctx.currency ]] ([[productdetails.simples.0.suppliers.0.discount]]%)</span>
+                <span class="pre-reduction tax-info">[[ productdetails.simples.0.suppliers.0.tax_info ]]</span>
+              </p>
+            </template>
+            <!-- NORMAL PRICE -->
+            <template is="dom-if" if="[[ !isOnSale ]]">
+              <p class="core-product-price pdp-price">
+                <span class="selling-price">[[ productdetails.simples.0.suppliers.0.price ]] [[ ctx.currency ]]</span>
+                <span class="pre-reduction tax-info">[[ productdetails.simples.0.suppliers.0.tax_info ]]</span>
+              </p>
+            </template>
+            <!-- FREE SHIPPING BADGE -->
+            <!-- <p class="shipping-tag">[[_translate('Free Shipping')]]*</p>   -->
+          </template>
+
+
+          <!-- OOS MESSAGE -->
+          <template is="dom-if" if="[[ outofstock ]]">
+            <button class="core-block-cta core-block-cta-lg cta-full-width out-of-stock" disabled><i class="wadicon-block"></i>[[_translate('Out Of Stock')]]</button>
+          </template>
+
+          <!-- REVIEW STARS -->
+          <template is="dom-if" if="[[ reviews ]]">
+            <div on-tap="_scrollToReviews" class="reviews-badge" itemtype="http://schema.org/AggregateRating" itemscope="itemscope" itemprop="aggregateRating">
+              <div class="stars-container">
+                <i style$="width: [[_getStarFill(reviews.score)]]%" class="stars"></i>
+              </div>
+              <p class="rating">
+                [[_getReviewScore(reviews.score)]]
+                <span class="reviews-count">([[totalReviews]] [[_translate('Reviews')]])</span>
+              </p>
+            </div>
+          </template>
+        </div>
+
+      </div>
+
+      <!-- HIGHLIGHTS -->
+      <template is="dom-if" if="[[ !isMobile]]" restamp="true">
+        <template is="dom-if" if="[[ productdetails.highlights.length ]]" restamp="true">
+          <div class="highlights-container">
+            <ul class="highlights">
+              <template is="dom-repeat" items="[[ productdetails.highlights ]]" as="highlight">
+                <li>[[highlight]]</li>
+              </template>
+            </ul>
+          </div>
+        </template>
+      </template>
+      <!-- <div class="supplier-additional-info">
+        <p class="shipping">
+          [[ _getDeliveryPromise(selectedSku) ]]
+        </p>
+      </div> -->
+
+      <!-- VARIATIONS START -->
+      <template is="dom-if" if="[[hasVariations]]">
+        <div class="pdp-variations-wrapper">
+          <!-- ELECTRONIC COLORS -->
+          <template is="dom-if" if="[[ productdetails.groups.color ]]">
+            <template is="dom-if" if="[[ _isMoreThanOne(productdetails.groups.color) ]]">
+              <div class="pdp-variation-container">
+                <p class="title">[[_translate('Colors')]]:</p>
+                <ul>
+                   <template is="dom-repeat" items="[[ productdetails.groups.color ]]" as="variation">
+                      <li>
+                        <a href$="[[ variation.link ]]" class$="thumbnail [[ _isCurrentVariation(variation.sku, productdetails.sku) ]]">
+                          <img lazy-src$="[[ _getProductImage(variation.imageKey) ]]" alt$="[[ variation.key ]]">
+                          <div class="core-product-image-preloader"><i class="wadicon-spinner wadicon-spin"></i></div>
+                        </a>
+                      </li>
+                  </template>
+                </ul>
+              </div>
+            </template>
+          </template>
+          <!-- ELECTRONIC SIZES -->
+          <template is="dom-if" if="[[ productdetails.groups.size ]]">
+            <template is="dom-if" if="[[ _isMoreThanOne(productdetails.groups.size) ]]">
+              <div class="pdp-variation-container">
+                <p class="title">[[_translate('Sizes')]]:</p>
+                <ul>
+                  <template is="dom-repeat" items="[[productdetails.groups.size]]" as="variation">
+                    <li><a href$="[[variation.link]]" class$="[[_isCurrentVariation(variation.sku, productdetails.sku)]]">[[ variation.key ]]</a></li>
+                  </template>
+                </ul>
+              </div>
+            </template>
+          </template>
+          <!-- FASHION SIZES -->
+          <template is="dom-if" if="[[ !isOneSize ]]">
+            <div class="pdp-variation-container">
+              <p class="title">[[_translate('Select Size')]]:</p>
+              <ul>
+                <template is="dom-repeat" items="[[ productdetails.simples ]]" as="variation">
+                    <li>
+                      <div class="custom-radio-container">
+                        <label for$="size-[[ variation.size ]]" class$="custom-radio-label [[ _isVariationAvailable(variation.sku) ]]">
+                          <input type="radio" disabled$="[[ _isAvailable(variation.sku) ]]" name="product-size" checked$="[[ _isSelectedSku(variation.sku) ]]" value$="[[ variation.sku ]]" on-change="_selectSize" id$="size-[[ variation.size ]]" />
+                          <span class="label-text">[[ variation.size ]]</span>
+                          <div class="check-indicator"></div>
+                          <i></i>
+                        </label>
+                      </div>
+                    </li>
+                </template>
+              </ul>
+              <template is="dom-if" if="[[ !inCart ]]">
+                <template is="dom-if" if="[[ !selectedSize ]]">
+                  <p class="size-warning"><i class="wadicon-alert"></i>[[_translate('Please select your size')]]</p>
+                </template>
+              </template>
+            </div>
+          </template>
+        </div>
+      </template>
+      <!-- VARIATIONS END -->
+
+      <!-- BLUE OFFER HIGHLIGHT BOX START -->
+      <!-- <template is="dom-if" if="[[ isSA ]]" restamp="true">
+        <div class="offer-highlight-container">
+          <p class="title">[[ _translate('Limited Time Offer') ]]</p>
+          <p>[[ _translate('_limitedTimeOfferText') ]]</p>
+        </div>
+      </template> -->
+      <!-- BLUE OFFER HIGHLIGHT BOX END -->
+
+      <!-- OFFERS START -->
+      <template is="dom-if" if="[[ productdetails.ribbon.desc ]]" restamp="true">
+        <div class="default-seller offer-highlight-container">
+          <p class="title offers">[[ _translate('Offers') ]]</p>
+          <p>[[productdetails.ribbon.desc]]</p>
+        </div>
+      </template>
+      <!-- OFFERS ENDS -->
+
+    </section>
+
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+    is: 'pdp-core-details-element',
+
+    properties: {
+
+      productdetails: {
+        type: Object
+      },
+
+      reviews: {
+        type: Object,
+        notify: true,
+        observer: "_reviewsChanged"
+      },
+
+      outofstock: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
+       * app context
+       */
+      ctx: {
+        type: Object
+      },
+
+      selectedSku: {
+        type: String,
+        observer: "_selectedSkuChanged"
+      },
+
+      inCart: {
+        type: Boolean,
+        value: false
+      },
+
+      selectedSize: {
+        type: String,
+        value: null
+      }
+    },
+
+    // Element Lifecycle
+    attached: function () {
+      this.isSA = this.ctx.country === 'sa' ? true : false;
+      this.isMobile = window.config.device === 'mobile' ? true : false;
+      this.isElectronics = (this.productdetails.attributes.attribute_set === 'electronics' ? true : false);
+      this.isOnSale = false;
+      if (this.productdetails.simples[0].suppliers && this.productdetails.simples[0].suppliers.length) {
+        this.isOnSale = (this.productdetails.simples[0].suppliers[0].specialPrice ? true : false);
+      }
+      this.isOneSize = this.productdetails.simples[0].size === 'OS' ? true : false;
+      if (this.isOnSale) {
+        this.discountTotal = this.productdetails.simples[0].suppliers[0].price - this.productdetails.simples[0].suppliers[0].specialPrice;
+      }
+
+      // HAS VARIATIONS
+      if ((this.productdetails.groups && this.productdetails.groups.color && this._isMoreThanOne(this.productdetails.groups.color)) || (this.productdetails.groups && this.productdetails.groups.size && this._isMoreThanOne(this.productdetails.groups.size) ) || !this.isOneSize) {
+        this.hasVariations = true;
+      }
+    },
+
+    _reviewsChanged: function (res) {
+      // REVIEWS WORK
+      this.numProReviews = this._getArrayTotal(this.reviews.pro_score_dist_all);
+      this.numUserReviews = this._getArrayTotal(this.reviews.user_score_dist_all);
+      this.totalReviews = this.numProReviews + this.numUserReviews;
+    },
+
+    _selectedSkuChanged: function (sku) {
+      var el = document.querySelector("input[value='" + sku + "']");
+      if (el) {
+        el.checked = true;
+      }
+    },
+
+    json: function (data) {
+      return JSON.stringify(data);
+    },
+
+    _getProductImage: function (key) {
+      return "https://" + this.ctx.cdn + "/product/" + key + "/1-cart.jpg";
+    },
+
+    _scrollToReviews: function() {
+      this.fire('scroll-to-reviews');
+    },
+
+    _selectSize: function(e) {
+      this.selectedSize = e.target.value;
+      this.fire('size-selected', { sku: this.selectedSize });
+    },
+
+    _isSelectedSku: function (sku) {
+      return this.selectedSku === sku;
+    },
+
+    _isAvailable: function (sku) {
+      var found = this.productdetails.simples.find(function (d) { return d.sku === sku; });
+      return !(found && found.suppliers && found.suppliers.length !== 0 && found.quantity > 0);
+    },
+
+    _isVariationAvailable: function (sku) {
+      return this._isAvailable(sku) ? 'disabled' : '';
+    },
+
+    // ADD CLASS TO H1 IF BRAND LOGO IS PRESENT
+    _hasBrandLogo: function(url) {
+      if (url) {
+        return 'has-logo';
+      }
+    },
+
+    _isCurrentVariation: function(variation, current) {
+      if (variation === current) {
+        return 'active';
+      }
+    },
+
+    _isMoreThanOne: function(array) {
+      if (array && array.length > 1 ) {
+        return true;
+      }
+    },
+
+    _getReviewScore: function(score) {
+      return (score / 2).toFixed(1);
+    },
+
+    _getStarFill: function(score) {
+      return (score / 10) * 100;
+    },
+
+    _getArrayTotal: function(array) {
+      var total = 0;
+      for (var i in array) {
+          total += array[i];
+      }
+      return total;
+    },
+
+    _getBrandLogo: function (url) {
+      return url ? '//' + this.ctx.cdn + '/brand/' + url : null;
+    },
+
+    _logoError: function (e) {
+      e.target.parentNode.removeChild(e.target);
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+  });
+
+</script>

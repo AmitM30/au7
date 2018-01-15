@@ -85,6 +85,6 @@ export class ThankYou {
   }
 
   getViewStrategy () {
-    return this.config.templateURL + '/modules/checkout/' + this.viewName + ((this.common.device.isFMCG) ? '.fmcg' : '') + this.config.moduleVersion + '.html';
+    return '/android_asset/www/modules/checkout/' + this.viewName + ((this.common.device.isFMCG) ? '.fmcg' : '') + this.config.moduleVersion + '.html';
   }
 }

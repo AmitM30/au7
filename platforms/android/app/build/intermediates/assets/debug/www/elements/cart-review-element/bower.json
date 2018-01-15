@@ -1,0 +1,29 @@
+{
+  "name": "cart-review-element",
+  "version": "1.0.0",
+  "authors": [
+    "Carine Li <carine.li@wadi.com>"
+  ],
+  "description": "An element that provides the user to see the products and costs of their cart",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "cart"
+  ],
+  "main": "cart-review-element.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "/demo/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  }
+}

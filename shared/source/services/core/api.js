@@ -158,8 +158,8 @@ export class API {
    * @returns {Promise} returns a promise
    */
   getCORSRequest (endpoint, queryParameters, parameters) {
-    console.log('GET CORS: ', 'https://en-sa.wadi.com' + endpoint + Utils.jsonToQueryString(queryParameters));
-    return this.cors.jsonp('https://en-sa.wadi.com' + endpoint + Utils.jsonToQueryString(queryParameters), 'callback')
+    console.log('GET CORS: ', endpoint + Utils.jsonToQueryString(queryParameters));
+    return this.cors.jsonp('https://' + endpoint + Utils.jsonToQueryString(queryParameters), 'callback')
       .then((httpResponse) => {
         return httpResponse.response;
       }, (error) => {

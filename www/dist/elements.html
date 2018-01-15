@@ -22269,7 +22269,7 @@ module.exports = function (element) {
               <li class="product-suggestion suggest-list">
                 <a href="/{{ product.link }}">
                   <div class="image-container">
-                    <img src="//{{ options.cdnURL }}/product/{{ product.imageKey }}/1-cart.jpg" alt="{{ product.name }}">
+                    <img src="https://{{ options.cdnURL }}/product/{{ product.imageKey }}/1-cart.jpg" alt="{{ product.name }}">
                   </div>
                   <div class="details-container">
                     <p class="name">[[ product.name ]]</p>
@@ -22836,7 +22836,7 @@ module.exports = function (element) {
     initGoogleoAuth: function () {
       // Google Login
       var oAuth = document.createElement('script');
-      oAuth.src = '//apis.google.com/js/api:client.js';
+      oAuth.src = 'https://apis.google.com/js/api:client.js';
       oAuth.setAttribute('defer', 'defer');
 
       var _self = this;
@@ -22860,7 +22860,7 @@ module.exports = function (element) {
       (function(d, s) {
         var fjs = d.getElementsByTagName(s)[0];
         var e = d.createElement(s);
-        e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+        e.src = 'https://connect.facebook.net/en_US/all.js';
         e.async = true;
         fjs.parentNode.insertBefore(e, fjs);
       }(document, 'script'));
@@ -23222,10 +23222,10 @@ module.exports = function (element) {
               <template is="dom-if" if="[[ !options.dimensionsRatio ]]" restamp="true">
                 <a href$="[[ _getLink(banner.redirectUrl) ]]">
                   <template is="dom-if" if="[[ _firstBanner(i) ]]" restamp="true">
-                    <img src$="[[ banner.imageUrl ]]" on-load="_onLazyImageReady" on-click="_onClick" alt="[[ banner.title ]]" index$="[[ i ]]" class="swiper-lazy first" data-creative$="[[ banner.creative ]]" data-id$="[[ banner.id ]]">
+                    <img src$="https://[[ banner.imageUrl ]]" on-load="_onLazyImageReady" on-click="_onClick" alt="[[ banner.title ]]" index$="[[ i ]]" class="swiper-lazy first" data-creative$="[[ banner.creative ]]" data-id$="[[ banner.id ]]">
                   </template>
                   <template is="dom-if" if="[[ !_firstBanner(i) ]]" restamp="true">
-                    <img lazy-src$="[[ banner.imageUrl ]]" on-load="_onLazyImageReady" on-click="_onClick" alt="[[ banner.title ]]" index$="[[ i ]]" class="swiper-lazy rest" data-creative$="[[ banner.creative ]]" data-id$="[[ banner.id ]]">
+                    <img lazy-src$="https://[[ banner.imageUrl ]]" on-load="_onLazyImageReady" on-click="_onClick" alt="[[ banner.title ]]" index$="[[ i ]]" class="swiper-lazy rest" data-creative$="[[ banner.creative ]]" data-id$="[[ banner.id ]]">
                     <div class="swiper-lazy-preloader"></div>
                   </template>
                 </a>
@@ -23234,10 +23234,10 @@ module.exports = function (element) {
               <template is="dom-if" if="[[ options.dimensionsRatio ]]" restamp="true">
                 <a class="prevent-reflow" style$="padding-bottom: [[_intrinsicRatio(options.dimensionsRatio.width, options.dimensionsRatio.height)]]%" href="[[ _getLink(banner.redirectUrl) ]]">
                   <template is="dom-if" if="[[ _firstBanner(i) ]]" restamp="true">
-                    <img src$="[[ banner.imageUrl ]]" on-load="_onLazyImageReady" on-click="_onClick" alt="[[ banner.title ]]" index$="[[ i ]]" class="swiper-lazy first" data-creative$="[[ banner.creative ]]" data-id$="[[ banner.id ]]">
+                    <img src$="https://[[ banner.imageUrl ]]" on-load="_onLazyImageReady" on-click="_onClick" alt="[[ banner.title ]]" index$="[[ i ]]" class="swiper-lazy first" data-creative$="[[ banner.creative ]]" data-id$="[[ banner.id ]]">
                   </template>
                   <template is="dom-if" if="[[ !_firstBanner(i) ]]" restamp="true">
-                    <img lazy-src$="[[ banner.imageUrl ]]" on-load="_onLazyImageReady" on-click="_onClick" alt="[[ banner.title ]]" index$="[[ i ]]" class="swiper-lazy rest" data-creative$="[[ banner.creative ]]" data-id$="[[ banner.id ]]">
+                    <img lazy-src$="https://[[ banner.imageUrl ]]" on-load="_onLazyImageReady" on-click="_onClick" alt="[[ banner.title ]]" index$="[[ i ]]" class="swiper-lazy rest" data-creative$="[[ banner.creative ]]" data-id$="[[ banner.id ]]">
                     <div class="swiper-lazy-preloader"></div>
                   </template>
                 </a>
@@ -23473,7 +23473,7 @@ module.exports = function (element) {
                         <div class="banner-preloader" style$="padding-bottom: [[_intrinsicRatio(images.mainBanner.width, images.mainBanner.height)]]%">
                           <i class="wadicon-spinner wadicon-spin"></i>
                         </div>
-                        <img lazy-src$="[[ images.mainBanner.path ]]" alt$="[[ _getAltText(images.mainBanner.title) ]]" on-load="_onLazyImageReady" on-click="_onClick" position$="[[ index ]]" data-creative$="[[ images.mainBanner.creative ]]" data-id$="[[ images.mainBanner.id ]]">
+                        <img lazy-src$="https://[[ images.mainBanner.path ]]" alt$="[[ _getAltText(images.mainBanner.title) ]]" on-load="_onLazyImageReady" on-click="_onClick" position$="[[ index ]]" data-creative$="[[ images.mainBanner.creative ]]" data-id$="[[ images.mainBanner.id ]]">
                         <template is="dom-if" if="[[ images.mainBanner.content ]]" restamp="true">
                           <div class="content-holder">
                             <p class="title">[[images.mainBanner.content.title]]</p>
@@ -23496,7 +23496,7 @@ module.exports = function (element) {
                             <div class="banner-preloader" style$="padding-bottom: [[_intrinsicRatio(smallImage.dimensionsRatio.width, smallImage.dimensionsRatio.height)]]%">
                               <i class="wadicon-spinner wadicon-spin"></i>
                             </div>
-                            <img lazy-src$="[[ smallImage.path ]]" alt="[[ smallImage.alttitle ]]" on-load="_onLazyImageReady" on-click="_onClick" position$="[[ index ]]" data-creative$="[[ smallImage.creative ]]" data-id$="[[ smallImage.id ]]">
+                            <img lazy-src$="https://[[ smallImage.path ]]" alt="[[ smallImage.alttitle ]]" on-load="_onLazyImageReady" on-click="_onClick" position$="[[ index ]]" data-creative$="[[ smallImage.creative ]]" data-id$="[[ smallImage.id ]]">
                             <template is="dom-if" if="[[ smallImage ]]" restamp="true">
                               <p class="text-content">[[smallImage.title]]<strong>[[smallImage.text]]</strong></p>
                             </template>
@@ -23521,7 +23521,7 @@ module.exports = function (element) {
                               <div class="banner-preloader" style$="padding-bottom: [[_intrinsicRatio(smallImage.dimensionsRatio.width, smallImage.dimensionsRatio.height)]]%">
                                 <i class="wadicon-spinner wadicon-spin"></i>
                               </div>
-                              <img lazy-src$="[[ smallImage.path ]]" alt="[[ smallImage.title ]]" on-load="_onLazyImageReady" on-click="_onClick" position$="[[ index ]]" data-creative$="[[ smallImage.creative ]]" data-id$="[[ smallImage.id ]]">
+                              <img lazy-src$="https://[[ smallImage.path ]]" alt="[[ smallImage.title ]]" on-load="_onLazyImageReady" on-click="_onClick" position$="[[ index ]]" data-creative$="[[ smallImage.creative ]]" data-id$="[[ smallImage.id ]]">
                               <template is="dom-if" if="[[ smallImage.content ]]" restamp="true">
                               <p class="text-content">[[smallImage.content.title]]<strong>[[smallImage.content.text]]</strong></p>
                             </template>
@@ -23701,7 +23701,7 @@ module.exports = function (element) {
           </marked-element>
           <template is="dom-if" if="[[ content.image ]]">
             <div class="image-container">
-              <img src$="[[ _getImageUrl(content.image) ]]">
+              <img src$="https://[[ _getImageUrl(content.image) ]]">
             </div>
           </template>
           <template is="dom-if" if="[[ content.video ]]">
@@ -23732,7 +23732,7 @@ module.exports = function (element) {
                   </div>
                 </template>
                 <template is="dom-if" if="[[ info.image ]]">
-                  <div class="image-container"><img src$="[[ _getImageUrl(info.image) ]]" alt="[[ info.title ]]"></div>
+                  <div class="image-container"><img src$="https://[[ _getImageUrl(info.image) ]]" alt="[[ info.title ]]"></div>
                 </template>
               </section>
             </template>
@@ -23791,7 +23791,7 @@ module.exports = function (element) {
     },
 
     _getImageUrl: function (url) {
-      return url.replace('@lang@', this.ctx.lang).replace('@country@', this.ctx.country);
+      return 'https://' + url.replace('@lang@', this.ctx.lang).replace('@country@', this.ctx.country);
     },
 
     _getVideoLink: function (url) {
@@ -24893,8 +24893,8 @@ Polymer({
           <div class="swiper-wrapper js_slides">
             <template is="dom-repeat" items="[[ banners.assets ]]" as="banner">
               <div class="swiper-slide js_slide" position$="[[ index ]]" on-tap="_onClick">
-                <img src$="[[ banner.imageUrl ]]" alt="[[ banner.title ]]" class="swiper-lazy preactive">
-                <img src$="[[ banner.activeImageUrl ]]" alt="[[ banner.title ]]" class="swiper-lazy alternate">
+                <img src$="https://[[ banner.imageUrl ]]" alt="[[ banner.title ]]" class="swiper-lazy preactive">
+                <img src$="https://[[ banner.activeImageUrl ]]" alt="[[ banner.title ]]" class="swiper-lazy alternate">
                 <template is="dom-if" if="[[ banners.assets ]]" as="banner">
                   <p class="title">[[ banner.title ]]</p>
                 </template>
@@ -25373,7 +25373,7 @@ Polymer({
     <validation-phone phone-config="[[ phoneConfig ]]"></validation-phone>
     <div class="site-width-container">
       <template is="dom-if" if="[[ campaign.imageUrl ]]">
-        <img lazy-src$="[[ campaign.imageUrl ]]" alt$="[[ _getAltText(campaign.title) ]]" on-load="_onLazyImageReady">
+        <img lazy-src$="https://[[ campaign.imageUrl ]]" alt$="[[ _getAltText(campaign.title) ]]" on-load="_onLazyImageReady">
       </template>
       <div class="content-holder">
         <template is="dom-if" if="[[ campaign.title ]]">

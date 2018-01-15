@@ -51,7 +51,7 @@ export class App {
     config.addPipelineStep('preRender', PreRenderStep);
     config.addPipelineStep('postcomplete', PostCompleteStep);
     config.map([
-      { route: ['', 'home'],    name: 'home',         moduleId: '../shared/source/modules/home',     nav: true },
+      { route: ['', 'home', 'android_asset/www/index.html'],    name: 'home',         moduleId: '../shared/source/modules/home',     nav: true },
       { route: 'cart',          name: 'cart',         moduleId: '../shared/source/modules/cart',     nav: true,  title: 'Cart' },
       { route: 'checkout',      name: 'checkout',     moduleId: '../shared/source/modules/checkout', nav: true,  title: 'Checkout'},
       { route: 'something-went-wrong', name: 'error', moduleId: '../shared/source/modules/error',    nav: false, title: 'What went Wrong !' }

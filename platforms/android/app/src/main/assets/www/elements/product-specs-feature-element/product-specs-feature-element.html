@@ -1,0 +1,113 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<!--<link rel="import" href="bower_components/polymer/polymer.html">-->
+
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+
+    <product-specs-feature-element></product-specs-feature-element>
+
+@demo
+-->
+<dom-module id="product-specs-feature-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+    <content></content>
+    <div class="site-width-container">
+      <h2 hidden$="[[isMobile]]">[[ _translate('Full Specifications') ]]</h2>
+      <h3 collapse="#collapse-specs" on-click="_toggle" hidden$="[[!isMobile]]">[[ _translate('View Full Specifications') ]]</h3>
+      <iron-collapse id="collapse-specs" opened="[[!isMobile]]">
+        <div class="content-holder">
+          <template is="dom-repeat" items="[[_toArray(attributesmap.groups)]]">
+            <table>
+              <thead>
+              <tr><th colspan="2">[[ item.value.label ]]</th></tr>
+              </thead>
+              <tbody>
+              <template is="dom-repeat" items="[[_toArray(item.value.attributes)]]" as="attrName">
+                <tr>
+                  <td>[[ attrName.value.label ]]</td>
+                  <td>[[ attrName.value.value ]]</td>
+                </tr>
+              </template>
+              </tbody>
+            </table>
+          </template>
+        </div>
+      </iron-collapse>
+    </div>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'product-specs-feature-element',
+
+    properties: {
+
+      /**
+       * Product Specification and feature json object to be displayed
+       */
+      attributesmap: {
+        type: Object
+      },
+
+      /**
+       * Options supported by Product Specification and feature element
+       */
+      options: {
+        type: Object
+      },
+
+      /**
+       * Application context
+       */
+      ctx: {
+        type: Object
+      }
+    },
+
+    attached: function () {
+      this.isMobile = window.config.device === 'mobile' ? true : false;
+    },
+
+    _toArray: function(attributesmap) {
+      return Object.keys(attributesmap).map(function(key) {
+        return {
+          label: key,
+          value: attributesmap[key]
+        };
+      });
+    },
+    
+    _toggle: function (event) {
+      var node = event.currentTarget.getAttribute('collapse');
+      this.querySelector(node).toggle();
+      event.currentTarget.classList.toggle('opened');
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+  });
+
+</script>

@@ -1,0 +1,376 @@
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+    <product-reviews-element></product-reviews-element>
+@demo
+-->
+
+<dom-module id="product-reviews-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+
+    <template is="dom-if" if="[[ reviews ]]">
+
+    <section class="pdp-section-area site-width-container">
+
+      <!-- TOP SUMMARY SECTION START -->
+      <div class="details-module summary-container">
+
+        <h2 hidden$="[[isMobile]]">[[_translate('Reviews')]]</h2>
+
+        <!-- BIG STARS START -->
+        <div class="rating-container">
+          <p class="rating">[[_getReviewScore(reviews.score)]]</p>
+          <div class="additional-details-container">
+            <div class="stars-container large"><i style$="width: [[_getStarFill(reviews.score)]]%" class="stars"></i></div>
+            <p class="counter">[[ _translate('Based on') ]] [[totalReviews]] [[_translate('Reviews')]]*</p>
+          </div>
+
+          <!-- PROS & CONS DESKTOP START -->
+          <template is="dom-if" if="[[!isMobile]]">
+            <div class="overview-container">
+              <template is="dom-if" if="[[reviews.product_pros.length]]">
+                <p class="pros">
+                  <template is="dom-repeat" items="[[reviews.product_pros]]" as="pro">
+                    <span>
+                      [[pro]]
+                      <template is="dom-if" if="[[_isNotLastItem(index, reviews.product_pros.length)]]">
+                        <span>,&nbsp;</span>
+                      </template>
+                    </span>
+                  </template>
+                </p>
+              </template>
+              <template is="dom-if" if="[[reviews.product_cons.length]]">
+                <p class="cons">
+                  <template is="dom-repeat" items="[[reviews.product_cons]]" as="con">
+                    <span>
+                      [[con]]
+                      <template is="dom-if" if="[[_isNotLastItem(index, reviews.product_cons.length)]]">
+                        <span>,&nbsp;</span>
+                      </template>
+                    </span>
+                  </template>
+                </p>
+              </template>
+            </div>
+          </template>
+          <!-- PROS & CONS DESKTOP END -->
+        </div>
+        <!-- BIG STARS END -->
+
+        <!-- GRAPHS START -->
+        <div class="graph-wrapper">
+          <div class="graph-container">
+            <p class="title">[[ _translate('Expert Reviews') ]] ([[numProReviews]])*</p>
+            <table>
+              <template is="dom-repeat" items="[[pro_score_dist_all_reversed]]" as="score">
+                <tr>
+                  <td class="value-title">[[_getScoreHeading(reviews.pro_score_dist_all.length, index)]]</td>
+                  <td class="value-holder">
+                    <div class="value-container"><span style$="width: [[_getReviewGraphFill(score, numProReviews)]]%" class="value"></span></div>
+                  </td>
+                  <td class="count">[[score]]</td>
+                </tr>
+              </template>
+            </table>
+          </div>
+          <div class="graph-container">
+            <p class="title">[[ _translate('User Reviews') ]] ([[numUserReviews]])*</p>
+            <table>
+              <template is="dom-repeat" items="[[user_score_dist_all_reversed]]" as="score">
+                <tr>
+                  <td class="value-title">[[_getScoreHeading(reviews.user_score_dist_all.length, index)]]</td>
+                  <td class="value-holder">
+                    <div class="value-container"><span style$="width: [[_getReviewGraphFill(score, numUserReviews)]]%" class="value"></span></div>
+                  </td>
+                  <td class="count">[[score]]</td>
+                </tr>
+              </template>
+            </table>
+          </div>
+        </div>
+        <!-- GRAPHS END -->
+
+        <!-- PROS & CONS MOBILE START -->
+        <template is="dom-if" if="[[isMobile]]">
+          <div class="overview-container">
+            <template is="dom-if" if="[[reviews.product_pros.length]]">
+              <p class="pros">
+                <template is="dom-repeat" items="[[reviews.product_pros]]" as="pro">
+                  <span>
+                    [[pro]]
+                    <template is="dom-if" if="[[_isNotLastItem(index, reviews.product_pros.length)]]">
+                      <span>,&nbsp;</span>
+                    </template>
+                  </span>
+                </template>
+              </p>
+            </template>
+            <template is="dom-if" if="[[reviews.product_cons.length]]">
+              <p class="cons">
+                <template is="dom-repeat" items="[[reviews.product_cons]]" as="con">
+                  <span>
+                    [[con]]
+                    <template is="dom-if" if="[[_isNotLastItem(index, reviews.product_cons.length)]]">
+                      <span>,&nbsp;</span>
+                    </template>
+                  </span>
+                </template>
+              </p>
+            </template>
+            <p class="disclaimer">* [[ _translate('_PDPReviewsDisclaimer') ]]</p>
+          </div>
+        </template>
+        <!-- PROS & CONS MOBILE END -->
+
+        <!-- DESKTOP DISCLAIMER -->
+        <template is="dom-if" if="[[!isMobile]]">
+          <p class="disclaimer" hidden$="[[isMobile]]">* [[ _translate('_PDPReviewsDisclaimer') ]]</p>
+        </template>
+
+      </div>
+      <!-- TOP SUMMARY SECTION END -->
+
+
+      <!-- EXPERT AND USER REVIEWS START -->
+      <div class="reviews-container">
+
+        <template is="dom-if" if="[[!isMobile]]">
+          <nav class="pdp-details-nav-container">
+            <div class="site-width-container">
+              <ul>
+                <li><a class="active review-trigger" collapse="#collapse-pro-reviews" on-tap="_loadExpertReviews">[[ _translate('Expert Reviews') ]] ([[reviews.pro_review_count]])</a></li>
+                <li><a class="review-trigger" collapse="#collapse-user-reviews" on-tap="_loadUserReviews">[[ _translate('User Reviews') ]] ([[reviews.user_review_count]])</a></li>
+              </ul>
+            </div>
+          </nav>
+        </template>
+
+
+        <!-- EXPERT REVIEWS START -->
+        <h3 hidden$="[[!isMobile]]" collapse="#collapse-pro-reviews" on-click="_loadExpertReviews">[[ _translate('Expert Reviews') ]] ([[reviews.pro_review_count]])</h3>
+        <iron-collapse id="collapse-pro-reviews" class="in-view" opened="[[!isMobile]]">
+          <div class="content-holder">
+            <template is="dom-repeat" items="[[ expertreviews ]]" as="review">
+              <div class="review-container">
+                <div class="reviewer-details">
+                  <div class="key-details-container">
+                    <p class$="source country [[review.country]]">[[review.source]]</p>
+                    <p class="date">[[review.date]]</p>
+                  </div>
+                  <div class="additional-details-container">
+                    <template is="dom-if" if="[[review.score]]">
+                      <div class="stars-container"><i style$="width: [[_getStarFill(review.score)]]%" class="stars"></i></div>
+                    </template>
+                  </div>
+                </div>
+                <div class="review-details">
+                  <p class="extract"><span>[[review.extract]]</span></p>
+                  <template is="dom-if" if="[[review.pros]]">
+                    <p class="pros">[[review.pros]]</p>
+                  </template>
+                  <template is="dom-if" if="[[review.cons]]">
+                    <p class="cons">[[review.cons]]</p>
+                  </template>
+                </div>
+              </div>
+            </template>
+            <div class="loader-container" hidden$="[[ expertreviews ]]">
+              [[ _translate('Loading') ]] <i class="wadicon-spinner wadicon-spin"></i>
+            </div>
+            <template is="dom-if" if="[[ expertreviews ]]">
+              <div class="cta-container">
+                <button class="core-block-cta core-block-cta-support" on-click="_loadMoreExpertReviews">[[ _translate('Load More Reviews') ]]</button>
+                <!-- <p>You have reached the end of expert reviews.</p> -->
+              </div>
+            </template>
+          </div>
+        </iron-collapse>
+        <!-- EXPERT REVIEWS END -->
+
+        <!-- USER REVIEWS START -->
+        <h3 hidden$="[[!isMobile]]" collapse="#collapse-user-reviews" on-click="_loadUserReviews">[[ _translate('User Reviews') ]] ([[reviews.user_review_count]])</h3>
+        <iron-collapse id="collapse-user-reviews" opened="[[!isMobile]]">
+          <div class="content-holder">
+            <template is="dom-repeat" items="[[userreviews]]" as="review">
+              <div class="review-container">
+                <div class="reviewer-details">
+                  <div class="key-details-container">
+                    <p class$="source country [[review.country]]">[[review.source]]</p>
+                    <p class="date">[[review.date]]</p>
+                  </div>
+                  <div class="additional-details-container">
+                    <template is="dom-if" if="[[review.score]]">
+                      <div class="stars-container"><i style$="width: [[_getStarFill(review.score)]]%" class="stars"></i></div>
+                    </template>
+                  </div>
+                </div>
+                <div class="review-details">
+                  <p class="extract"><span>[[review.extract]]</span></p>
+                  <template is="dom-if" if="[[review.pros]]">
+                    <p class="pros">[[review.pros]]</p>
+                  </template>
+                  <template is="dom-if" if="[[review.cons]]">
+                    <p class="cons">[[review.cons]]</p>
+                  </template>
+                </div>
+              </div>
+            </template>
+            <div class="loader-container" hidden$="[[ userreviews ]]">
+              [[ _translate('Loading') ]] <i class="wadicon-spinner wadicon-spin"></i>
+            </div>
+            <template is="dom-if" if="[[ userreviews ]]">
+              <div class="cta-container">
+                <button class="core-block-cta core-block-cta-support" on-click="_loadMoreUserReviews">[[ _translate('Load More Reviews') ]]</button>
+                <!-- <p>You have reached the end of user reviews.</p> -->
+              </div>
+            </template>
+          </div>
+        </iron-collapse>
+        <!-- USER REVIEWS END -->
+      </div>
+      <!-- EXPERT AND USER REVIEWS END -->
+    </section>
+    </template>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'product-reviews-element',
+
+    properties: {
+      reviews: {
+        type: Object,
+        observer: "_reviewsChanged"
+      },
+
+      expertreviews: {
+        type: Object,
+        notify: true,
+        value: function() {
+            return [];
+        }
+      },
+
+      userreviews: {
+        type: Object,
+        notify: true,
+        value: function() {
+            return [];
+        }
+      }
+    },
+
+    attached: function () {
+      this.isMobile = window.config.device === 'mobile' ? true : false;
+    },
+
+    _reviewsChanged: function () {
+      if (this.reviews.pro_score_dist_all) {
+        this.numProReviews = this._getArrayTotal(this.reviews.pro_score_dist_all);
+        this.numUserReviews = this._getArrayTotal(this.reviews.user_score_dist_all);
+        this.totalReviews = this.numProReviews + this.numUserReviews;
+        this.pro_score_dist_all_reversed = this.reviews.pro_score_dist_all.slice().reverse();
+        this.user_score_dist_all_reversed = this.reviews.user_score_dist_all.slice().reverse();
+
+        // LOAD EXPERT REVIEWS INITIALLY ON DESKTOP
+        if (!this.isMobile && !this.expertreviews.length) {
+          this.fire('load-expert-reviews');
+        }
+      }
+    },
+
+    _loadExpertReviews: function (event) {
+      if(this.isMobile){
+        this._toggle(event);
+      }
+      else {
+        [].forEach.call(this.getElementsByClassName('review-trigger'), function(el) { el.classList.remove('active'); });
+        event.currentTarget.classList.add('active');
+        document.getElementById('collapse-user-reviews').classList.remove('in-view');
+        document.getElementById('collapse-pro-reviews').classList.add('in-view');
+      }
+
+      if (!this.expertreviews) {
+        this.fire('load-expert-reviews');
+      }
+    },
+
+    _loadMoreExpertReviews: function (src) {
+      this.fire('load-expert-reviews', { list: this.expertreviews });
+    },
+
+    _loadUserReviews: function (event) {
+      if(this.isMobile){
+        this._toggle(event);
+      }
+      else {
+        [].forEach.call(this.getElementsByClassName('review-trigger'), function(el) { el.classList.remove('active'); });
+        event.currentTarget.classList.add('active');
+        document.getElementById('collapse-pro-reviews').classList.remove('in-view');
+        document.getElementById('collapse-user-reviews').classList.add('in-view');
+      }
+      if (!this.userreviews) {
+        this.fire('load-user-reviews');
+      }
+    },
+
+    _loadMoreUserReviews: function (src) {
+      this.fire('load-user-reviews', { list: this.userreviews });
+    },
+
+    _getScoreHeading: function (length, index) {
+      return ((length - 1) - index).toString() + '-' + (length - index).toString();
+    },
+
+    _getReviewGraphFill: function (score, totalScores) {
+      return (score / totalScores) * 100;
+    },
+
+    _getReviewScore: function (score) {
+      return (score / 2).toFixed(1);
+    },
+
+    _getStarFill: function (score) {
+      return (score / 10) * 100;
+    },
+
+    _getArrayTotal: function (array) {
+      var total = 0;
+      for (var i in array) {
+          total += array[i];
+      }
+      return total;
+    },
+
+    _isNotLastItem: function (index, length) {
+      if (index !== length - 1) {
+        return true;
+      }
+    },
+
+    _toggle: function (event) {
+      var node = event.currentTarget.getAttribute('collapse');
+      this.querySelector(node).toggle();
+      event.currentTarget.classList.toggle('opened');
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+  });
+
+</script>

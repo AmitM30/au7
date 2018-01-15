@@ -115,16 +115,15 @@ export class Handler {
       }
     };
 
-    console.log('this.common.firstLoad: ', this.common.firstLoad);
-    console.log('this.common.loadAPIData: ', this.common.loadAPIData);
     if (this.common.firstLoad && this.common.loadAPIData) {
       this.response = this.common.loadAPIData;
       fn.call(this);
     } else {
+      console.log('HANDLER PATH -> ', navigationInstruction.fragment + ((navigationInstruction.queryString) ? '?' + navigationInstruction.queryString : ''));
       return this.request.backend(navigationInstruction.fragment + ((navigationInstruction.queryString) ? '?' + navigationInstruction.queryString : ''))
         .then((response) => {
-          console.log('this.response: ', this.response);
           this.response = response;
+          console.log('HANDLER -> this.response: ', this.response);
           fn.call(this);
         });
     }
@@ -247,7 +246,7 @@ export class Handler {
   }
 
   getViewStrategy () {
-    console.log('this.customView: ', this.customView);
+    console.log('HANDLER -> this.customView: ', this.customView);
     if (this.customView) {
       this.json = Helpers.initAsyncRender(this.response.render);
       this.common.bodyClass = this.response.render.overridingCSS || this.common.bodyClass;
@@ -257,13 +256,14 @@ export class Handler {
       }
     }
 
+    console.log('this.response.type: ', this.response.type);
     switch (this.response.type) {
       case 'detail':
-        return this.config.templateURL + 'modules/pdp' + this.config.moduleVersion + '.html';
+        return '/android_asset/www/modules/pdp' + this.config.moduleVersion + '.html';
       case 'list':
-        return this.config.templateURL + 'modules/plp' + this.config.moduleVersion + '.html';
+        return '/android_asset/www/modules/plp' + this.config.moduleVersion + '.html';
       default: this.common.pageType = '404';
-        return this.config.templateURL + 'modules/404' + this.config.moduleVersion + '.html';
+        return '/android_asset/www/modules/404' + this.config.moduleVersion + '.html';
     }
   }
 
