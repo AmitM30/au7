@@ -137,6 +137,6 @@ export class Shipping {
   }
 
   getViewStrategy () {
-    return '/android_asset/www/modules/checkout/' + this.viewName + this.config.moduleVersion + '.html';
+    return this.config.templateURL + 'modules/checkout/' + this.viewName + this.config.moduleVersion + '.html';
   }
 }

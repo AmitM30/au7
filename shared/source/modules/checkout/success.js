@@ -79,12 +79,7 @@ export class ThankYou {
     }
   }
 
-  // TODO - THIS IS ONLY NEEDED WHILST DOODLE FLUID IS NOT ON PROD & PHOENIX IS
-  forceToHome () {
-    window.location.href = '/';
-  }
-
   getViewStrategy () {
-    return '/android_asset/www/modules/checkout/' + this.viewName + ((this.common.device.isFMCG) ? '.fmcg' : '') + this.config.moduleVersion + '.html';
+    return this.config.templateURL + 'modules/checkout/' + this.viewName + ((this.common.device.isFMCG) ? '.fmcg' : '') + this.config.moduleVersion + '.html';
   }
 }

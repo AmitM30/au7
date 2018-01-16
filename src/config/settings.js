@@ -29,6 +29,7 @@ export class Settings {
     config.switch.country = config.locale.country === 'ae' ? 'sa' : 'ae';
     config.myAccount = 'my.' + config.domain;
     config.createAccount = 'my.' + config.domain + '/register';
+    config.templateURL = config.templateURL || window.appDirectory;
 
     window.document.body.style.direction = config.direction;
 

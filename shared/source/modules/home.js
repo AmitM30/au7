@@ -53,7 +53,6 @@ export class Home {
   canDeactivate () { }
 
   getViewStrategy () {
-    console.log('HOME -> this.customView: ', this.customView);
     if (this.customView) {
       this.json = Helpers.initAsyncRender(this.response.render);
       this.common.bodyClass = (this.response.render.overridingCSS) ? this.response.render.overridingCSS : this.common.bodyClass;

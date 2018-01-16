@@ -152,6 +152,6 @@ export class PlaceOrder {
   }
 
   getViewStrategy () {
-    return this.config.templateURL + '/modules/checkout/' + this.viewName + this.config.moduleVersion + '.html';
+    return this.config.templateURL + 'modules/checkout/' + this.viewName + this.config.moduleVersion + '.html';
   }
 }

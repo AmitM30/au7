@@ -257,13 +257,14 @@ export class Handler {
     }
 
     console.log('this.response.type: ', this.response.type);
+    console.log('this.config.templateURL: ', this.config.templateURL);
     switch (this.response.type) {
       case 'detail':
-        return '/android_asset/www/modules/pdp' + this.config.moduleVersion + '.html';
+        return this.config.templateURL + 'modules/pdp' + this.config.moduleVersion + '.html';
       case 'list':
-        return '/android_asset/www/modules/plp' + this.config.moduleVersion + '.html';
+        return this.config.templateURL + 'modules/plp' + this.config.moduleVersion + '.html';
       default: this.common.pageType = '404';
-        return '/android_asset/www/modules/404' + this.config.moduleVersion + '.html';
+        return this.config.templateURL + 'modules/404' + this.config.moduleVersion + '.html';
     }
   }
 

@@ -24,7 +24,6 @@ export async function configure (aurelia) {
   //   aurelia.use.developmentLogging();
   // }
 
-  // aurelia.use.plugin('aurelia-polymer');
   aurelia.use.plugin('aurelia-html-import-template-loader');
   aurelia.use.globalResources('../shared/source/plugins/t');
 

@@ -70,13 +70,7 @@ export class App {
   }
 
   async activate () {
-    
-    // Fetch facets list
-    // this.request.facetsList().then((list) => { this.config.set('facetTypes', list.data || this.config.facetTypes); });
-    
-    // Set cart count
-    // this.common.cartCount = await this.cart.length();
-    
+
     this.cartModel.addresses.shipping = this.cartModel.addresses.shipping || this.cartModel.getDefaultAddressObject();
     this.cartModel.addresses.billing = this.cartModel.addresses.billing || this.cartModel.getDefaultAddressObject();
     
@@ -322,7 +316,7 @@ export class App {
   }
 
   getViewStrategy () {
-    return this.config.templateURL + 'app.html';
+    return 'app.html';
   }
 
   determineActivationStrategy () {

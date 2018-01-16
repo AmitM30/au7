@@ -7,7 +7,7 @@
     "dev": "webpack-dev-server -d --env.platform=default --progress",
     "build": "webpack -p --env.production --env.platform=default --progress",
     "build:dev": "webpack --env.production --env.platform=default --progress",
-    "build:watch": "webpack --watch --env.production --env.platform=default --progress",
+    "build:watch": "webpack  -p --watch --env.production --env.platform=default --progress",
     "build:prod:small": "cross-env NODE_ENV=live APP_ENV=small npm run webpack"
   },
   "author": "Amit Mangal",

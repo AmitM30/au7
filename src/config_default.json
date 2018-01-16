@@ -3,7 +3,7 @@
     "api": "api",
     "xdomain": "/data/xdomain.html",
     "direction": "ltr",
-    "templateURL": "",
+    "templateURL": null,
     "templatePath": "_templates",
     "moduleVersion": "",
     "locale": {

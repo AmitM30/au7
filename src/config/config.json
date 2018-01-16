@@ -4,7 +4,6 @@
     "api": "api",
     "xdomain": "/data/xdomain.html",
     "direction": "ltr",
-    "templateURL": "",
     "templatePath": "_templates",
     "moduleVersion": "",
     "appHtml": "",
@@ -51,32 +50,6 @@
         "navigationWidth": "80%"
     },
     "CDNUrl": "b.wadicdn.com",
-    "facetTypes": {
-        "category": {
-            "name": "Category",
-            "type": "links"
-        },
-        "offers": {
-            "name": "Offers",
-            "type": "multiselect"
-        },
-        "show_oos": {
-            "name": "Include Out Of Stock",
-            "type": "singleselect"
-        },
-        "brand": {
-            "name": "Brand",
-            "type": "multiselect"
-        },
-        "color": {
-            "name": "Color",
-            "type": "multiselect"
-        },
-        "price": {
-            "name": "Price",
-            "type": "range"
-        }
-    },
     "currencyMapping": {
         "sa-en": "SAR",
         "ae-en": "AED",
@@ -174,36 +147,5 @@
         "fallBackLastName": "...",
         "fallBackSignupFirstName": "Wadi",
         "fallBackSignupLastName": "Customer"
-    },
-
-    "apis": {
-        "version": "v1",
-        "backend": "/api/sawa/v1/u",
-        "product": "/api/sawa/v1/products/",
-        "search": "/api/sawa/v1/u/catalog",
-        "suggest": "/api/sawa/v1/suggest",
-        "review": "/api/checkout/order/review",
-        "navigation": "/api/sawa/v1/config/navigation",
-        "facets": "/api/sawa/v1/facets/list",
-        "subscribe": "/api/sawa/v1/userSignup",
-        "login": "/api/jerry/login",
-        "logout": "/api/jerry/v1/logout",
-        "passReset": "/api/sawa/v1/password-reset-request",
-        "userStatus": "/api/jerry/v1/customers/self",
-        "userAddress": "/api/jerry/v2/addresses?depth=1&limit=20",
-        "userExist": "/api/jerry/v2/users/{email}/exists",
-        "uploadDocument": "/api/sawa/v1/customer/idUpload",
-        "idCheck": "/api/sawa/v1/customer/idCheck",
-        "sendOTP":"/api/jerry/v2/phone/verify",
-        "verifyOTP":"/api/jerry/v2/phone/code/verify",
-        "reviews": "//d1le22hyhj2ui8.cloudfront.net/onpage/wadi.com/reviews.js",
-        "order": "/api/checkout/v1/order",
-        "error": "/api/sawa/v1/app/error",
-        "socialLogin": "/api/jerry/connect",
-        "createAddress": "/api/jerry/v2/addresses",
-        "cities":"/api/rose/u/_meta/cities",
-        "areas":"/api/rose/u/_meta/areas",
-        "orderReview":"/api/checkout/v1/order/review",
-        "promotion": "/api/promotion/subscribe"
     }
 }
