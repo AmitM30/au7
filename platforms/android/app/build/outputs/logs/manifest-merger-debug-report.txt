@@ -1,13 +1,13 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\manga\Desktop\wadi\au7\platforms\android\app\src\main\AndroidManifest.xml:2:1-14:12
-INJECTED from C:\Users\manga\Desktop\wadi\au7\platforms\android\app\src\main\AndroidManifest.xml:2:1-14:12
-INJECTED from C:\Users\manga\Desktop\wadi\au7\platforms\android\app\src\main\AndroidManifest.xml:2:1-14:12
-INJECTED from C:\Users\manga\Desktop\wadi\au7\platforms\android\app\src\main\AndroidManifest.xml:2:1-14:12
+ADDED from C:\Users\manga\Desktop\wadi\au7\platforms\android\app\src\main\AndroidManifest.xml:2:1-15:12
+INJECTED from C:\Users\manga\Desktop\wadi\au7\platforms\android\app\src\main\AndroidManifest.xml:2:1-15:12
+INJECTED from C:\Users\manga\Desktop\wadi\au7\platforms\android\app\src\main\AndroidManifest.xml:2:1-15:12
+INJECTED from C:\Users\manga\Desktop\wadi\au7\platforms\android\app\src\main\AndroidManifest.xml:2:1-15:12
 MERGED from [:CordovaLib] C:\Users\manga\Desktop\wadi\au7\platforms\android\CordovaLib\build\intermediates\manifests\full\debug\AndroidManifest.xml:20:1-27:12
-INJECTED from C:\Users\manga\Desktop\wadi\au7\platforms\android\app\src\main\AndroidManifest.xml:2:1-14:12
-INJECTED from C:\Users\manga\Desktop\wadi\au7\platforms\android\app\src\main\AndroidManifest.xml:2:1-14:12
-INJECTED from C:\Users\manga\Desktop\wadi\au7\platforms\android\app\src\main\AndroidManifest.xml:2:1-14:12
+INJECTED from C:\Users\manga\Desktop\wadi\au7\platforms\android\app\src\main\AndroidManifest.xml:2:1-15:12
+INJECTED from C:\Users\manga\Desktop\wadi\au7\platforms\android\app\src\main\AndroidManifest.xml:2:1-15:12
+INJECTED from C:\Users\manga\Desktop\wadi\au7\platforms\android\app\src\main\AndroidManifest.xml:2:1-15:12
 	package
 		ADDED from C:\Users\manga\Desktop\wadi\au7\platforms\android\app\src\main\AndroidManifest.xml:2:98-131
 		INJECTED from C:\Users\manga\Desktop\wadi\au7\platforms\android\app\src\main\AndroidManifest.xml
@@ -86,3 +86,7 @@ MERGED from [:CordovaLib] C:\Users\manga\Desktop\wadi\au7\platforms\android\Cord
 		ADDED from C:\Users\manga\Desktop\wadi\au7\platforms\android\app\src\main\AndroidManifest.xml:13:42-71
 	android:minSdkVersion
 		ADDED from C:\Users\manga\Desktop\wadi\au7\platforms\android\app\src\main\AndroidManifest.xml:13:15-41
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from C:\Users\manga\Desktop\wadi\au7\platforms\android\app\src\main\AndroidManifest.xml:14:5-81
+	android:name
+		ADDED from C:\Users\manga\Desktop\wadi\au7\platforms\android\app\src\main\AndroidManifest.xml:14:22-78

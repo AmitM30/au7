@@ -1,6 +1,7 @@
 
 import { inject }               from 'aurelia-framework';
 import { InlineViewStrategy }   from 'aurelia-framework';
+import { setUpFramework7 }      from './f7.js'
 
 import { Settings }             from './config/settings';
 import { Cart }                 from '../shared/source/services/cart';
@@ -48,10 +49,12 @@ export class App {
   }
 
   configureRouter (config, router) {
+    let appDir = (window.appDirectory || '').replace('file:///', '');
+    console.log('appDir: ', appDir);
     config.addPipelineStep('preRender', PreRenderStep);
     config.addPipelineStep('postcomplete', PostCompleteStep);
     config.map([
-      { route: ['', 'home', 'android_asset/www/index.html'],    name: 'home',         moduleId: '../shared/source/modules/home',     nav: true },
+      { route: ['', 'home', appDir + 'index.html'],    name: 'home',         moduleId: '../shared/source/modules/home',     nav: true },
       { route: 'cart',          name: 'cart',         moduleId: '../shared/source/modules/cart',     nav: true,  title: 'Cart' },
       { route: 'checkout',      name: 'checkout',     moduleId: '../shared/source/modules/checkout', nav: true,  title: 'Checkout'},
       { route: 'something-went-wrong', name: 'error', moduleId: '../shared/source/modules/error',    nav: false, title: 'What went Wrong !' }
@@ -294,6 +297,8 @@ export class App {
   }
 
   attached () {
+    setUpFramework7('#wadi');
+
     // Set locale cookie
     this.common.setLocaleCookie();
 

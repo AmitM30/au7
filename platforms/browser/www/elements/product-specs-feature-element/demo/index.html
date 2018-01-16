@@ -1,0 +1,81 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>Product's specification and feature element Demo</title>
+    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../bower_components/polymer/polymer.html">
+    <link rel="import" href="../product-specs-feature-element.html">
+  </head>
+  <body>
+
+    <p>An example of <code>&lt;Product's specification and feature element&gt;</code>:</p>
+    <h2 collapse="#collapse-specs" on-click="_toggle">View Specification & Features</h2>
+    <product-specs-feature-element attributesmap='{
+      "groups": {
+        "display": {
+          "label": "Display",
+          "attributes": {
+            "touchscreen_dropdown": {
+              "label": "Capacitive",
+              "value": "Touchscreen"
+            },
+            "screen_type": {
+              "label": "Screen Type",
+              "value": "IPS"
+            },
+            "screen_size_text": {
+              "label": "Screen Size",
+              "value": "4 Inches"
+            },
+            "screen_resolution": {
+              "label": "Screen Resolution",
+              "value": "640 X 1136"
+            }
+          }
+        },
+        "camera": {
+          "label": "Camera",
+          "attributes": {
+            "camera_primary_resolution": {
+              "label": "Primary Camera",
+              "value": "8.0 MP"
+            },
+            "flash": {
+              "label": "Flash",
+              "value": "Yes"
+            },
+            "camera_secondary_resolution": {
+              "label": "Secondary Camera",
+              "value": "Yes, 1.2 MP"
+            }
+          }
+        },
+        "Multimedia": {
+          "label": "Multimedia",
+          "attributes": {
+            "video_recording": {
+              "label": "Video Recording",
+              "value": "Yes"
+            },
+            "music_player": {
+              "label": "music_player",
+              "value": "Yes"
+            }
+          }
+        }
+      }
+    }'>
+    </product-specs-feature-element>
+  </body>
+</html>

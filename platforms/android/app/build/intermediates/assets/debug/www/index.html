@@ -62,6 +62,11 @@
         };
         window.Polymer = { dom: 'shady', lazyRegister: true };
         window.translate = function (value) { return value; };
+
+        document.addEventListener('deviceready', onDeviceReady, false);
+        function onDeviceReady() {
+            window.appDirectory = cordova.file.applicationDirectory + 'www/';
+        };
     </script>
     <script src="dist/app-launch-v3.js"></script>
     <script src="dist/ext/swiper.min.js"></script>

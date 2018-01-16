@@ -1,0 +1,29 @@
+{
+  "name": "id-document-upload-element",
+  "version": "1.0.0",
+  "authors": [
+    "Amit Mangal <carine.li@wadi.com>"
+  ],
+  "description": "id-document-upload-element",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "checkout"
+  ],
+  "main": "id-document-upload-element.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "/demo/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  }
+}

@@ -28,5 +28,8 @@ export async function configure (aurelia) {
   aurelia.use.plugin('aurelia-html-import-template-loader');
   aurelia.use.globalResources('../shared/source/plugins/t');
 
-  aurelia.start().then((a) => a.setRoot('app', document.getElementById('wadi')));
+  document.addEventListener('deviceready', onDeviceReady, false);
+  function onDeviceReady() {
+      aurelia.start().then((a) => a.setRoot('app', document.getElementById('wadi')));
+  };
 }

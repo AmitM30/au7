@@ -34,7 +34,7 @@ let config = generateConfig({
 
     entry: {
       main: [
-        './src/main.js'
+        srcDir + '/main.js'
       ]
     },
     // entry: {
