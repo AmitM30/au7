@@ -14,17 +14,18 @@ export async function configure (aurelia) {
   LogManager.addAppender(aurelia.container.get(UnhandledError));
   LogManager.setLevel(LogManager.logLevel.debug);
 
-  // console.log('PRODUCTION: ', PRODUCTION);
+  console.log('PRODUCTION: ', PRODUCTION);
 
   aurelia.use
     .standardConfiguration()
     .developmentLogging();
 
-  // if (window.location.search.indexOf('..showdebug..=on') >= 0) {
+  // if (!PRODUCTION) {
   //   aurelia.use.developmentLogging();
   // }
 
   aurelia.use.plugin('aurelia-html-import-template-loader');
+  aurelia.use.plugin('aurelia-animator-css');
   aurelia.use.globalResources('../shared/source/plugins/t');
 
   document.addEventListener('deviceready', onDeviceReady, false);

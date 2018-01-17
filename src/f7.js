@@ -6,14 +6,14 @@
 import 'framework7/dist/js/framework7.js'
 
 // Framework7 Setup to be called by app.js when DOM is ready
-export function setUpFramework7 (src) {
+export function setUpFramework7 () {
   const F7 = new Framework7({
     fastClicks: false,
     material: true,
     animateNavBackIcon: true
   })
 
-  const mainView = F7.addView(src, {
+  const mainView = F7.addView('.view-main', {
     domCache: true // enable inline pages
   })
 }

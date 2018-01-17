@@ -100,18 +100,8 @@ export class Lazyload {
     this.ea.subscribe('lazy-load-images', this.lazyLoadImages);
     this.events.subscribe('router:navigation:complete', this.lazyLoadImages);
     this.events.subscribe('router:navigation:complete', this.lazyLoad.bind(this));
+    window.addEventListener('animation:enter:done', this.lazyLoad.bind(this));
 
     this.lazyLoadImages();
   }
-
-  activate () {
-    console.log('Activate: LAZYLOAD');
-  }
 }
-
-//   if (images.length === 0) {
-//     window.removeEventListener('DOMContentLoaded', this.lazyLoadImages);
-//     window.removeEventListener('load', this.lazyLoadImages);
-//     window.removeEventListener('resize', this.lazyLoadImages);
-//     window.removeEventListener('scroll', this.lazyLoadImages);
-//   }

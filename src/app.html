@@ -2,7 +2,6 @@
 <template>
   <div id="wrapper" dir="${config.direction}" class="${config.locale.lang} ${common.bodyClass}">
 
-    <div id="route-loader"><span class="progress"></span></div>
     <notifications-element message.two-way="notifier.message"></notifications-element>
     <div class="loading-screen" if.bind="common.appLoading"><i class="wadicon-spinner wadicon-spin"></i></div>
     <paper-drawer-panel ref="navigation" force-narrow drawer-focus-selector="" disable-swipe drawer-width="80%">
@@ -56,7 +55,7 @@
             search-term.bind="plpModel.search.q"
           ></search-element>
         </header>
-        <div id="page-container">
+        <div id="page-container view-main">
           <router-view></router-view>
           <compose view-model="../shared/source/modules/super-view" model.one-way="tsaheyluModel.model" view.one-way="tsaheyluModel.view" containerless ></compose>
         </div>

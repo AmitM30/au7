@@ -75,11 +75,11 @@ export class App {
     this.cartModel.addresses.billing = this.cartModel.addresses.billing || this.cartModel.getDefaultAddressObject();
     
     await this.appWrapper.init();
+
     // Set user status
     await this.user.status();
 
     this.lazyload.init();
-
   }
 
   search (event) {
@@ -291,7 +291,7 @@ export class App {
   }
 
   attached () {
-    setUpFramework7('#wadi');
+    // setUpFramework7();
 
     // Set locale cookie
     this.common.setLocaleCookie();
@@ -324,14 +324,17 @@ export class App {
   }
 
   initRouteChangeCue () {
-    let cueEl = document.querySelector('#route-loader');
     let previousRoute;
 
     this.router.events.subscribe('router:navigation:processing', (navigationInstruction) => {
+      // Close navigation panel
+      if (document.querySelector('paper-drawer-panel')) {
+        document.querySelector('paper-drawer-panel').closeDrawer();
+      }
       previousRoute = previousRoute || window.location.href;
       if (this.common.firstLoad) { return; }
-      cueEl.classList.add('started');
-      window.setTimeout(() => { cueEl.classList.add('in-progress'); }, 200);
+      // route fade out
+      document.querySelector('section.au-animate').classList.add('cha');
     });
 
     this.router.events.subscribe('router:navigation:success', (navInstructions) => {
@@ -343,20 +346,12 @@ export class App {
         let checkoutNowEvent = new Event("checkout-now", {"bubbles":true, "cancelable":false});
         window.document.dispatchEvent(checkoutNowEvent);
       }
-      window.setTimeout(() => { cueEl.classList.add('in-progress'); }, 200);
     });
 
-    this.router.events.subscribe('router:navigation:complete', () => {
-      if (this.common.firstLoad) { this.common.firstLoad = false; return; }
-      window.setTimeout(() => {
-        window.setTimeout(() => { cueEl.classList.remove('started'); cueEl.classList.remove('in-progress'); cueEl.classList.remove('complete'); }, 300);
-        cueEl.classList.add('complete');
-      }, 500);
-    });
+    this.router.events.subscribe('router:navigation:complete', () => { });
 
     // Something went wrong
     this.router.events.subscribe('router:navigation:error', (e) => {
-      cueEl.classList.add('in-progress');
 
       // let error = this.router.routes.find((x) => { return x.name === 'error' });
       let error = { error: e };

@@ -11,10 +11,10 @@ export class PreRenderStep {
   }
 
   run (routingContext, next) {
-    // Close navigation panel
-    if (document.querySelector('paper-drawer-panel')) {
-      document.querySelector('paper-drawer-panel').closeDrawer();
-    }
+    // // Close navigation panel
+    // if (document.querySelector('paper-drawer-panel')) {
+    //   document.querySelector('paper-drawer-panel').closeDrawer();
+    // }
 
     // Set App state - 'checkout', 'app'
     this.common.state = routingContext.config.name === 'checkout' ? 'checkout' : 'app';
