@@ -9239,7 +9239,7 @@ this.fire('dom-change');
       this._notifyingDescendant = false;
     }
   };
-</script><dom-module id="paper-drawer-panel" assetpath="../../../bower_components/paper-drawer-panel/">
+</script><dom-module id="paper-drawer-panel" assetpath="../../bower_components/paper-drawer-panel/">
   <template>
     <style>
       :host {
@@ -9959,7 +9959,7 @@ this.fire('dom-change');
 
 
 
-<dom-module id="iron-a11y-announcer" assetpath="../../../bower_components/iron-a11y-announcer/">
+<dom-module id="iron-a11y-announcer" assetpath="../../bower_components/iron-a11y-announcer/">
   <template>
     <style>
       :host {
@@ -11120,7 +11120,7 @@ within `fitInto` boundaries, while preserving the element's CSS margin values.
   })();
 </script>
 
-<dom-module id="iron-overlay-backdrop" assetpath="../../../bower_components/iron-overlay-behavior/">
+<dom-module id="iron-overlay-backdrop" assetpath="../../bower_components/iron-overlay-behavior/">
 
   <template>
     <style>
@@ -12438,7 +12438,7 @@ within `fitInto` boundaries, while preserving the element's CSS margin values.
    */
 
 })();
-</script><dom-module id="paper-toast" assetpath="../../../bower_components/paper-toast/">
+</script><dom-module id="paper-toast" assetpath="../../bower_components/paper-toast/">
   <template>
     <style>
       :host {
@@ -12698,7 +12698,7 @@ within `fitInto` boundaries, while preserving the element's CSS margin values.
 </dom-module>
 
 
-<dom-module id="paper-ripple" assetpath="../../../bower_components/paper-ripple/">
+<dom-module id="paper-ripple" assetpath="../../bower_components/paper-ripple/">
 
   <template>
     <style>
@@ -13387,7 +13387,7 @@ within `fitInto` boundaries, while preserving the element's CSS margin values.
 </script>
 
 
-<dom-module id="iron-collapse" assetpath="../../../bower_components/iron-collapse/">
+<dom-module id="iron-collapse" assetpath="../../bower_components/iron-collapse/">
 
   <template>
 
@@ -15437,7 +15437,7 @@ event and do your own custom submission:
 
   };
 
-</script><dom-module id="iron-scroll-threshold" assetpath="../../../bower_components/iron-scroll-threshold/">
+</script><dom-module id="iron-scroll-threshold" assetpath="../../bower_components/iron-scroll-threshold/">
   <template>
     <style>
       :host {
@@ -15935,6 +15935,7 @@ event and do your own custom submission:
  */
 
 ;(function() {
+'use strict';
 
 /**
  * Block-Level Grammar
@@ -15967,6 +15968,10 @@ block.list = replace(block.list)
   (/bull/g, block.bullet)
   ('hr', '\\n+(?=\\1?(?:[-*_] *){3,}(?:\\n+|$))')
   ('def', '\\n+(?=' + block.def.source + ')')
+  ();
+
+block.blockquote = replace(block.blockquote)
+  ('def', block.def)
   ();
 
 block._tag = '(?!(?:'
@@ -16375,9 +16380,9 @@ Lexer.prototype.token = function(src, top, bq) {
 
 var inline = {
   escape: /^\\([\\`*{}\[\]()#+\-.!_>])/,
-  autolink: /^<([^ >]+(@|:\/)[^ >]+)>/,
+  autolink: /^<([^ <>]+(@|:\/)[^ <>]+)>/,
   url: noop,
-  tag: /^\x3c!--[\s\S]*?--\x3e|^<\/?\w+(?:"[^"]*"|'[^']*'|[^'">])*?>/,
+  tag: /^\x3c!--[\s\S]*?--\x3e|^<\/?\w+(?:"[^"]*"|'[^']*'|[^<'">])*?>/,
   link: /^!?\[(inside)\]\(href\)/,
   reflink: /^!?\[(inside)\]\s*\[([^\]]*)\]/,
   nolink: /^!?\[((?:\[[^\]]*\]|[^\[\]])*)\]/,
@@ -16389,7 +16394,7 @@ var inline = {
   text: /^[\s\S]+?(?=[\\<!\[_*`]| {2,}\n|$)/
 };
 
-inline._inside = /(?:\[[^\]]*\]|[^\[\]]|\](?=[^\[]*\]))*/;
+inline._inside = /(?:\[[^\]]*\]|\\[\[\]]|[^\[\]]|\](?=[^\[]*\]))*/;
 inline._href = /\s*<?([\s\S]*?)>?(?:\s+['"]([\s\S]*?)['"])?\s*/;
 
 inline.link = replace(inline.link)
@@ -16801,10 +16806,10 @@ Renderer.prototype.link = function(href, title, text) {
         .replace(/[^\w:]/g, '')
         .toLowerCase();
     } catch (e) {
-      return '';
+      return text;
     }
     if (prot.indexOf('javascript:') === 0 || prot.indexOf('vbscript:') === 0 || prot.indexOf('data:') === 0) {
-      return '';
+      return text;
     }
   }
   if (this.options.baseUrl && !originIndependentUrl.test(href)) {
@@ -17067,15 +17072,15 @@ function resolveUrl(base, href) {
   base = baseUrls[' ' + base];
 
   if (href.slice(0, 2) === '//') {
-    return base.replace(/:[^]*/, ':') + href;
+    return base.replace(/:[\s\S]*/, ':') + href;
   } else if (href.charAt(0) === '/') {
-    return base.replace(/(:\/*[^/]*)[^]*/, '$1') + href;
+    return base.replace(/(:\/*[^/]*)[\s\S]*/, '$1') + href;
   } else {
     return base + href;
   }
 }
-baseUrls = {};
-originIndependentUrl = /^$|^[a-z][a-z0-9+.-]*:|^[?#]/i;
+var baseUrls = {};
+var originIndependentUrl = /^$|^[a-z][a-z0-9+.-]*:|^[?#]/i;
 
 function noop() {}
 noop.exec = noop;
@@ -17178,7 +17183,7 @@ function marked(src, opt, callback) {
   } catch (e) {
     e.message += '\nPlease report this to https://github.com/chjj/marked.';
     if ((opt || marked.defaults).silent) {
-      return '<p>An error occured:</p><pre>'
+      return '<p>An error occurred:</p><pre>'
         + escape(e.message + '', true)
         + '</pre>';
     }
@@ -17244,7 +17249,7 @@ if (typeof module !== 'undefined' && typeof exports === 'object') {
   return this || (typeof window !== 'undefined' ? window : global);
 }());
 </script>
-<dom-module id="marked-element" assetpath="../../../bower_components/marked-element/">
+<dom-module id="marked-element" assetpath="../../bower_components/marked-element/">
   <template>
     <style>
       :host {
@@ -18868,7 +18873,7 @@ is separate from validation, and `allowed-pattern` does not affect how the input
 
   };
 
-</script><dom-module id="paper-input-char-counter" assetpath="../../../bower_components/paper-input/">
+</script><dom-module id="paper-input-char-counter" assetpath="../../bower_components/paper-input/">
   <template>
     <style>
       :host {
@@ -19671,7 +19676,7 @@ is separate from validation, and `allowed-pattern` does not affect how the input
 
   }
 
-</style><dom-module id="paper-input-container" assetpath="../../../bower_components/paper-input/">
+</style><dom-module id="paper-input-container" assetpath="../../bower_components/paper-input/">
   <template>
     <style>
       :host {
@@ -20221,7 +20226,7 @@ is separate from validation, and `allowed-pattern` does not affect how the input
 </script>
 
 
-<dom-module id="paper-input-error" assetpath="../../../bower_components/paper-input/">
+<dom-module id="paper-input-error" assetpath="../../bower_components/paper-input/">
   <template>
     <style>
       :host {
@@ -20281,7 +20286,7 @@ is separate from validation, and `allowed-pattern` does not affect how the input
     }
   });
 </script>
-<dom-module id="paper-input" assetpath="../../../bower_components/paper-input/">
+<dom-module id="paper-input" assetpath="../../bower_components/paper-input/">
   <template>
     <style>
       :host {
@@ -21913,7 +21918,7 @@ module.exports = function (element) {
 
 },{"../lib/dom":3,"../lib/helper":6,"./instances":18,"./update-geometry":19,"./update-scroll":20}]},{},[1]);
 </script>
-<dom-module id="products-carousel-element" assetpath="../../../shared/components/products-carousel-element/">
+<dom-module id="products-carousel-element" assetpath="../../shared/components/products-carousel-element/">
 
   <style>
     :host {
@@ -22225,7 +22230,7 @@ module.exports = function (element) {
   });
 
 </script>
-<dom-module id="search-element" assetpath="../../../shared/components/search-element/">
+<dom-module id="search-element" assetpath="../../shared/components/search-element/">
   
     <style>
       :host {
@@ -22257,6 +22262,7 @@ module.exports = function (element) {
                 <ul>
                   <li class="category-suggestion suggest-list">
                     <a href="/catalog/?q={{ suggestions.keyword }}">
+                      <paper-ripple></paper-ripple>
                       <span class="term">[[ suggestions.keyword ]] </span>
                     </a>
                   </li>                    
@@ -22269,7 +22275,7 @@ module.exports = function (element) {
               <li class="product-suggestion suggest-list">
                 <a href="/{{ product.link }}">
                   <div class="image-container">
-                    <img src="https://{{ options.cdnURL }}/product/{{ product.imageKey }}/1-cart.jpg" alt="{{ product.name }}">
+                    <img src="//{{ options.cdnURL }}/product/{{ product.imageKey }}/1-cart.jpg" alt="{{ product.name }}">
                   </div>
                   <div class="details-container">
                     <p class="name">[[ product.name ]]</p>
@@ -22358,6 +22364,7 @@ module.exports = function (element) {
       },
   
       _suggestChanged: function (val) {
+        console.log('_suggestChanged: ', val);
         if (!(this.suggest && this.suggest.data)) { return };
   
         this.suggestLength = this.suggest.data.suggest.length + this.suggest.data.popular.length;
@@ -22446,7 +22453,7 @@ module.exports = function (element) {
     });
   
   </script>
-  <dom-module id="small-nav-element" assetpath="../../../shared/components/small-nav-element/">
+  <dom-module id="small-nav-element" assetpath="../../shared/components/small-nav-element/">
 
   <style>
     :host {
@@ -22651,7 +22658,7 @@ module.exports = function (element) {
   });
 
 </script>
-<dom-module id="signup-element" assetpath="../../../shared/components/signup-element/">
+<dom-module id="signup-element" assetpath="../../shared/components/signup-element/">
 
   <style>
     :host {
@@ -22836,7 +22843,7 @@ module.exports = function (element) {
     initGoogleoAuth: function () {
       // Google Login
       var oAuth = document.createElement('script');
-      oAuth.src = 'https://apis.google.com/js/api:client.js';
+      oAuth.src = '//apis.google.com/js/api:client.js';
       oAuth.setAttribute('defer', 'defer');
 
       var _self = this;
@@ -22860,7 +22867,7 @@ module.exports = function (element) {
       (function(d, s) {
         var fjs = d.getElementsByTagName(s)[0];
         var e = d.createElement(s);
-        e.src = 'https://connect.facebook.net/en_US/all.js';
+        e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
         e.async = true;
         fjs.parentNode.insertBefore(e, fjs);
       }(document, 'script'));
@@ -22955,7 +22962,7 @@ module.exports = function (element) {
   });
 
 </script>
-<dom-module id="newsletter-signup-element" assetpath="../../../shared/components/newsletter-signup-element/">
+<dom-module id="newsletter-signup-element" assetpath="../../shared/components/newsletter-signup-element/">
 
   <style>
     :host {
@@ -23054,7 +23061,7 @@ module.exports = function (element) {
   });
 
 </script>
-<dom-module id="cart-button-element" assetpath="../../../shared/components/cart-button-element/">
+<dom-module id="cart-button-element" assetpath="../../shared/components/cart-button-element/">
 
   <style>
     :host {
@@ -23192,7 +23199,7 @@ module.exports = function (element) {
   });
 
 </script>
-<dom-module id="carousel-element" assetpath="../../../shared/components/carousel-element/">
+<dom-module id="carousel-element" assetpath="../../shared/components/carousel-element/">
 
   <style>
     :host {
@@ -23445,7 +23452,7 @@ module.exports = function (element) {
   });
 
 </script>
-<dom-module id="banner-element" assetpath="../../../shared/components/banner-element/">
+<dom-module id="banner-element" assetpath="../../shared/components/banner-element/">
     <style>
       :host {
         display: block;
@@ -23670,7 +23677,7 @@ module.exports = function (element) {
     });
   
   </script>
-<dom-module id="info-element" assetpath="../../../shared/components/info-element/">
+<dom-module id="info-element" assetpath="../../shared/components/info-element/">
 
   <style>
     :host {
@@ -23701,7 +23708,7 @@ module.exports = function (element) {
           </marked-element>
           <template is="dom-if" if="[[ content.image ]]">
             <div class="image-container">
-              <img src$="https://[[ _getImageUrl(content.image) ]]">
+              <img src$="[[ _getImageUrl(content.image) ]]">
             </div>
           </template>
           <template is="dom-if" if="[[ content.video ]]">
@@ -23732,7 +23739,7 @@ module.exports = function (element) {
                   </div>
                 </template>
                 <template is="dom-if" if="[[ info.image ]]">
-                  <div class="image-container"><img src$="https://[[ _getImageUrl(info.image) ]]" alt="[[ info.title ]]"></div>
+                  <div class="image-container"><img src$="[[ _getImageUrl(info.image) ]]" alt="[[ info.title ]]"></div>
                 </template>
               </section>
             </template>
@@ -23791,7 +23798,7 @@ module.exports = function (element) {
     },
 
     _getImageUrl: function (url) {
-      return 'https://' + url.replace('@lang@', this.ctx.lang).replace('@country@', this.ctx.country);
+      return url.replace('@lang@', this.ctx.lang).replace('@country@', this.ctx.country);
     },
 
     _getVideoLink: function (url) {
@@ -23810,7 +23817,7 @@ module.exports = function (element) {
   });
 
 </script>
-<dom-module id="notifications-element" assetpath="../../../shared/components/notifications-element/">
+<dom-module id="notifications-element" assetpath="../../shared/components/notifications-element/">
 
   <style>
     :host {
@@ -23877,7 +23884,7 @@ module.exports = function (element) {
   });
 
 </script>
-<dom-module id="messaging-element" assetpath="../../../shared/components/messaging-element/">
+<dom-module id="messaging-element" assetpath="../../shared/components/messaging-element/">
 
   <style>
     :host {
@@ -23936,7 +23943,7 @@ module.exports = function (element) {
   });
 
 </script>
-<dom-module id="footer-info-element" assetpath="../../../shared/components/footer-info-element/">
+<dom-module id="footer-info-element" assetpath="../../shared/components/footer-info-element/">
     
       <style>
         :host {
@@ -24328,7 +24335,7 @@ module.exports = function (element) {
       });
     
     </script>
-<dom-module id="timer-element" assetpath="../../../shared/components/timer-element/">
+<dom-module id="timer-element" assetpath="../../shared/components/timer-element/">
 
   <style>
     :host {
@@ -24493,7 +24500,7 @@ module.exports = function (element) {
   });
 
 </script>
-<dom-module id="category-links-element" assetpath="../../../shared/components/category-links-element/">
+<dom-module id="category-links-element" assetpath="../../shared/components/category-links-element/">
   <style>
     :host {
       display: block;
@@ -24569,7 +24576,7 @@ module.exports = function (element) {
   });
 
 </script>
-<dom-module id="forget-password-element" assetpath="../../../shared/components/forget-password-element/">
+<dom-module id="forget-password-element" assetpath="../../shared/components/forget-password-element/">
 
   <style>
     :host {
@@ -24770,7 +24777,7 @@ Polymer({
       return value.length > 2 ? true : false;
     }
   });
-</script><dom-module id="country-language-switcher-element" assetpath="../../../shared/components/country-language-switcher-element/">
+</script><dom-module id="country-language-switcher-element" assetpath="../../shared/components/country-language-switcher-element/">
 
   <style>
     :host {
@@ -24853,7 +24860,7 @@ Polymer({
   });
 
 </script>
-<dom-module id="tabbed-links-element" assetpath="../../../shared/components/tabbed-links-element/">
+<dom-module id="tabbed-links-element" assetpath="../../shared/components/tabbed-links-element/">
 
   <style>
     :host {
@@ -24893,8 +24900,8 @@ Polymer({
           <div class="swiper-wrapper js_slides">
             <template is="dom-repeat" items="[[ banners.assets ]]" as="banner">
               <div class="swiper-slide js_slide" position$="[[ index ]]" on-tap="_onClick">
-                <img src$="https://[[ banner.imageUrl ]]" alt="[[ banner.title ]]" class="swiper-lazy preactive">
-                <img src$="https://[[ banner.activeImageUrl ]]" alt="[[ banner.title ]]" class="swiper-lazy alternate">
+                <img src$="[[ banner.imageUrl ]]" alt="[[ banner.title ]]" class="swiper-lazy preactive">
+                <img src$="[[ banner.activeImageUrl ]]" alt="[[ banner.title ]]" class="swiper-lazy alternate">
                 <template is="dom-if" if="[[ banners.assets ]]" as="banner">
                   <p class="title">[[ banner.title ]]</p>
                 </template>
@@ -25040,7 +25047,7 @@ Polymer({
   });
 
 </script>
-<dom-module id="tabbed-pages-element" assetpath="../../../shared/components/tabbed-pages-element/">
+<dom-module id="tabbed-pages-element" assetpath="../../shared/components/tabbed-pages-element/">
 
   <style>
     :host {
@@ -25143,7 +25150,7 @@ Polymer({
   });
 
 </script>
-<dom-module id="usps-element" assetpath="../../../shared/components/usps-element/">
+<dom-module id="usps-element" assetpath="../../shared/components/usps-element/">
 
   <style>
     :host {
@@ -25284,7 +25291,7 @@ Polymer({
   });
 
 </script>
-<dom-module id="app-download-element" assetpath="../../../shared/components/app-download-element/">
+<dom-module id="app-download-element" assetpath="../../shared/components/app-download-element/">
 
   <style>
     :host {
@@ -25330,6 +25337,7 @@ Polymer({
     attached: function () {
       this.showBanner = false;
       this._getMobileOperatingSystem();
+      this.isAE = this.ctx.country === 'ae' ? true : false;
     },
 
     _closeBanner: function() {
@@ -25359,7 +25367,7 @@ Polymer({
   });
 
 </script>
-<dom-module id="promotional-campaign-element" assetpath="../../../shared/components/promotional-campaign-element/">
+<dom-module id="promotional-campaign-element" assetpath="../../shared/components/promotional-campaign-element/">
 
   <style>
     :host {
@@ -25373,7 +25381,7 @@ Polymer({
     <validation-phone phone-config="[[ phoneConfig ]]"></validation-phone>
     <div class="site-width-container">
       <template is="dom-if" if="[[ campaign.imageUrl ]]">
-        <img lazy-src$="https://[[ campaign.imageUrl ]]" alt$="[[ _getAltText(campaign.title) ]]" on-load="_onLazyImageReady">
+        <img lazy-src$="[[ campaign.imageUrl ]]" alt$="[[ _getAltText(campaign.title) ]]" on-load="_onLazyImageReady">
       </template>
       <div class="content-holder">
         <template is="dom-if" if="[[ campaign.title ]]">
@@ -25657,7 +25665,7 @@ Polymer({
     },
   });
 </script>
-<dom-module id="phone-verification-element" assetpath="../../../shared/components/phone-verification-element/">
+<dom-module id="phone-verification-element" assetpath="../../shared/components/phone-verification-element/">
 
   <style>
     :host {
@@ -25930,7 +25938,7 @@ Polymer({
   });
 
 </script>
-<dom-module id="facets-element" assetpath="../../../shared/components/facets-element/">
+<dom-module id="facets-element" assetpath="../../shared/components/facets-element/">
 
   <style>
     :host {
@@ -26520,7 +26528,7 @@ Polymer({
 </script>
 
 
-<dom-module id="facets-element-multiselect" assetpath="../../../shared/components/facets-element/">
+<dom-module id="facets-element-multiselect" assetpath="../../shared/components/facets-element/">
   <template>
     <template is="dom-if" if="[[_isBrand(facetKey)]]">
       <div class="search-container">
@@ -26606,7 +26614,7 @@ Polymer({
 </script>
 
 
-<dom-module id="facets-element-links" assetpath="../../../shared/components/facets-element/">
+<dom-module id="facets-element-links" assetpath="../../shared/components/facets-element/">
   <template>
     <ul class="perfect-scrollbar">
       <template is="dom-repeat" items="[[ facetList ]]" as="obj">
@@ -26655,7 +26663,7 @@ Polymer({
 </script>
 
 
-<dom-module id="facets-element-singleselect" assetpath="../../../shared/components/facets-element/">
+<dom-module id="facets-element-singleselect" assetpath="../../shared/components/facets-element/">
   <template>
     <ul class="perfect-scrollbar">
       <template is="dom-repeat" items="[[ facetList ]]" as="obj">
@@ -26711,7 +26719,7 @@ Polymer({
 </script>
 
 
-<dom-module id="facets-element-range" assetpath="../../../shared/components/facets-element/">
+<dom-module id="facets-element-range" assetpath="../../shared/components/facets-element/">
   <template>
     <template is="dom-if" if="[[_isBrand(facetKey)]]">
       <div class="search-container">
@@ -26795,7 +26803,7 @@ Polymer({
     }
   });
 </script>
-<dom-module id="products-listing-element" assetpath="../../../shared/components/products-listing-element/">
+<dom-module id="products-listing-element" assetpath="../../shared/components/products-listing-element/">
 
   <style>
     :host {
@@ -27199,7 +27207,7 @@ Polymer({
   });
 
 </script>
-<dom-module id="no-product-results-element" assetpath="../../../shared/components/no-product-results-element/">
+<dom-module id="no-product-results-element" assetpath="../../shared/components/no-product-results-element/">
 
   <style>
     :host {
@@ -27228,7 +27236,7 @@ Polymer({
   });
 
 </script>
-<dom-module id="input-suggest-element" assetpath="../../../shared/components/input-suggest-element/">
+<dom-module id="input-suggest-element" assetpath="../../shared/components/input-suggest-element/">
   <style>
     :host {
       display: block;

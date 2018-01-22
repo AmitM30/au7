@@ -24,7 +24,7 @@ Example:
             <span class="supplier-rating-badge">[[defaultSupplier.vendor_rating]] / 5</span>
           </div>
           <template is="dom-if" if="[[otherSuppliersCount]]">
-            <p class="other-sellers-cta" on-tap="_scrollToOtherSellers"><span>[[otherSuppliersCount]] [[_translate('other sellers')]]</span></p>
+            <p class="other-sellers-cta" on-tap="_scrollToOtherSellers"><span>[[otherSuppliersCount]] [[_translate('other sellers')]]</span> [[_translate('from')]] <strong>[[lowestSuppliersPrice]] [[ctx.currency]]</strong></p>
           </template>
           <div class="supplier-additional-info">
             <div class="delivery-promise-container">

@@ -1,0 +1,35 @@
+
+<template>
+	<section id="checkout-step-signup">
+
+		<div class="checkout-area">
+			<signup-element user.two-way="user.info" options='{ "title": "My Account", "expanded": true, "requiresPhoneVerification" : true}'
+				logout.trigger="logoutUser()"
+				login.trigger="loginUser($event)"
+				guest-login.trigger="guestLogin($event)"
+				password-reset-request.trigger="passwordResetRequest($event)"
+				password-reset.trigger="setPassword($event)"
+				otp-verify.trigger="otpVerify($event)"
+				otp-request.trigger="otpRequest($event)"
+				phone-config.one-way="phoneConfig"
+				primary-phone.one-way="user.primaryPhone"
+				customer-exist.trigger="checkUserExistence($event)"
+				social-login.trigger="socialLogin($event)"
+				skip-phone-verification.trigger="skipPhoneVerification($event)"
+				ctx.bind="common.ctx">
+			</signup-element>
+
+			<div class="user-overview-container" if.bind="user.info.isValidUser">
+				<div class="checkout-highlight-memo">
+	        		<p>${ 'Welcome back' | t }<strong class="value"> ${ user.info.firstname}</strong>!</p>
+	     		</div>
+   				<a class="core-block-cta core-block-cta-lg cta-full-width proceed-to-shipping" href="/checkout/shipping?edit">${ 'Continue to shipping' | t }</a>
+   			</div>
+		</div>
+
+		<div class="checkout-area">
+			<p class="coupon-reminder-message">${ '_couponCodeStepMessage' | t }</p>
+		</div>
+
+	</section>
+</template>

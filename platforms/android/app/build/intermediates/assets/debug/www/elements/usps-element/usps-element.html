@@ -1,0 +1,149 @@
+<!--
+usps-element
+
+Example:
+    <usps-element></usps-element>
+@demo
+-->
+
+<dom-module id="usps-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+
+    <template is="dom-if" if="[[isMobile]]" restamp="true">
+      <div class="swiper-container">
+        <div id="usp-news" class="swiper-wrapper">
+          <template is="dom-repeat" items="[[ usps ]]" as="usp">
+            <div class="swiper-slide usp_header">
+              <strong>[[ usp.title ]]&nbsp;</strong><span>[[ usp.support ]]</span>
+            </div>
+          </template>
+        </div>
+      </div>
+    </template>
+
+    <template is="dom-if" if="[[!isMobile]]" restamp="true">
+      <div class="usps">
+        <ul>
+          <li on-mouseover="_showPopup" on-mouseout="_hidePopup">
+            <i class="wadicon-warranty"></i>
+            <span class="selling-point">[[ _translate('Price Protection') ]] : <span class="tagline">[[ _translate('Youre all covered!') ]]</span></span>
+            <div class="popup-container">
+              <div class="content-holder">
+                <p class="heading"><i class="wadicon-warranty"></i>[[ _translate('Price Protection') ]]</p>
+                <p>[[_translate('iftheprice') ]]</p>
+                <p>[[_translate('Wadi will pay you with cash voucher.') ]]</p>
+              </div>
+            </div>
+          </li>
+          <li on-mouseover="_showPopup" on-mouseout="_hidePopup">
+            <i class="wadicon-exchange"></i>
+            <span class="selling-point">[[_translate('14 Day Free Returns') ]]: <span class="tagline">[[ _translate('No Questions Asked!') ]]</span></span>
+            <div class="popup-container">
+              <div class="content-holder">
+                <p class="heading"><i class="wadicon-exchange"></i>[[ _translate('14 Day Free Returns') ]]</p>
+                <p>[[ _translate('Becausewe') ]] </p>
+                <p>[[_translate('sitback') ]]</p>
+              </div>
+            </div>
+          </li>
+          <li on-mouseover="_showPopup" on-mouseout="_hidePopup">
+            <i class="wadicon-authentic"></i>
+            <span class="selling-point">[[ _translate('100% Authentic Products') ]] : <span class="tagline">[[ _translate('Always')]]</span></span>
+            <div class="popup-container">
+              <div class="content-holder">
+                <p class="heading"><i class="wadicon-authentic"></i>[[ _translate('100% Authentic Products') ]]</p>
+                <!-- <p>[[ _translate('Its our guarantee!') ]]</p> -->
+                <p>[[ _translate('thereason')]]</p>
+              </div>
+            </div>
+          </li>
+        </ul>
+    </div>
+    </template>
+
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+    is: 'usps-element',
+
+    properties: {
+      usps: {
+        type: Array
+      },
+
+      slideTime: {
+        type: Number,
+        value: 2500
+      }
+    },
+
+    // Element Lifecycle
+    attached: function () {
+      this.MAX_WIDTH = 1920;
+      this.isMobile = window.config.device === 'mobile' ? true : false;
+
+      if (this.isMobile) {
+        this._switchClass(0);
+      }
+
+      this._setwidgetPosition();
+    },
+
+    _setwidgetPosition: function () {
+      var maxWidth = Math.min(document.body.clientWidth, this.MAX_WIDTH);
+      var elPos = this._getElementPos(this);
+      var offset = (document.body.clientWidth - this.MAX_WIDTH) > 0 ? elPos.x / 2 : elPos.x;
+      this.style.width = maxWidth + 'px';
+      if (window.config.lang === 'en') {
+        this.style.marginLeft =  (-1 * offset) + 'px';
+      } else {
+        this.style.marginRight = (-1 * offset) + 'px';
+      }
+    },
+
+    _showPopup: function(e) {
+      e.currentTarget.classList.add('active');
+    },
+
+    _hidePopup: function(e) {
+      e.currentTarget.classList.remove('active');
+    },
+
+    _getElementPos: function (el) {
+      for (var lx=0, ly=0;
+          el != null;
+          lx += el.offsetLeft, ly += el.offsetTop, el = el.offsetParent);
+      return {x: lx, y: ly};
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    },
+
+    _switchClass: function (i) {
+      var lis = this.querySelectorAll('#usp-news .usp_header');
+      if (lis && lis.length > 0) {
+        lis[i].classList.remove('usp_header_on');
+        lis[i].classList.remove('usp_header_out');
+        lis[i = ++i % lis.length].classList.add('usp_header_on');
+        lis[i = ++i % lis.length].classList.add('usp_header_out');
+      }
+
+      var _self = this;
+      this.startSliding = window.setTimeout(function () { _self._switchClass(i); }, _self.slideTime );
+    }
+  });
+
+</script>

@@ -18,6 +18,7 @@ const title     = 'Wadi.com';
 const baseUrl   = '/';
 const rootDir   = path.resolve();
 const srcDir    = path.resolve('src');
+const outDir    = path.resolve('export');
 
 // Variables set by npm scripts in package.json
 const isProduction = process.env.NODE_ENV && process.env.NODE_ENV.toLowerCase() || (process.env.NODE_ENV = 'development');

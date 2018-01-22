@@ -30,6 +30,7 @@ export async function configure (aurelia) {
 
   document.addEventListener('deviceready', onDeviceReady, false);
   function onDeviceReady() {
+      console.log('DEVICE READY');
       aurelia.start().then((a) => a.setRoot('app', document.getElementById('wadi')));
   };
 }

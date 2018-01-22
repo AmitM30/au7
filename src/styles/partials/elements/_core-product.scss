@@ -1,0 +1,214 @@
+/* -------------------------------------> INDEX */
+/* 0.  FLASH SALE TIMER */
+/* 1.  PRODUCT TAGS */
+/* 2.  PRODUCT PRICE */
+/* 3.  OUT OF STOCK BADGE */
+/* 4.  FREE SHIPPING TAG */
+
+/* -------------------------------------> 0. FLASH SALE TIMER */
+timer-element {
+  font-weight: 700;
+  color: $color-body-attention;
+
+  .availability-bar,
+  .available-quantity {
+    height: 4px;
+    border-radius: 10px;
+  }
+
+  .availability-bar {
+    position: relative;
+    border: 1px solid $color-body-attention;
+    margin-bottom: 3px;
+    background-color: $color-bg-primary;
+
+    .available-quantity {
+      position: absolute;
+      left: 0;
+      background-color: $color-body-attention;
+      transition: all 0.5s ease-out;
+    }
+  }
+  .details-row {
+    @include clearfix;
+  }
+
+  .remaining {
+    color: $color-body-dark;
+  }
+
+  #timer {
+    float: right;
+  }
+}
+
+.ar timer-element {
+  font-weight: 400;
+
+  .availability-bar {
+    .available-quantity {
+      right: 0; left: auto;
+    }
+  }
+
+  #timer {
+    float: left;
+  }
+}
+
+/* -------------------------------------> 1. PRODUCT TAGS */
+.product-tag,
+.discount-tag {
+  display: inline-block;
+  position: absolute;
+  top: 10px; left: 10px;
+  border: 1px solid;
+  max-width: 85%;
+  z-index: 20;
+  padding: 4px 8px 2px;
+  color: $color-body-dark;
+  @include mx-text-ellipsis;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  background-color: rgba(255, 255, 255, 0.75);
+  box-sizing: border-box;
+  border-radius: 2px;
+  letter-spacing: 0.02em;
+
+  &.attention {
+    color: $color-body-attention;
+  }
+}
+
+.ar .product-tag,
+.ar .discount-tag {
+  letter-spacing: 0;
+}
+
+.ar .product-tag {
+  right: 0; left: auto;
+}
+
+.discount-tag {
+  background-color: $color-secondary;
+  bottom: 35%; top: auto;
+  right: 10px; left: auto;
+  border: 0;
+}
+
+.ar .discount-tag {
+  left: 10px; right: auto;
+}
+.details-container {
+  padding: 0 10px;
+  bottom: 0;
+  width: 90%;
+}
+
+/* -------------------------------------> 2. PRODUCT PRICE */
+.core-product-price {
+  .pre-reduction {
+    color: $color-body-light;
+    text-decoration: line-through;
+    margin-right: 4px;
+  }
+  
+  .tax-info {
+    display: block;
+    text-decoration: none;
+  }
+
+  .selling-price {
+    color: $color-primary;
+  }
+
+  .discount {
+    color: $color-body-dark;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+}
+
+.ar .core-product-price {
+  .pre-reduction {
+    margin-left: 4px;
+    margin-right: 0;
+  }
+
+  .selling-price {
+    font-weight: 700;
+  }
+}
+
+/* -------------------------------------> 3. OUT OF STOCK BADGE */
+p.core-product-badge {
+  position: absolute;
+  width: 54px; height: 54px;
+  right: 10px;
+
+  &.promo-badge {
+    @include mx-image-replacement;
+    @include mx-sprite;
+    bottom: 10px; 
+    background-position: 600px 600px;
+  }
+
+  &.OneDayDelivery {
+    background-position: 0 -236px;
+  }
+
+  &.DealOfTheDay {
+    background-position: 0 -291px;
+  }
+
+  &.out-of-stock {
+    top: 10px;
+    background-color: rgba(102, 102, 102, 0.9);
+    color: $color-body-alt;
+    text-align: center;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 50%;
+
+    span {
+      position: relative;
+      top: 50%;
+      @include transform(translateY(-50%));
+      display: block;
+    }
+  }
+}
+
+.ar p.core-product-badge {
+  left: 10px; right: auto;
+
+  &.OneDayDelivery {
+    background-position: -55px -236px;
+  }
+
+  &.DealOfTheDay {
+    background-position: -55px -291px;
+  }
+}
+
+/* -------------------------------------> 4. FREE SHIPPING TAG */
+.shipping-tag {
+  color: $color-body-attention;
+  border: 1px solid;
+  border-radius: 2px;
+  display: inline-block;
+  padding: 4px 8px 2px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+
+.ar .shipping-tag {
+  letter-spacing: 0;
+}
+
+
+

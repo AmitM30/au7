@@ -1,0 +1,150 @@
+/* -------------------------------------> INDEX */
+/* 0.  MOBILE DEV ONLY */
+/* 1.  CORE FOUNDATIONS */
+/* 2.  POLYMER DRAWER SETUP */
+
+/* -------------------------------------> 0. MOBILE DEV ONLY */
+// html, body {
+// 	background-color: #333 !important;
+// }
+
+// #splash-screen {
+// 	width: 320px;
+// 	margin: 0 auto;
+// }
+
+// #wrapper {
+// 	width: 320px;
+// 	margin: 0 auto;
+// 	background-color: $color-bg-primary;
+// }
+
+// #route-loader,
+// #app-download-banner {
+// 	width: 320px;
+// 	margin: 0 auto;
+// 	box-sizing: border-box;
+// }
+
+// #site-header search-element .search-cover {
+// 	width: 320px;
+// 	margin: 0 auto;
+// }
+
+// #drawer {
+// 	width: 256px !important;
+//     left: 50% !important;
+//     margin-left: -160px;
+// }
+
+// .ar #drawer {
+// 	left: auto !important; right: 50% !important;
+// 	margin-right: -160px; margin-left: 0;
+// }
+
+// #page-pdp {
+// 	#pdp-fixed-cta-container {
+// 		box-sizing: border-box;
+// 		width: 320px;
+// 		margin: 0 auto;
+// 	}
+// }
+
+// #page-cart {
+// 	.cart-overview-container{
+// 		width: 320px;
+// 		box-sizing: border-box;
+// 		margin: 0 auto;
+// 	}
+
+// 	.loading-screen {
+// 		width: 320px;
+// 		margin: 0 auto;
+// 	}
+// }
+
+// #facets-modal-wrapper {
+// 	width: 320px !important;
+// 	margin: 0 auto;
+// 	left: -320px !important;
+// 	margin-left: -160px;
+
+// 	.facets-scrim {
+// 		width: 320px;
+// 		left: 50% !important;
+// 		margin-left: -160px;
+// 	}
+
+// 	&.oov-false {
+// 		left: 50% !important;
+// 	}
+// }
+
+// #notifier {
+// 	width: 320px;
+// 	left: 50% !important;
+// 	margin-left: -160px !important;
+// }
+
+/* -------------------------------------> 1. CORE FOUNDATIONS */
+html, body {
+	color: $color-body;
+	background-color: $color-bg-primary;
+	height: 100%;
+	line-height: 1.3;
+	font-family: $font-primary-en;
+}
+
+#wadi {
+	height: 100%;
+}
+
+.ar {
+	font-family: $font-primary-ar;
+}
+
+#wrapper {
+	min-height: 100%;
+
+	&.app-banner-showing {
+		padding-bottom: 61px;
+	}
+}
+
+// paper-drawer-panel.paper-drawer-panel-0[selected=drawer] .narrow-layout.paper-drawer-panel #main.paper-drawer-panel {
+// 	position: fixed;
+// }
+
+/* -------------------------------------> 2. POLYMER DRAWER SETUP */
+#drawer {
+	-webkit-overflow-scrolling: touch;
+}
+
+#page-container {
+	-webkit-overflow-scrolling: touch;
+}
+
+.paper-drawer-panel-0 {
+	position: static;
+}
+
+.paper-drawer-panel-0 #scrim.paper-drawer-panel {
+	z-index: 80;
+	position: fixed;
+}
+
+.paper-drawer-panel-0 iron-selector.paper-drawer-panel > #main.paper-drawer-panel  {
+	position: static;
+}
+
+.ar .paper-drawer-panel-0 .left-drawer.narrow-layout.paper-drawer-panel>#drawer.paper-drawer-panel:not(.iron-selected) {
+	@include transform(translateX(100%));
+}
+.ar .paper-drawer-panel-0 iron-selector.paper-drawer-panel>#drawer.paper-drawer-panel {
+	right: 0; left: auto;
+}
+
+.paper-drawer-panel-0 iron-selector.paper-drawer-panel > #drawer.paper-drawer-panel {
+	position: fixed;
+	z-index: 90;
+}

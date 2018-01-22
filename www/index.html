@@ -42,10 +42,10 @@
             max-width: 100%;
         }
 
-        #wadi {
+        /* #wadi {
             position: fixed;
             overflow-y: scroll;
-        }
+        } */
     </style>
     <!-- <link rel="stylesheet" href="dist/styles/framework7/framework7.material.css"> -->
     <link rel="stylesheet" href="dist/styles/site.css">
@@ -65,7 +65,10 @@
 
         document.addEventListener('deviceready', onDeviceReady, false);
         function onDeviceReady() {
+            console.log('StatusBar: ', StatusBar);
+            StatusBar.hide();
             window.appDirectory = cordova.file.applicationDirectory + 'www/';
+            console.log(window.appDirectory);
         };
     </script>
     <script src="dist/app-launch-v3.js"></script>

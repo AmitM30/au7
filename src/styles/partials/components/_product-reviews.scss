@@ -1,0 +1,399 @@
+/* -------------------------------------> INDEX */
+/* 0.  SHARED */
+/* 1.  SUMMARY/GRAPH */
+/* 2.  REVIEW SEGMENT */
+/* 3.  LOAD MORE CONTAINER */
+
+/* -------------------------------------> 0. SHARED */
+pdp-core-details-element,
+product-reviews-element {
+    .stars-container {
+    	position: relative;
+        display: inline-block;
+
+    	&:before,
+    	i.stars:before {
+    		font-family: wadicons;
+            font-size: 16px;
+            color: $color-secondary;
+            content: "\e80f\e80f\e80f\e80f\e80f";
+    	}
+
+        i.stars:before {
+            content: "\e80e\e80e\e80e\e80e\e80e";
+        }
+
+        i.stars {
+        	position: absolute;
+            top: 0; left: 0;
+            display: block;
+            overflow: hidden;
+        }
+
+        &.large {
+        	&:before,
+        	i.stars:before {
+        		font-size: 20px;
+        	}
+        }
+    }
+
+    .pros,
+    .cons {
+    	padding-left: 20px;
+    	position: relative;
+
+        &:before{
+            font-family: wadicons;
+            position: absolute;
+            top: 0; left: 0;
+        }
+    }
+
+    .pros {
+        &:before {
+            color: $color-primary;
+            content: "\e812";
+        }
+    }
+
+    .cons {
+        &:before {
+            color: $color-body-attention;
+            content: "\e813";
+        }
+    }
+
+    .loader-container {
+        text-align: center;
+        margin: 10px 0;
+    }
+}
+
+.ar pdp-core-details-element,
+.ar product-reviews-element {
+    .stars-container {
+        i.stars {
+            right: 0; left: auto;
+        }
+    }
+
+    .pros,
+    .cons {
+        padding-right: 20px;
+        padding-left: 0;
+
+        &:before{
+            right: 0; left: auto;
+        }
+    }
+}
+
+/* -------------------------------------> 1. SUMMARY/GRAPH */
+product-reviews-element {
+	.summary-container {
+		padding-bottom: 12px !important;
+	}
+
+	.rating-container,
+    .graph-wrapper,
+    .overview-container {
+        border-bottom: 1px dotted $color-border;
+        margin-left: -10px;
+        margin-right: -10px;
+        padding: 0 10px 8px;
+    }
+
+    // RATING
+    .rating-container {
+    	text-align: center;
+    }
+
+    p.rating {
+        font-size: 44px;
+        line-height: 1;
+        margin-right: 10px;
+        color: $color-body-dark;
+    	display: inline-block;
+    }
+
+    .additional-details-container {
+    	display: inline-block;
+    	text-align: left;
+    }
+
+    p.counter {
+    	font-size: 12px;
+    }
+
+    // GRAPHS
+    .graph-wrapper {
+    	@include clearfix;
+    	padding-bottom: 0;
+    }
+
+    .graph-container {
+        float: left;
+        width: 50%;
+        @include box-sizing(border-box);
+        padding: 10px 10px 11px 0;
+
+        + .graph-container {
+        	padding-left: 10px;
+        	padding-right: 0;
+        	border-left: 1px dotted $color-border;
+        }
+    }
+
+    p.title {
+        color: $color-body-dark;
+        margin-bottom: 2px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    table {
+    	width: 100%;
+
+        td {
+            padding-top: 2px;
+        }
+
+        td.value-title {
+            width: 24px;
+        }
+
+        td.count {
+            width: 28px;
+            text-align: right;
+            color: $color-body-light;
+            font-size: 11px;
+        }
+    }
+
+    .value-container, .value-container .value {
+        height: 8px;
+        border-radius: 10px;
+    }
+
+    .value-container {
+        width: 100%;
+        background-color: #ddd;
+        position: relative;
+        overflow: hidden;
+
+        .value {
+            position: absolute;
+            top: 0; left: 0;
+            background-color: $color-primary;
+        }
+    }
+
+    // PROS/CONS OVERVIEW
+    .overview-container {
+    	padding: 10px 10px 0;
+    	border-bottom: 0;
+
+        p {
+            color: $color-body-dark;
+            text-transform: capitalize;
+            margin-top: 10px;
+
+            &:first-child {
+            	margin-top: 0;
+            }
+
+            &.disclaimer {
+            	color: $color-body-light;
+            	font-size: 12px;
+            	text-transform: none;
+            }
+        }
+    }
+}
+
+.ar product-reviews-element {
+    p.rating {
+        margin-left: 10px;
+        margin-right: 0;
+        font-family: $font-primary-en;
+    }
+
+    .additional-details-container {
+        text-align: right;
+    }
+
+    // GRAPHS
+    .graph-container {
+        float: right;
+        padding: 10px 0 11px 10px;
+
+        + .graph-container {
+            padding-right: 10px;
+            padding-left: 0;
+            border-right: 1px dotted $color-border;
+            border-left: 0;
+        }
+    }
+
+    table {
+        td.count {
+            text-align: left;
+        }
+    }
+
+    .value-container {
+        .value {
+            right: 0; left: auto;
+        }
+    }
+}
+
+/* -------------------------------------> 2. REVIEW SEGMENT */
+product-reviews-element {
+    .review-container {
+    	font-size: 14px;
+        border-top: 1px dotted $color-border;
+        @include clearfix;
+        padding: 10px 10px 15px;
+
+        // REVIEWER DETAILS
+        .reviewer-details {
+        	@include clearfix;
+        	margin-bottom: 12px;
+        }
+
+        .key-details-container {
+        	float: left;
+        }
+
+        .additional-details-container {
+        	float: right;
+        	text-align: right;                          
+        }
+
+        p.source {
+            font-weight: 700;
+            font-size: 15px; line-height: 16px;
+            color: $color-body-dark;
+        	margin-bottom: 4px;
+
+            &:before {
+                content: "";
+                background-image: url('images/sprite-review-flags.png');
+                @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+                    background-image: url('images/sprite-review-flags@2x.png');
+                    background-size: auto 16px;
+                }
+                width: 16px; height: 16px;
+                float: left;
+                background-position: 0 0;
+                margin-right: 6px;
+            }
+
+            &.us:before { background-position: -17px 0; }
+
+            &.gb:before { background-position: -34px 0; }
+
+            &.in:before { background-position: -51px 0; }
+
+            &.za:before { background-position: -68px 0; }
+
+            &.nz:before { background-position: -85px 0; }
+
+            &.sg:before { background-position: -102px 0; }
+
+            &.ca:before { background-position: -119px 0; }
+
+            &.au:before { background-position: -136px 0; }
+
+            &.ae:before { background-position: -153px 0; }
+
+            &.sa:before { background-position: -170px 0; }
+        }
+
+        p.date {
+            color: $color-body-light;
+            font-size: 13px;
+            margin-left: 22px;
+        }
+
+        p.extract {
+            position: relative;
+            padding: 0 20px;
+            color: $color-body-dark;
+            font-weight: 700;
+            margin-bottom: 12px;
+
+            &:before {
+                font-family: wadicons;
+                color: $color-border;
+                font-size: 56px; line-height: 1;
+                position: absolute;
+                content: "\f10d";
+                top: 0; left: 0;
+                opacity: 0.4;
+            }
+
+            span {
+                position: relative;
+                z-index: 2;
+            }
+        }
+
+        p.pros,
+        p.cons {
+        	margin-top: 8px;
+        }
+    }
+}
+
+.ar product-reviews-element {
+    .review-container {
+        // REVIEWER DETAILS
+        .key-details-container {
+            float: right;
+        }
+
+        .additional-details-container {
+            float: left;
+            text-align: left;                          
+        }
+
+        p.source {
+            &:before {
+                float: right;
+                margin-left: 6px;
+                margin-right: 0;
+            }
+        }
+
+        p.date {
+            margin-right: 22px;
+            margin-left: 0;
+        }
+
+        p.extract {
+            &:before {
+                content: "\F10E";
+                right: 0; left: auto;
+            }
+        }
+    }
+}
+
+
+/* -------------------------------------> 3. LOAD MORE CONTAINER */
+product-reviews-element {
+    .cta-container {
+        text-align: center;
+        padding: 10px 10px 30px;
+
+        p {
+            font-size: 13px;
+            color: $color-body-dark;
+        }
+    }
+}
+
+

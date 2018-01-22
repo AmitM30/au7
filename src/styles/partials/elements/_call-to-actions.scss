@@ -1,0 +1,100 @@
+/* -------------------------------------> INDEX */
+/* 0.  BLOCK CTA */
+/* -------------------------------------> 0. BLOCK CTA */
+// COLORS
+.core-block-cta {
+	border-radius: $cta-border-radius;
+	font-size: 13px;
+	height: 32px;
+	padding: 1px 20px 0;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	background-color: $color-primary;
+	color: $color-body-alt;
+	position: relative;
+	display: inline-block;
+	text-align: center;
+	box-sizing: border-box;
+
+	&.core-block-cta-secondary {
+		background-color: $color-secondary;
+		color: $color-body-dark;
+		paper-ripple { color: #fff; }
+	}
+
+	&.core-block-cta-tertiary {
+		background-color: $color-bg-alt;
+		paper-ripple { color: #fff; }
+	}
+
+	&.core-block-cta-support {
+		background-color: $color-bg-support;
+		color: $color-body-dark;
+	}
+
+	&.core-block-cta-outlined,
+	&.core-block-cta-outlined-secondary {
+		background-color: transparent;
+		border: 1px solid;
+		padding-top: 0;
+	}
+
+	&.core-block-cta-outlined {
+		color: $color-primary;
+	}
+
+	&.core-block-cta-outlined-secondary {
+		color: $color-body-alt;
+	}
+
+	&.disabled,
+	&[disabled] {
+		background-color: #ddd;
+		color: #aaa;
+		pointer-events: none;
+	}
+}
+
+// SIZES
+.core-block-cta {
+	&.core-block-cta-sml {
+		height: 28px;
+		font-size: 12px;
+		padding-left: 15px; padding-right: 15px;
+	}
+
+	&.core-block-cta-lg {
+		height: 42px;
+		font-size: 14px;
+	}
+}
+
+// LINKS
+a.core-block-cta {
+	line-height: 32px;
+
+	&.core-block-cta-sml {
+		line-height: 24px;
+	}
+
+	&.core-block-cta-lg {
+		line-height: 42px;
+	}
+}
+
+a.core-block-cta-outlined,
+a.core-block-cta-outlined-secondary {
+	line-height: 30px;
+
+	&.core-block-cta-sml {
+		line-height: 26px;
+	}
+
+	&.core-block-cta-lg {
+		line-height: 34px;
+	}
+}
+
+.cta-full-width {
+	width: 100%;
+}

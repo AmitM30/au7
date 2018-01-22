@@ -1,0 +1,77 @@
+<script>
+  Polymer({
+    is: "validation-phone-number",
+    behaviors: [
+      Polymer.IronValidatorBehavior
+    ],
+
+    properties:{
+      phoneConfig:{
+        type:Object
+      }
+    },
+
+    attached: function () {
+      this.minLength = this.phoneConfig.minLength;
+      this.maxLength = this.phoneConfig.maxLength;
+      this.carrierCodes = this.phoneConfig.carrierCodes.join("|");
+      this.countryCodeNumber = this.phoneConfig.isdCode;
+      this.phoneNumberFormat = "^(" + this.countryCodeNumber + "|00" + this.countryCodeNumber + ")?(0)?(" + this.carrierCodes + ")(\\d{7})$";
+      this.phoneNumberFormat = new RegExp(this.phoneNumberFormat, "g");
+    },
+
+    validate: function(value, phoneConfig) {
+
+      if (phoneConfig) {
+        this.phoneConfig = phoneConfig;
+        this.minLength = this.phoneConfig.minLength;
+        this.maxLength = this.phoneConfig.maxLength;
+        this.carrierCodes = this.phoneConfig.carrierCodes.join("|");
+        this.countryCodeNumber = this.phoneConfig.isdCode;
+        this.phoneNumberFormat = "^(" + this.countryCodeNumber + "|00" + this.countryCodeNumber + ")?(0)?(" + this.carrierCodes + ")(\\d{7})$";
+        this.phoneNumberFormat = new RegExp(this.phoneNumberFormat, "g");
+      }
+
+      //Return true if RegExp matches
+      if (value && this.phoneNumberFormat) {
+        return value.match(this.phoneNumberFormat) !== null;
+      }
+      return false;
+    },
+
+    phoneNumberWithCountry: function (value) {
+      var num = value;
+      var matches = {};
+
+      num.replace(this.phoneNumberFormat, function(match, countryCode, extra, carrierCode, phone) {
+         matches = {
+           countryCode : countryCode,
+           extra : extra,
+           carrierCode : carrierCode,
+           phone : phone
+         };
+      });
+      if (!this.validate(value) && value.toString().length > this.maxLength) {
+          return { message: "maxLength" };
+      }
+      if (!this.validate(value) && value.toString().length < this.minLength) {
+        return { message: "minLength" };
+      }
+      if (this.validate(value)) {
+        return { message: "validPhone", number: "+" + this.countryCodeNumber + "-" + matches.carrierCode + "-" + matches.phone };
+      }
+      if (!this.validate(value) && typeof matches.countryCode === "undefined" && typeof matches.extra === "undefined" && typeof matches.carrierCode === "undefined" && typeof matches.phone === "undefined") {
+        return { message: "invalidPhone" };
+      }
+    },
+
+    phoneNumberWithoutCountry: function (value) {
+      if (this.validate(value)) {
+        var len = value.split('-');
+        return value.split('-')[len - 1];
+      }
+
+      return null;
+    },
+  });
+</script>

@@ -1,0 +1,227 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<!--<link rel="import" href="bower_components/polymer/polymer.html">-->
+
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+
+    <large-nav-element></large-nav-element>
+
+@demo
+-->
+
+<dom-module id="large-nav-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+    <div id="mainNavScrim" on-tap="_hideNavOptions"></div>
+    <div class="nav">
+      <div class="main-nav-strip">
+        <div id="mainNavWrapper" class="main-nav-wrapper" on-tap="_showDropdown" on-mouseenter="_showDropdown" on-mouseleave="_hideDropdown">
+          <!-- <button class="main-nav-trigger"><i><span></span><span></span><span></span></i> [[_translate('Shop All Departments')]]</button> -->
+          <button class="main-nav-trigger">[[_translate('Shop All Departments')]]</button>
+
+          <div class="main-nav-dropdown-wrapper">
+            <div class="main-nav-dropdown-container">
+              <ul class="level-01">
+                <template is="dom-repeat" items="[[ nav.menu ]]" as="navigation">
+
+                    <li on-mouseover="_showCatMenu" on-mouseout="_hideCatMenu">
+                      <a class$="category [[ _hasChildren(navigation.children) ]]" title$="[[navigation.title]]" href$="[[ navigation.url ]]" style$="color: [[ navigation.color ]]">
+                        <template is="dom-if" if="[[ navigation.icon ]]">
+                          <i class$="[[navigation.icon]]"></i>
+                        </template>
+                        [[navigation.title]]
+                      </a>
+
+                        <div class$="level-02-container [[ _hasWrapper(navigation.children) ]]">
+                          <div class="content-holder">
+                            <template is="dom-repeat" items="[[ navigation.children ]]" as="subNavLevelOne">
+                              <ul class="level_02">
+                                <li>
+                                  <a class$="category [[ _hasNolink(subNavLevelOne.url) ]]" href$="[[ subNavLevelOne.url ]]" title$="[[ subNavLevelOne.title ]]" style$="color: [[ subNavLevelOne.color ]]">[[ subNavLevelOne.title ]]</a>
+                                  <ul>
+                                    <template is="dom-repeat" items="[[ subNavLevelOne.children ]]" as="subNavLevelTwo">
+                                      <li>
+                                          <a href$="[[ subNavLevelTwo.url ]]" title$="[[ subNavLevelTwo.title ]]" style$="color: [[ subNavLevelTwo.color ]]"> [[ subNavLevelTwo.title ]] </a>
+                                      </li>
+                                    </template>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </template>
+                          </div>
+
+                          <!-- <div class="offers-container">
+                            <ul>
+                              <template is="dom-repeat" items="[[ navigation.images ]]" as="navImages">
+                                <li>
+                                  <a title="[[ navImages.alt ]]" href$="[[ navImages.link ]]">
+                                    <img lazy-src$="[[ navImages.imageUrl ]]" alt="[[ navImages.alt ]]">
+                                  </a>
+                                </li>
+                              </template>
+                            </ul>
+                          </div> -->
+
+
+                          <div class="logos-container">
+                            <ul>
+                              <template is="dom-repeat" items="[[ navigation.images ]]" as="navImages">
+                                <li>
+                                  <a title="[[ navImages.alt ]]" href$="[[ navImages.link ]]">
+                                    <img lazy-src$="[[ navImages.imageUrl ]]" alt$="[[ navImages.alt ]]">
+                                  </a>
+                                </li>
+                              </template>
+                            </ul>
+                          </div>
+                        </div>
+                    </li>
+                  </template>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        <ul class="promotions">
+          <template is="dom-repeat" items="[[ nav.promotions ]]" as="navPromotions">
+            <li>
+              <a title$="[[ navPromotions.title ]]" href$="[[ navPromotions.link ]]" style$="color: [[ navPromotions.color ]]">
+                [[ navPromotions.title ]]
+              </a>
+            </li>
+          </template>
+        </ul>
+
+        <div class="downloadapp">
+          <span>[[ _translate('Download our App') ]]</span>
+          <a target="_blank" href="//192305.tlnk.io/serve?action=click&publisher_id=334718&site_id=126575&my_placement=header&my_campaign=organic&my_publisher=web&my_site=mobile_site&site_id_android=126573" class="android"></a>
+          <a target="_blank" href="//192305.tlnk.io/serve?action=click&publisher_id=334718&site_id=126575&my_placement=header&my_campaign=organic&my_publisher=web&my_site=mobile_site&site_id_android=126573" class="ios"></a>
+        </div>
+
+
+      </div>
+    </div>  
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+    is: 'large-nav-element',
+    properties: {
+
+      /**
+       * navigation json object to be displayed
+       */
+      nav: {
+        type: Object
+      },
+
+      /**
+       * Options supported by small navigation element
+       */
+      options: {
+        type: Object
+      },
+
+      /**
+       * application context
+       */
+      ctx: {
+        type: Object
+      }
+    },
+
+    // Element Lifecycle
+    attached: function () {
+      if (window.location.pathname === '/') {
+        this.$.mainNavWrapper.classList.add('active');
+      }
+
+      var fn = function (e) {
+        this.fixedHeader = e.detail.fixed;
+        if (this.fixedHeader) {
+          this.$.mainNavWrapper.classList.remove('active');
+        } else {
+          if (window.location.pathname === '/') {
+            this.$.mainNavWrapper.classList.add('active');
+          }
+        }
+      };
+
+      this.fixedEvent = window.addEventListener('fixed-header', fn.bind(this));
+    },
+
+    _hideNavOptions: function (e) {
+      var event = new Event('hide-blanket');
+      window.dispatchEvent(event);
+      this.$.mainNavScrim.classList.remove('active');
+      this.$.mainNavWrapper.classList.remove('active');
+    },
+
+    json: function (data) {
+      return JSON.stringify(data);
+    },
+
+    _hasChildren: function (child) {
+      return !child ? 'no-child': '';
+    },
+
+    _hasWrapper: function (child) {
+      return !child ? 'no-wrapper': '';
+    },
+
+    _hasNolink: function (url) {
+      return !url ? 'nolink': '';
+    },
+
+    _showDropdown: function () {
+      this.$.mainNavScrim.classList.add('active');
+      this.$.mainNavWrapper.classList.add('active');
+      this.querySelector('#mainNavWrapper .level-01').classList.add('expand');
+    },
+
+    _hideDropdown: function () {
+      this.$.mainNavScrim.classList.remove('active');
+      this.querySelector('#mainNavWrapper .level-01').classList.remove('expand');
+      if (this.fixedHeader || window.location.pathname !== '/') {
+        this.$.mainNavWrapper.classList.remove('active');
+      }
+    },
+
+    _showCatMenu: function (e) {
+      e.currentTarget.classList.add('active');
+    },
+
+    _hideCatMenu: function (e) {
+      e.currentTarget.classList.remove('active');
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    },
+
+    detached: function () {
+      window.removeEventListener(this.fixedEvent);
+    }
+  });
+
+</script>

@@ -1,0 +1,145 @@
+<!--
+Add To Cart and Buy Now functionality
+
+Example:
+    <cart-button-element></cart-button-element>
+@demo
+-->
+<dom-module id="cart-button-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+
+    <!-- ADD TO CART BUTTON -->
+    <template is="dom-if" if="[[!options.redirect]]">
+      <button class$="[[buttonProgressClass]] [[ options.className ]] add-to-cart" disabled$="[[ isDisabled ]]">
+        [[ addCartText ]]
+        <template is="dom-if" if="[[ options.showPrice ]]"> &nbsp;([[ item.price ]] [[ ctx.currency ]])</template>
+        <paper-ripple></paper-ripple>
+      </button>
+    </template>
+
+    <!-- BUY NOW BUTTON -->
+    <template is="dom-if" if="[[options.redirect]]">
+      <button class$="[[ options.className ]]" disabled$="[[ isDisabled ]]">[[ _translate('Buy Now') ]]<paper-ripple></paper-ripple></button>
+    </template>
+
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'cart-button-element',
+
+    listeners: {
+      'tap': '_add'
+    },
+
+    properties: {
+
+      /**
+       * Item information to Add to Cart / Buy Now
+       */
+      item: {
+        type: Object,
+        value: {
+          sku: undefined,
+          vendor: undefined,
+          price: undefined
+        },
+        observer: "_itemChanged"
+      },
+
+      /**
+       * Product already in cart or not
+       */
+      inCart: {
+        type: Boolean,
+        value: false,
+        observer: "_inCartChanged"
+      },
+
+      /**
+       * Options supported by element
+       */
+      options: {
+        type: Object,
+        value: {
+          redirect: false,
+          type: Boolean,
+          className: 'core-block-cta core-block-cta-sml cta-full-width'
+        }
+      },
+
+      selectedSku: {
+        type: String,
+        observer: "_selectedSkuChanged"
+      },
+
+      ctx: {
+        type: Object
+      }
+    },
+
+    attached: function () {
+      this.addCartText = this._translate('Add To Cart');
+
+      if (this.inCart) {
+        this._stateChange();
+      }
+      this.isDisabled = (this.selectedSku) ? false : true;
+    },
+
+    _add: function () {
+      if (this.isDisabled) { return; }
+      if (!this.inCart) {
+        var addObj = { ref: this, item: this.item, redirect: this.options.redirect, inCart: this.inCart };
+        this.set('buttonProgressClass', 'in-progress');
+        this.set('addCartText', this._translate('Adding'));
+        this.fire('add-product', addObj);
+      } else {
+        this.fire('redirect-buy-now', { inCart: this.inCart });
+      }
+    },
+
+    _stateChange: function () {
+      this.inCart = true;
+      this.classList.add('full-width');
+      this.set('addCartText', this._translate('Checkout Now'));
+    },
+
+    _itemChanged: function (val) {
+      if (!this.inCart) {
+        this.inCart = false;
+        this.classList.remove('full-width');
+        this.set('addCartText', this._translate('Add To Cart'));
+      } else {
+        this._stateChange();
+      }
+    },
+
+    _selectedSkuChanged: function (val) {
+      this.isDisabled = (this.selectedSku) ? false : true;
+    },
+
+    _inCartChanged: function (res) {
+      if (this.inCart) {
+        this._stateChange();
+      }
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+  });
+
+</script>

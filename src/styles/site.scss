@@ -1,0 +1,38 @@
+@import "compass";
+@import "compass/css3/animation";
+
+// VENDOR
+@import "vendor.scss";
+
+// CORE
+@import "partials/elements/_typography.scss";
+@import "partials/core/_variables.scss";
+@import "partials/core/_performance.scss";
+@import "partials/core/_overrides.scss";
+@import "partials/core/_foundations.scss";
+@import "partials/core/_grid.scss";
+@import "partials/core/_general.scss";
+@import "partials/core/_animators.scss";
+
+// ELEMENTS
+@import "partials/elements/_core-product.scss";
+@import "partials/elements/_call-to-actions.scss";
+@import "partials/elements/_form-elements.scss";
+@import "partials/elements/_loaders.scss";
+@import "partials/elements/_misc.scss";
+
+// AREAS
+@import "partials/areas/_site-header.scss";
+@import "partials/areas/_site-footer.scss";
+@import "partials/areas/_main-nav.scss";
+
+// COMPONENTS
+@import "partials/components/_product-carousels.scss";
+@import "partials/components/_product-reviews.scss";
+
+// PAGES
+@import "partials/pages/_plp.scss";
+@import "partials/pages/_pdp.scss";
+@import "partials/pages/_cart.scss";
+@import "partials/pages/_static.scss";
+@import "partials/pages/_checkout.scss";

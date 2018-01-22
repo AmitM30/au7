@@ -1,0 +1,774 @@
+/* -------------------------------------> INDEX */
+/* 0.  NO PRODUCTS */
+/* 1.  HEADER AREA */
+/* 2.  SORT */
+/* 3.  FILTERS */
+/* 4.  VIEW SWITCH */
+/* 5.  CORE GRID LAYOUT */
+/* 6.  PRODUCT IMAGE AREA */
+/* 7.  PRODUCT DETAILS AREA */
+/* 8.  INFINITE SCROLL */
+
+/* -------------------------------------> 0. NO PRODUCTS */
+.no-products-container {
+	text-align: center;
+	padding: 65px 10px 30px;
+	position: relative;
+
+	&:before, &:after {
+		position: absolute;
+		left: 50%;
+	}
+
+	&:before {
+		height: 50px;
+		width: 2px; margin-left: -1px;
+		top: 5px;
+		content: "";
+		background-color: $color-bg-alt;
+	}
+
+	&:after {
+		content: "\E80D";
+		font-family: wadicons;
+		position: absolute; top: 10px;
+		font-size: 27px; line-height: 1px;
+		margin-left: -13px;
+		color: $color-bg-alt;
+	}
+
+	h1 {
+		font-size: 18px;
+		color: $color-body-dark;
+		margin-bottom: 5px;
+	}
+
+	p {
+		font-size: 15px;
+	}
+}
+
+/* -------------------------------------> 1. HEADER AREA */
+$plp-options-height: 38px;
+
+#page-list {
+	position: relative; // FOR GRID SWITCHER
+}
+
+#page-container .plp-header {
+	h1 {
+		color: $color-body-dark;
+		font-size: 16px;
+		border-top: 1px solid $color-border;
+		padding: 10px;
+		text-align: center;
+		background-color: $color-bg-support-light;
+
+		span {
+			color: $color-body-light;
+			font-size: 14px;
+			display: inline-block;
+		}
+	}
+}
+
+/* -------------------------------------> 2. SORT OPTION */
+#page-list .plp-sort-container {
+	position: absolute;
+	top: 1px; left: 0;
+	padding-left: 10px;
+	@include box-sizing(border-box);
+	width: 33.333%;
+    overflow: hidden;
+
+    &:before {
+		content: "\e818";
+		font-family: wadicons;
+		position: absolute;
+		top: 10px; left: 10px;
+		color: $color-body-dark;
+		font-size: 14px;
+	}
+
+    select {
+    	font: inherit;
+		color: $color-body-dark;
+		height: $plp-options-height - 1px;
+    	font-size: 16px;
+	    width: 130%;
+	    border: none;
+	    box-shadow: none;
+	    background-color: transparent;
+	    background-image: none;
+	    -webkit-appearance: none;
+	       -moz-appearance: none;
+	            appearance: none;
+	    padding-left: 20px;
+	}
+
+	select:focus {
+	    outline: none;
+	}
+}
+
+.ar #page-list .plp-sort-container {
+	right: 0; left: auto;
+	padding-right: 10px;
+	padding-left: 0;
+
+    &:before {
+		right: 10px; left: auto;
+	}
+
+    select {
+	    padding-right: 20px;
+	    padding-left: 0;
+	}
+}
+
+/* -------------------------------------> 3. FILTERS */
+// CORE FILTER MODAL LAYOUT
+#facets-modal-wrapper {
+	position: fixed;
+	top: 0; bottom: 0; left: -100%;
+	width: 100%;
+	z-index: 80;
+	@include transition(left ease-in-out 0.4s);
+
+	.facets-scrim {
+		position: fixed;
+		top: 0; right: 0; bottom: 0; left: 0;
+		background-color: rgba(0, 0, 0, 0.6);
+		opacity: 0;
+		@include transition(opacity ease-in-out 0.8s);
+		pointer-events: none;
+	}
+
+	&.oov-false {
+		left: 0;
+
+		.facets-scrim {
+			opacity: 1;
+		}
+	}
+
+	.facets-modal {
+		position: absolute;
+		top: 10px; right: 10px; bottom: 10px; left: 10px;
+		background-color: $color-bg-primary;
+	}
+
+	.facets-modal-header {
+		padding: 8px 10px 10px;
+	}
+
+	.facets-body {
+		border-top: 1px solid $color-border;
+		position: absolute;
+		top: 41px; right: 0; bottom: 56px; left: 0;
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.facets-list {
+		border-bottom: 1px solid $color-border;
+	}
+
+	.facets-cta-container {
+		position: absolute;
+		bottom: 0; left: 0; right: 0;
+		border-top: 1px solid $color-border;
+		padding: 10px;
+		box-shadow: 0px -1px 3px rgba(0, 0, 0, 0.1);
+	}
+}
+
+.ar #facets-modal-wrapper {
+	right: -100%; left: auto;
+	@include transition(right ease-in-out 0.4s);
+
+	&.oov-false {
+		right: 0; left: auto;
+	}
+}
+
+// FILTER MODAL ELEMENTS
+#page-list facets-element {
+	position: relative;
+
+	// ACCORDION TRIGGER LINK
+	a.facets-trigger {
+		font-size: 16px;
+		display: block;
+		line-height: $plp-options-height;
+		height: $plp-options-height;
+		text-align: center;
+		color: $color-body-dark;
+
+		&:before {
+			content: "\e817";
+			font-family: wadicons;
+			margin-right: 6px;
+		}
+	}
+
+	// HEADER ELEMENTS
+	p.modal-title {
+		color: $color-body-dark;
+		font-size: 18px;
+	}
+
+	.facets-modal-close {
+		position: absolute;
+		padding: 8px;
+		top: 0; right: 0;
+		font-size: 18px;
+	}
+
+	// FILTER CATEGORY
+	a.filter-category-heading {
+		padding: 12px 10px;
+		font-size: 15px;
+		background-color: $color-bg-secondary;
+		color: $color-body-dark;
+		display: block;
+		text-transform: capitalize;
+		border-top: 1px solid $color-border;
+		@include clearfix;
+		position: relative;
+
+		&:first-child {
+			border-top: 0;
+		}
+
+		span.active-facets {
+			display: block;
+			font-size: 13px;
+			color: $color-primary;
+			margin-top: 4px;
+
+			span {
+				display: inline-block;
+			}
+
+			&.not {
+				color: $color-body-light;
+			}
+		}
+
+		&:after {
+			font-family: wadicons;
+			content: "\e812";
+			position: absolute;
+			top: 12px; right: 10px;
+		}
+
+		&.opened {
+			&:after {
+				content: "\e813";
+			}
+		}
+	}
+
+	// FILTER SEARCH
+	.search-container {
+		background-color: $color-bg-tertiary;
+		padding: 8px 10px;
+		border-top: 1px dotted $color-border;
+		position: relative;
+
+		&:after {
+			position: absolute;
+			top: 16px; right: 18px;
+			font-size: 13px;
+			color: $color-body-light;
+			padding-left: 1px;
+			content: "\E814";
+			font-family: wadicons;
+		}
+
+		input {
+			padding-right: 30px;
+		}
+
+		.field-clear {
+			background-color: $color-bg-primary;
+			line-height: 30px;
+			top: 1px; right: 1px;
+		}
+	}
+
+
+	// FILTER CHECKBOXES
+	.facets-body ul > li {
+		border-top: 1px dotted $color-border;
+
+		.custom-checkbox-container {
+			.custom-checkbox-label {
+				display: block;
+				.label-text {
+					padding: 12px 10px 12px 36px;
+					text-transform: capitalize;
+				}
+
+				input[type="checkbox"]:checked + .label-text {
+		            background-color: $color-bg-tertiary;
+		        }
+
+				.check-indicator:before {
+					top: 12px; left: 10px;
+				}
+
+				.check-indicator:after {
+					top: 15px; left: 13px;
+				}
+			}
+		}
+
+		// FILTER LINKS E.G. CATEGORIES
+		a {
+			display: block;
+			padding: 12px 10px 12px 36px;
+			font-size: 14px;
+			color: $color-body-dark;
+			position: relative;
+
+			&:before {
+				font-family: wadicons;
+				content: "\e80c";
+				position: absolute;
+				top: 11px; left: 13px;
+			}
+		}
+	}
+
+	// SELECTED FACETS
+	.selected-facets-container {
+		border-top: 1px solid $color-border;
+		white-space: nowrap;
+		overflow: hidden;
+		position: relative;
+
+		&:after {
+			content: '';
+			position: absolute;
+			top: 0; bottom: 0; right: 0;
+			width: 80px;
+			pointer-events: none;
+			z-index: 10;
+			@include background-image(linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,1)));
+		}
+
+		ul {
+			font-size: 0;
+			overflow-x: auto;
+			padding: 10px 70px 10px 10px;
+
+			li {
+				display: inline-block;
+				font-size: 13px;
+				border: 1px solid $color-border;
+				border-radius: 2px;
+				padding: 6px 10px;
+				color: $color-body-dark;
+				margin-right: 10px;
+				background-color: $color-bg-support;
+				text-transform: capitalize;
+
+				i {
+					margin-left: 8px;
+					position: relative;
+					top: 1px;
+					pointer-events: none;
+				}
+
+				&:first-child {
+					font-weight: 700;
+				}
+			}
+		}
+	}
+}
+
+.ar #page-list facets-element {
+	// ACCORDION TRIGGER LINK
+	a.facets-trigger {
+		&:before {
+			margin-left: 6px;
+			margin-right: 0;
+		}
+	}
+
+	// HEADER ELEMENTS
+	.facets-modal-close {
+		left: 0; right: auto;
+	}
+
+	// FILTER CATEGORY
+	a.filter-category-heading {
+		&:after {
+			left: 10px; right: auto;
+		}
+	}
+
+	// FILTER SEARCH
+	.search-container {
+		&:after {
+			left: 18px; right: auto;
+		}
+
+		input {
+			padding-left: 30px;
+			padding-right: 8px;
+		}
+
+		.field-clear {
+			left: 1px; right: auto;
+		}
+	}
+
+	// FILTER CHECKBOXES
+	.facets-body ul > li {
+		.custom-checkbox-container {
+			.custom-checkbox-label {
+				.label-text {
+					padding: 12px 36px 12px 10px;
+				}
+
+				.check-indicator:before {
+					right: 10px; left: auto;
+				}
+
+				.check-indicator:after {
+					right: 13px; left: auto;
+				}
+			}
+		}
+
+		// FILTER LINKS E.G. CATEGORIES
+		a {
+			padding: 12px 36px 12px 10px;
+
+			&:before {
+				right: 13px; left: auto;
+				content: "\e80b";
+			}
+		}
+	}
+
+	// SELECTED FACETS
+	.selected-facets-container {
+		&:after {
+			left: 0; right: auto;
+			@include background-image(linear-gradient(left, rgba(255,255,255,1), rgba(255,255,255,0)));
+		}
+
+		ul {
+			padding: 10px 10px 10px 70px;
+
+			li {
+				margin-left: 10px;
+				margin-right: 0;
+
+				i {
+					margin-right: 8px;
+					margin-left: 0;
+				}
+			}
+		}
+	}
+}
+
+/* -------------------------------------> 4. VIEW SWITCH */
+#page-container .plp-switch-view-container {
+	position: absolute;
+	top: 0; right: 0;
+	padding-right: 5px;
+	width: 33.333%;
+	@include box-sizing(border-box);
+
+	i {
+		float: right;
+		color: $color-body-dark;
+		font-size: 18px;
+		padding: 0 5px;
+
+		&:before {
+			display: block;
+			line-height: $plp-options-height;
+		}
+
+		&.active {
+			color: $color-border;
+		}
+	}
+}
+
+.ar #page-container .plp-switch-view-container {
+	left: 0; right: auto;
+	padding-left: 5px; padding-right: 0;
+
+	i {
+		float: left;
+	}
+}
+
+/* -------------------------------------> 5. CORE GRID LAYOUT */
+#page-container ul.core-product-listing {
+	@include flexbox((
+	    display: flex,
+		flex-wrap: wrap
+    ));
+	background-color: $color-bg-primary;
+
+	li.grid-column {
+		padding: 10px 10px 50px;
+		float: none;
+		font-size: 14px;
+		border-top: 1px solid $color-border;
+		position: relative;
+		@include flexbox((
+			flex: 0 1 50%
+	    ));
+
+		&:after {
+			content: '';
+			position: absolute;
+			top: 0; bottom: 0;
+			right: 0;
+			width: 1px;
+			background-color: $color-border;
+		}
+
+		&:nth-child(even) {
+			&:after {
+				left: -1px; right: auto;
+			}
+		}
+
+		a.plp-link {
+			display: block;
+		}
+
+		&.column-percent-100 {
+			@include flexbox((
+				flex: 100%
+		    ));
+			padding: 10px 10px 14px;
+
+			a.plp-link {
+				@include clearfix;
+			}
+		}
+	}
+}
+
+.ar #page-container ul.core-product-listing {
+	li.grid-column {
+		&:after {
+			left: 0; right: auto;
+		}
+
+		&:nth-child(even) {
+			&:after {
+				right: -1px; left: auto;
+			}
+		}
+	}
+}
+
+/* -------------------------------------> 6. PRODUCT IMAGE AREA */
+#page-container ul.core-product-listing {
+	.plp-image-container {
+		position: relative;
+		margin-bottom: 6px;
+
+		img {
+			max-width: 100%;
+			position: absolute;
+			top: 0; left: 0;
+		}
+	}
+
+	timer-element {
+		position: absolute;
+		bottom: 0; right: -10px; left: -10px;
+		border-top: 1px solid $color-border;
+		border-bottom: 1px solid $color-border;
+		background-color: rgba(255, 255, 255, 0.75);
+		padding: 5px 10px 2px;
+  		font-size: 12px;
+	}
+
+	// OUT OF STOCK
+	.out-of-stock-true {
+		.plp-image-container {
+			&:after {
+				content: "";
+				position: absolute;
+				top: 0; right: 0; bottom: 0; left: 0;
+				background-color: rgba(255, 255, 255, 0.4);
+			}
+
+			p.core-product-badge {
+				z-index: 10;
+			}
+		}
+	}
+}
+
+// ROW VIEW
+#page-container ul.core-product-listing {
+	li.column-percent-100 {
+		.plp-image-container {
+			float: left;
+			width: 30%;
+			margin-bottom: 0;
+		}
+
+		timer-element {
+			position: static;
+			border: 0;
+			background-color: transparent;
+			padding: 5px 0 0;
+
+			#timer {
+				float: none;
+				display: block;
+			}
+		}
+
+		p.product-tag {
+			max-width: 100%;
+		}
+
+		p.core-product-badge {
+			right: 0;
+
+			&.promo-badge {
+				bottom: 0;
+			}
+
+			&.out-of-stock {
+				top: 0;
+			}
+		}
+	}
+}
+
+.ar #page-container ul.core-product-listing {
+	li.column-percent-100 {
+		.plp-image-container {
+			float: right;
+		}
+
+		p.core-product-badge {
+			left: 0; right: auto;
+		}
+	}
+}
+
+/* -------------------------------------> 7. PRODUCT DETAILS AREA */
+#page-container ul.core-product-listing {
+	p.plp-name {
+		margin-bottom: 8px;
+		color: $color-body-dark;
+	}
+
+	p.plp-price {
+		position: absolute;
+		bottom: 14px;
+		font-size: 12px;
+
+		.selling-price {
+			display: inline-block;
+			font-size: 15px;
+			padding-bottom: 16px;
+		}
+
+		.discount {
+			display: block;
+			font-size: 13px;
+			margin-top: -16px;
+		}
+	}
+
+	// OUT OF STOCK
+	.out-of-stock-true {
+		.plp-details-container {
+			opacity: 0.4;
+		}
+	}
+}
+
+// ROW VIEW
+#page-container ul.core-product-listing {
+	li.column-percent-100 {
+		font-size: 15px;
+
+		.plp-details-container {
+			float: left;
+			width: 70%;
+			padding-left: 15px;
+			@include box-sizing(border-box);
+		}
+
+		ul.highlights {
+			list-style-type: disc;
+			margin-left: 16px;
+
+			> li {
+				font-size: 13px;
+				margin-bottom: 3px;
+			}
+		}
+
+		p.plp-price {
+			position: static;
+			margin-top: 12px;
+			font-size: 13px;
+
+			.selling-price {
+				padding-bottom: 0;
+				font-size: 16px;
+			}
+
+			.discount {
+				margin-top: 0;
+				font-size: 14px;
+			}
+		}
+	}
+}
+
+.ar #page-container ul.core-product-listing {
+	li.column-percent-100 {
+		.plp-details-container {
+			float: right;
+			padding-right: 15px;
+			padding-left: 0;
+		}
+
+		ul.highlights {
+			margin-right: 16px;
+			margin-left: 0;
+		}
+	}
+}
+
+/* -------------------------------------> 8. INFINITE SCROLL */
+#page-container .products-loader {
+	text-align: center;
+    border-top: 1px solid #d6d6d6;
+    padding: 10px;
+
+    i {
+    	display: inline-block;
+	    font-size: 20px;
+	    color: $color-body-light;
+    }
+
+    p {
+    	font-size: 14px;
+    }
+}

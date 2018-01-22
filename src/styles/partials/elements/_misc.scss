@@ -1,0 +1,385 @@
+/* -------------------------------------> INDEX */
+/* 0.  SITE NOTIFICATION ALERT */
+/* 1.  PAYMENT METHODS */
+/* 2.  CHECKOUT SECURITY CERTIFICATION */
+/* 3.  PAPER TOAST */
+/* 4.  GENERIC INFO ELEMENT E.G. SEO */
+/* 5.  USPS SCROLLER */
+/* 6.  APP DOWNLOAD */
+/* 7.  COUPON CODE */
+/* 8.  SIGNIN ELEMENT */
+
+/* -------------------------------------> 0. SITE NOTIFICATION ALERT */
+#notifier {
+  min-height: 0;
+  padding: 10px 34px 10px 10px;
+  border-radius: 0;
+  margin: 0;
+  font-family: inherit;
+  color:#000;
+
+  button {
+    position: absolute;
+    top: 50%; right: 10px;
+    color: #000;
+    font-size: 16px; line-height: 1;
+    margin-top: -8px;
+  }
+}
+
+.ar #notifier {
+  padding: 10px 10px 10px 34px;
+
+  button {
+    left: 10px; right: auto;
+  }
+}
+
+/* -------------------------------------> 1. PAYMENT METHODS */
+ul.payment-methods {
+  font-size: 0;
+
+  li {
+    display: inline-block;
+    @include mx-image-replacement;
+    @include mx-sprite;
+    width: 38px; height: 24px;
+
+    + li {
+      margin-left: 15px;
+    }
+  }
+
+  li.visa {
+    background-position: 0 0;
+  }
+
+  li.mastercard {
+    background-position: -39px 0;
+  }
+
+  li.cod {
+    background-position: -78px 0;
+    width: 47px;
+  }
+}
+
+.ar ul.payment-methods {
+  li {
+    + li {
+      margin-right: 15px;
+      margin-left: 0;
+    }
+  }
+
+  li.cod {
+    background-position: -126px 0;
+  }
+}
+
+/* -------------------------------------> 2. CHECKOUT SECURITY CERTIFICATION */
+ul.checkout-certification {
+  font-size: 0;
+
+  li {
+    display: inline-block;
+    @include mx-image-replacement;
+    @include mx-sprite;
+    height: 25px;
+
+    + li {
+      margin-left: 15px;
+    }
+
+    &.visa {
+      width: 58px;
+      background-position: 0 -169px;
+    }
+
+    &.mastercard {
+      width: 70px;
+      background-position: -59px -169px;
+    }
+
+    &.trustwave {
+      margin-top: -2px;
+      width: 53px; height: 30px;
+      background-position: -130px -169px;
+    }
+  }
+}
+
+.ar ul.checkout-certification {
+  li {
+    + li {
+      margin-right: 15px;
+      margin-left: 0;
+    }
+  }
+}
+
+/* -------------------------------------> 3. PAPER TOAST */
+paper-toast {
+  width: 100%;
+  max-width: 100%;
+}
+
+
+/* -------------------------------------> 4. GENERIC INFO ELEMENT E.G. SEO */
+info-element .details-module {
+  padding: 12px 10px 15px;
+  font-size: 14px;
+
+  img {
+    max-width: 100%;
+    display: block;
+  }
+
+  h2 {
+    color: $color-body-dark;
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  h3 {
+    color: $color-body-dark;
+    font-size: 15px;
+    margin: 6px 0 1px;
+  }
+
+  p + p {
+    margin-top: 6px;
+  }
+
+  .image-container, .video-container {
+    margin-top: 12px;
+  }
+}
+
+/* -------------------------------------> 6. APP DOWNLOAD */
+#app-download-banner {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  border-top: 1px solid $color-border;
+  background-color: $color-bg-primary;
+  box-shadow: 0px -1px 3px rgba(0, 0, 0, 0.1);
+  padding: 7px 10px;
+  padding-right: 41px;
+  z-index: 21;
+
+  a.image-container {
+    margin: -8px -41px -7px -10px;
+    display: block;
+  }
+
+  img {
+    max-width: 100%;
+    display: block;
+  }
+
+  > a {
+    @include flexbox((
+      display: flex,
+      align-items: center,
+      justify-content: space-between
+    ));
+  }
+
+  i.wadicon-download {
+    font-size: 24px;
+  }
+
+  p {
+    font-size: 13px;
+
+    span {
+      color: $color-body-dark;
+    }
+
+    span.highlight {
+      font-size: 16px;
+    }
+
+    strong {
+      color: $color-body-attention;
+    }
+  }
+
+  span.badge {
+    width: 40px;
+    height: 40px;
+    display: block;
+    @include mx-sprite;
+    background-position: 0 -346px;
+  }
+
+  .wadicon-cancel {
+    position: absolute;
+    top: 0; bottom: 0; right: 0;
+    @include flexbox((
+      display: flex,
+      align-items: center
+    ));
+    padding: 10px 10px 10px 15px;
+  }
+}
+
+.ar #app-download-banner {
+  padding-left: 41px;
+  padding-right: 10px;
+
+  .image-container {
+    margin: -7px -10px -7px -41px;
+  }
+
+
+  .wadicon-cancel {
+    left: 0; right: auto;
+    padding: 10px 15px 10px 10px;
+  }
+}
+
+/* -------------------------------------> 7. COUPON CODE */
+coupon-code-element {
+  border-top: 1px solid $color-border;
+  padding: 12px 10px;
+  background-color: $color-bg-secondary;
+
+  > form {
+    display: flex;
+  }
+
+  input, .applied-coupon-code {
+    flex: 1;
+    margin-right: 10px;
+    display: block;
+    width: 100%;
+  }
+
+  .applied-coupon-code {
+    border: 1px solid $color-border;
+    background-color: $color-bg-primary;
+    border-radius: 2px;
+    height: 32px;
+    line-height: 32px;
+    padding: 0 8px;
+    font-size: 14px;
+    box-sizing: border-box;
+
+    strong {
+      color: $color-body-dark;
+    }
+  }
+}
+
+.ar coupon-code-element {
+  input, .applied-coupon-code {
+    margin-left: 10px;
+    margin-right: 0;
+  }
+}
+
+/* -------------------------------------> 8. SIGNIN ELEMENT */
+signup-element {
+  // SOCIAL LOGIN
+  .social-signin-button {
+    background-color: #EA4335;
+    border-radius: 2px;
+    width: 100%;
+    display: block;
+    color: $color-body-alt;
+    height: 32px;
+    line-height: 32px;
+    font-size: 14px;
+    text-align: left;
+    position: relative;
+
+    span {
+      position: relative;
+      left: 47px;
+    }
+
+    &:before {
+      content: "\F1A0";
+      font-family: wadicons;
+      border-right: 1px solid rgba(255, 255, 255, 0.3);
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      padding: 0 12px;
+      width: 12px;
+      line-height: 32px;
+      text-align: center;
+    }
+
+    &.facebook {
+      &:before { content: "\F09A"; }
+      background-color: #3b5998;
+    }
+
+    + .social-signin-button {
+      margin-top: 15px;
+    }
+  }
+
+  // FORGOT PASSWORD AREA
+  forget-password-element {
+    margin-top: 20px;
+    border-top: 1px dotted $color-border;
+    padding-top: 12px;
+
+    .highlight-memo {
+      background-color: $color-bg-tertiary !important;
+    }
+
+    a.option {
+      display: block;
+      color: $color-body;
+      font-size: 13px;
+
+      &:before {
+        font-family: wadicons;
+        content: "\e80c";
+        margin-right: 4px;
+      }
+
+      &.opened:before { content: "\E80A"; position: relative; top: 1px; }
+    }
+
+    form.forget-password-element {
+      padding-top: 8px;
+    }
+  }
+}
+
+.ar signup-element {
+  // SOCIAL LOGIN
+  .social-signin-button {
+    text-align: right;
+
+    span {
+      right: 47px; left: auto;
+    }
+
+    &:before {
+      border-left: 1px solid rgba(255, 255, 255, 0.3);
+      border-right: 0;
+      right: 0; left: auto;
+    }
+  }
+
+  // FORGOT PASSWORD AREA
+  forget-password-element {
+    a.option {
+      &:before {
+        margin-left: 4px; margin-right: 0;
+        content: "\e80b";
+      }
+
+      &.opened:before { content: "\E80A"; }
+    }
+  }
+}
+
+
+
+

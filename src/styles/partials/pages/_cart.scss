@@ -1,0 +1,602 @@
+/* -------------------------------------> INDEX */
+/* 0.  HEADER */
+/* 1.  PRODUCTS LISTING */
+/* 2.  CHECKOUT INFO */
+/* 3.  CART OVERVIEW PANEL CORE */
+/* 4.  CART INVOICE */
+/* 5.  CART EMPTY */
+/* 6.  CART LOADING */
+/* 7.  FREE SHIPPING MONITOR */
+
+/* -------------------------------------> 0. HEADER */
+#page-cart {
+	padding-bottom: 101px;
+	background-color: $color-bg-support-light;
+
+	h1 {
+		font-size: 16px;
+	    color: $color-body-dark;
+	    padding: 10px;
+		border-bottom: 1px solid $color-border;
+		text-align: center;
+		background-color: $color-bg-primary;
+
+		span {
+			color: $color-body-light;
+		    font-size: 14px;
+		}
+	}
+
+	.messages-container {
+	    padding: 8px 10px;
+		text-align: center;
+		font-size: 14px;
+		background-color: $color-bg-secondary;
+		border-top: 1px solid;
+		border-bottom: 1px solid;
+		color: $color-primary;
+		margin-top: -1px;
+
+		&:before {
+			content: "\e80e";
+			font-family: wadicons;
+			margin-right: 6px;
+		}
+
+		span {
+			display: inline-block;
+		}
+	}
+
+	.cta-container .core-block-cta {
+		span {
+			&:before {
+				content: "\E80C";
+				margin: 0 6px;
+				font-family: wadicons;
+				display: inline-block;
+			}
+		}
+	}
+}
+
+.ar #page-cart {
+	.messages-container {
+		&:before {
+			margin-left: 6px;
+			margin-right: 0;
+		}
+	}
+
+	.cta-container .core-block-cta {
+		span {
+			&:before {
+				content: "\E80B";
+			}
+		}
+	}
+}
+
+/* -------------------------------------> 1. PRODUCTS LISTING */
+cart-review-element {
+	ul.cart-products {
+		padding: 15px 10px;
+	}
+
+	li.cart-product {
+		padding: 12px 10px 11px;
+		font-size: 14px;
+		border: 1px solid $color-border;
+		position: relative;
+		background-color: $color-bg-primary;
+		overflow: hidden;
+
+		+ li {
+			margin-top: 15px;
+		}
+
+		.image-container, .details-container {
+			float: left;
+		}
+
+		// DELETE ITEM FROM CART
+		button.cart-product-remove {
+			position: absolute;
+			top: 0; right: 0;
+			font-size: 15px;
+			color: $color-body-light;
+			padding: 12px 10px;
+
+			span {
+				display: none;
+			}
+		}
+
+		// IMAGE CONTAINER
+		.image-container {
+			width: 23%;
+			position: relative;
+			box-sizing: border-box;
+			border: 1px solid $color-border;
+			margin-bottom: 10px;
+
+			img {
+				max-width: 100%;
+				display: block;
+				position: absolute;
+				top: 0; left: 0;
+			}
+
+			.discount-tag {
+				display: none;
+			}
+		}
+
+		// DETAILS CONTAINER
+		.details-container {
+			width: 77%;
+			padding-left: 15px;
+			box-sizing: border-box;
+		}
+
+		p.item-name {
+			font-size: 15px;
+			color: $color-body-dark;
+			padding-right: 20px;
+			margin-bottom: 3px;
+
+			span.subtitle {
+				color: $color-body;
+			    font-size: 14px;
+			    display: block;
+
+			    span + span {
+			    	margin-left: 4px;
+			    }
+			}
+		}
+
+		p.item-size {
+			color: $color-body-light;
+			@include clearfix;
+			margin-bottom: 5px;
+
+			span {
+				color: $color-body;
+				float: right;
+				width: 50%;
+			}
+		}
+
+		.quantity-container {
+			@include legacy-pie-clearfix;
+
+			label {
+				color: $color-body-light;
+				float: left;
+				width: 50%;
+			}
+		}
+
+		.custom-select-container {
+			float: left;
+			width: 50px;
+		}
+
+		p.cart-price {
+			margin: 15px 0 10px;
+			font-size: 13px;
+
+			.discount-tag {
+				position: static;
+				font-size: 12px;
+				margin-top: 2px;
+			}
+
+			.selling-price {
+				font-size: 16px;
+			}
+		}
+
+		// DELIVERY ESTIMATE AND GIFT
+		.support-info-container {
+			clear: both;
+			border-top: 1px solid $color-border;
+			padding-top: 5px;
+
+			> p {
+				margin-top: 5px;
+
+				&:before {
+					font-family: wadicons;
+					margin-right: 8px;
+				}
+
+				&.gift-wrap:before { content: "\E829"; }
+				&.delivery-estimate:before { content: "\E815"; }
+				&.product-warning:before { content: "\E827"; }
+			}
+		}
+	}
+
+	.cart-products.oos-items {
+		.title {
+			font-size: 14px;
+			padding: 3px 1px;
+		}
+		.cart-product {
+			background-color: #E7E7E8;
+			border: 1px solid #FFFFFF;
+
+			.image-container {
+				width: 10%;
+				margin-bottom: 0;
+
+				img {
+					position: relative;
+					width: 72%;
+				}
+			}
+		}
+	}
+
+	.link-button-container {
+		font-size: 16px;
+		padding: 10px;
+		color: #333;
+		border-bottom: 1px solid #E7E7E8;
+		text-align: center;
+		background-color: #fff;
+		display: flex;
+    	justify-content: flex-start;
+		font-size: 14px;
+		
+		span {
+			padding-left: 5px;
+		}
+	}
+
+	.link-button {
+		color: #0FB0AA;
+    	font-size: 14px;
+		text-decoration: underline;
+		padding-left: 12px;
+	}
+
+	.select-city-form {
+		padding: 10px 12px;
+		font-size: 16px;
+		color: #333;
+		border-bottom: 1px solid #E7E7E8;
+		text-align: center;
+		background-color: #fff;
+
+		.input-field {
+			display: flex;
+			justify-content: flex-start;
+		}
+
+		label {
+			width: 30%;
+   			align-self: center;
+		}
+
+		.input-container {
+			width: 100%;
+		}
+	}
+}
+
+.ar cart-review-element {
+	li.cart-product {
+		.image-container, .details-container {
+			float: right;
+		}
+
+		// DELETE ITEM FROM CART
+		button.cart-product-remove {
+			left: 0; right: auto;
+		}
+
+		// DETAILS CONTAINER
+		.details-container {
+			padding-right: 15px;
+			padding-left: 0;
+		}
+
+		p.item-name {
+			padding-left: 20px;
+			padding-right: 0;
+
+			span.subtitle {
+			    span + span {
+			    	margin-right: 4px;
+			    	margin-left: 0;
+			    }
+			}
+		}
+
+		p.item-size {
+			span {
+				float: left;
+			}
+		}
+
+		.quantity-container {
+			label {
+				float: right;
+			}
+		}
+
+		.custom-select-container {
+			float: right;
+		}
+
+		// DELIVERY ESTIMATE AND GIFT
+		.support-info-container {
+			> p {
+				&:before {
+					margin-left: 8px;
+					margin-right: 0;
+				}
+			}
+		}
+	}
+}
+
+/* -------------------------------------> 2. CHECKOUT INFO */
+#page-cart .checkout-info-wrapper {
+	text-align: center;
+	padding: 5px 10px 30px;
+
+	.checkout-info-container {
+		p {
+			font-size: 14px;
+			color: $color-body-light;
+			margin-right: 15px;
+			margin-bottom: 5px;
+		}
+
+		+ .checkout-info-container {
+			margin-top: 15px;
+		}
+	}
+}
+
+/* -------------------------------------> 3. CART OVERVIEW PANEL CORE */
+#page-cart .cart-overview-container {
+	position: fixed;
+	bottom: 0; left: 0; right: 0;
+	background-color: $color-bg-primary;
+	padding: 0 10px 10px;
+	z-index: 40;
+	border-top: 1px solid $color-border;
+	box-shadow: 0px -1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* -------------------------------------> 4. CART INVOICE */
+cart-review-element {
+	.cart-invoice-container {
+		border-bottom: 1px solid $color-border;
+		margin-bottom: 10px;
+		margin-left: -10px; margin-right: -10px;
+		padding: 12px 10px;
+		background-color: $color-bg-tertiary;
+
+		.cart-invoice-trigger {
+			display: block;
+			color: $color-body-dark;
+			font-size: 15px;
+			text-align: center;
+
+			&:after {
+				content: "\e812";
+				font-family: wadicons;
+				margin-left: 6px;
+				font-size: 14px;
+			}
+
+			&.opened:after {
+				content: "\e813";
+			}
+		}
+
+		ul.cart-invoice {
+			margin: 12px auto;
+			width: 260px;
+
+			> li {
+				@include clearfix;
+				font-size: 14px;
+				margin-top: 3px;
+
+				&.total {
+					color: $color-body-dark;
+					font-size: 16px;
+					font-weight: 700;
+					border-top: 1px solid $color-border;
+					margin-top: 6px;
+					padding-top: 6px;
+				}
+
+				&.free {
+					.value {
+						color: $color-primary;
+					}
+				}
+
+				&.discount {
+					.value {
+						color: $color-body-attention;
+					}
+				}
+
+				&.wallet {
+					.value {
+						color: $color-primary;
+					}
+				}
+			}
+
+			.heading {
+				float: left;
+			}
+
+			.value {
+				float: right;
+
+				&.free {
+					color: $color-primary;
+				}
+			}
+		}
+
+		// COUPON CODE
+		coupon-code-element {
+			margin: 0 -10px -12px;
+		}
+	}
+}
+
+.ar cart-review-element {
+	.cart-invoice-container {
+		.cart-invoice-trigger {
+			&:after {
+				margin-right: 6px;
+				margin-left: 0;
+			}
+		}
+
+		ul.cart-invoice {
+			.heading {
+				float: right;
+			}
+
+			.value {
+				float: left;
+			}
+		}
+	}
+}
+
+/* -------------------------------------> 5. CART EMPTY */
+.cart-empty-container {
+	text-align: center;
+	padding: 15px 10px;
+
+	p {
+		margin-bottom: 12px;
+		font-size: 16px;
+		color: $color-body-dark;
+	}
+}
+
+/* -------------------------------------> 6. CART LOADING */
+
+
+/* -------------------------------------> 7. FREE SHIPPING MONITOR */
+cart-review-element {
+	// SHIPPING FEE MONITOR
+	.shipping-fee-monitor {
+		font-size: 14px;
+		background-color: $color-bg-secondary;
+		padding: 9px 10px 12px;
+		border-bottom: 1px solid $color-border;
+		position: relative;
+
+		p {
+			&.free-delivery:before {
+				content: "\E815";
+				font-family: wadicons;
+				margin-right: 6px;
+				font-size: 16px;
+				position: relative; top: 1px;
+				color: $color-body-light;
+				line-height: 1;
+			}
+
+			span {
+				color: $color-primary;
+			}
+
+			strong {
+				color: $color-body-dark;
+				display: block;
+				font-size: 15px;
+			}
+		}
+
+		a.shop-more-link {
+			color: $color-body-dark;
+			display: inline-block;
+			position: absolute;
+			top: 8px; right: 10px;
+			text-decoration: underline;
+
+			&:after {
+				content: "\e80c";
+				font-family: wadicons;
+				margin-left: 4px;
+				font-size: 13px;
+				position: relative;
+				top: 1px;
+				text-decoration: none;
+				display: inline-block;
+			}
+		}
+
+		.progress-bar, .progress {
+			height: 7px;
+			border-radius: 10px;
+		}
+
+		.progress-bar {
+			background-color: $color-bg-support;
+			margin-top: 8px;
+		}
+
+		.progress {
+			background-color: $color-primary;
+			display: block;
+		}
+	}
+}
+
+.ar cart-review-element {
+	// SHIPPING FEE MONITOR
+	.shipping-fee-monitor {
+		p {
+			&.free-delivery:before {
+				margin-left: 6px; margin-right: 0;
+			}
+		}
+
+		a.shop-more-link {
+			left: 10px; right: auto;
+
+			&:after {
+				content: "\e80b";
+				margin-right: 4px; margin-left: 0;
+			}
+		}
+	}
+}
+
+.cvv {
+	width: 23% !important;
+	p.input-helper-message {
+		width: 300%;
+	}
+}  
+.ar .cvv {
+	width: 42% !important;
+	p.input-helper-message {
+		width: 300%;
+	}
+	.input-container {
+		width: 72px;
+		input {
+			width: 72px;
+		}
+	}
+}  

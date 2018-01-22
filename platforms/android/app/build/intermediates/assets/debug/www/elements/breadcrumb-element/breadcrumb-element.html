@@ -1,0 +1,84 @@
+<!--
+Site Breadcrumbs
+
+Example:
+    <breadcrumb-element></breadcrumb-element>
+@demo
+-->
+<dom-module id="breadcrumb-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+
+    <!-- ADD TO CART BUTTON -->
+    <template is="dom-if" if="[[ isRender ]]">
+      <nav>
+        <ul>
+          <li>
+            <a href="/">[[ _translate('Home') ]]</a>
+          </li>
+          <template is="dom-repeat" items="[[ list ]]" as="item" index-as="i">
+            <li>
+              <a href$="[[ _fixedUrl(item.key) ]]">[[ item.name ]]</a>
+            </li>
+          </template>
+        </ul>
+      </nav>
+    </template>
+
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'breadcrumb-element',
+
+    properties: {
+
+      /**
+       * Item information to Add to Cart / Buy Now
+       */
+      list: {
+        type: Array,
+        observer: "_listChanged"
+      },
+
+      /**
+       * Options supported by element
+       */
+      options: {
+        type: Object
+      },
+
+      ctx: {
+        type: Object
+      }
+    },
+
+    attached: function () {
+      this.isRender = true;
+    },
+
+    _listChanged: function (val) {
+      this.isRender = val && val.length > 0;
+    },
+
+    _fixedUrl: function (url) {
+      return url && url.indexOf('/') === 0 ? url : '/' + url;
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+  });
+
+</script>

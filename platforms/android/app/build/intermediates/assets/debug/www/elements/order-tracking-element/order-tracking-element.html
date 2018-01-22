@@ -1,0 +1,94 @@
+<!--
+usps-element
+
+Example:
+    <order-tracking-element></order-tracking-element>
+@demo
+-->
+
+<dom-module id="order-tracking-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+    <validation-email></validation-email>
+    <validation-form-fields></validation-form-fields>
+    <form is="iron-form" novalidate on-submit="_onSubmit">
+      <div class="input-container">
+        <input class$="validity-{{validOrderNo}}" is="iron-input" bind-value="{{ orderNo }}" on-input="_clearOrderNoValidation" type="text" placeholder="[[ _translate('_orderNumberFieldPlaceholder') ]]" />
+        <template is="dom-if" if="[[ orderNo.length ]]">
+          <a on-tap="_clearOrderNoField" class="field-clear"><i class="wadicon-cancel"></i></a>
+        </template>
+        <p class="input-helper-message" hidden$="[[validOrderNo]]"><i class="wadicon-alert"></i>[[ _translate('Please enter your order number') ]]</p>
+      </div>
+      <div class="input-container">
+        <input class$="validity-{{validEmail}}" is="iron-input" bind-value="{{ trackingEmail }}" on-input="_clearEmailValidation" type="email" placeholder="[[ _translate('Email') ]]" />
+        <template is="dom-if" if="[[ trackingEmail.length ]]">
+          <a on-tap="_clearEmailField" class="field-clear"><i class="wadicon-cancel"></i></a>
+        </template>
+        <p class="input-helper-message" hidden$="[[validEmail]]"><i class="wadicon-alert"></i>[[_translate('Please enter a valid email address')]]</p>
+      </div>
+     
+      <button class="core-block-cta cta-full-width" type="submit">[[_translate('Track My Order')]]<paper-ripple></paper-ripple></button>
+
+      <p class="input-helper-message" hidden><i class="wadicon-alert"></i>[[_translate('We are unable to find this order. Please check the order number/email and try again.')]]</p>
+    </form>
+   
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+    is: 'order-tracking-element',
+
+    properties: {
+    },
+
+    // Element Lifecycle
+    attached: function () {
+      this.validatorEmail = new Polymer.IronMeta({type: 'validator'}).byKey('validation-email');
+      this.validatorOrderNo = new Polymer.IronMeta({type: 'validator'}).byKey('validation-form-fields');
+      this.validEmail = true;
+      this.validOrderNo = true;
+    },
+
+    _onSubmit: function(event) {
+      this.validEmail = this.validatorEmail.validate(this.trackingEmail);
+      this.validOrderNo = this.validatorOrderNo.validate(this.orderNo);
+      if (!this.validEmail || !this.validOrderNo) {
+        event.preventDefault();
+      }
+      else {
+        this.fire('track-order', {"ref": this, "email": this.trackingEmail, "orderNo": this.orderNo});
+      }
+    },
+
+     _clearEmailValidation: function() {
+      this.validEmail = true;
+    },
+
+    _clearOrderNoValidation: function() {
+      this.validOrderNo = true;
+    },
+
+    _clearEmailField: function() {
+      this.set('trackingEmail', '');
+    },
+
+    _clearOrderNoField: function() {
+      this.set('orderNo', '');
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+  });
+
+</script>

@@ -1,0 +1,407 @@
+/* -------------------------------------> INDEX */
+/* 0.  SITE FOOTER */
+/* 1.  AR SITE FOOTER */
+/* 3.  NEWSLETTER SIGN UP */
+/* 4.  AR NEWSLETTER SIGN UP */
+
+/* -------------------------------------> 0. SITE FOOTER */
+footer-info-element {
+	background-color: $color-bg-primary;
+	
+	// MODULES
+	.footer-module {
+		text-align: center;
+		border-top: 1px solid $color-border;
+		padding: 17px 10px 20px;
+
+		&:first-child {
+			border-top: 0;
+		}
+
+		p.title {
+			color: $color-body-dark;
+			font-size: 18px;
+		}
+
+		p.additional-info {
+			font-size: 14px;
+			margin-bottom: 8px;
+		}
+	}
+
+	// LANG/COUNTRY
+	.language-switch {
+		font-family: $font-primary-ar;
+		color: $color-body-dark;
+		font-size: 15px;
+		vertical-align: middle;
+
+		&:after {
+			content: '/';
+			color: $color-body-light;
+			margin: 0 10px 0 8px;
+		}
+	}
+
+	.country-switcher {
+		width: 193px;
+		display: inline-block;
+		vertical-align: middle;
+		font-size: 15px;
+		border: 0;
+		box-shadow: none;
+
+		// FLAG
+		&:before {
+			content: '';
+			width: 20px; height: 20px;
+			position: absolute;
+			top: 50%; left: 0;
+			margin-top: -10px;
+			@include mx-sprite;
+			background-position: 0 -148px;
+		}
+
+		// DOWN ARROW
+		&:after {
+	        margin-top: -7px;
+	        font-size: 13px;
+	    }
+
+		select {
+			padding-left: 26px;
+		}
+
+		// SELECT WIDTHS & FLAGS
+		&.sa {
+			width: 137px;
+			&:before { background-position: -21px -148px; }
+		}
+	}
+
+	// DOWNLOAD APP LINKS
+	ul.app-links {
+		margin: 10px 0 5px;
+		font-size: 0;
+
+		li {
+			display: inline-block;
+
+			+ li {
+				margin-left: 15px;
+			}
+
+			a {
+				@include mx-image-replacement;
+				@include mx-sprite;
+				width: 116px; height: 35px;
+				display: block;
+
+				&.ios {
+					background-position: 0 -25px;
+				}
+
+				&.android {
+					background-position: 0 -107px;
+				}
+			}
+		}
+	}
+
+	// CONTACT/SOCIAL MEDIA LINKS
+	a.contact-number {
+		color: $color-primary;
+		font-size: 20px;
+		letter-spacing: 0.05em;
+
+		i {
+			vertical-align: middle;
+		    font-size: 16px;
+		    position: relative; top: -1px;
+		}
+	}
+
+	ul.social-media-links {
+		margin-top: 8px;
+
+		li {
+			display: inline-block;
+
+			+ li {
+				margin-left: 20px;
+			}
+
+			a {
+				color: $color-body-dark;
+				font-size: 20px;
+
+				i {
+					line-height: 1;
+				}
+			}
+		}
+	}
+
+	// PAYMENT METHODS
+	ul.payment-methods {
+		margin: 10px 0 5px;
+	}
+
+	// SUPPORT STUFF
+	ul.footer-support-links {
+		text-align: center;
+		margin-top: 10px;
+
+		li {
+			display: inline-block;
+
+			+ li:before {
+				content: "|";
+			    margin: 0 8px;
+			    position: relative;
+			    top: 1px;
+			    color: $color-border;
+			}
+
+		    a {
+			    font-size: 13px;
+		    }
+		}
+	}
+
+	p.copyright {
+		padding: 2px 10px 15px;
+	    text-align: center;
+	    font-size: 12px;
+	    color: $color-body-light;
+	}
+}
+
+// EXPANDABLE LINK AREAS
+footer-info-element small-nav-element {
+	> ul > li {
+		border-top: 1px solid $color-border;
+	}
+
+	.parent-link {
+		color: $color-body-dark;
+		font-size: 15px;
+		display: block;
+		@include clearfix;
+		padding: 12px 10px;
+
+		&:before {
+			content: "\e812";
+			font-family: wadicons;
+			float: right;
+		}
+
+		&.opened:before {
+			content: "\e813";
+		}
+	}
+
+	ul.level-02 {
+		padding: 0 10px 15px;
+		margin-top: -4px;
+
+		li {
+			+ li {
+				margin-top: 8px;
+			}
+
+			a {
+				font-size: 14px;
+			}
+		}
+	}
+}
+
+/* -------------------------------------> 1. AR SITE FOOTER */
+.ar footer-info-element {
+	// LANG/COUNTRY
+	.language-switch {
+		font-family: $font-primary-en;
+
+		&:after {
+			content: '\\';
+			margin: 0 8px 0 10px;
+		}
+	}
+
+	.country-switcher {
+		width: 208px;
+
+		&:before {
+			right: 0; left: auto;
+		}
+
+		select {
+			padding-right: 26px;
+			padding-left: 8px
+		}
+
+		// SELECT WIDTHS & FLAGS
+		&.sa {
+			width: 222px;
+		}
+	}
+
+	// DOWNLOAD APP LINKS
+	ul.app-links {
+		li {
+			+ li {
+				margin-left: 0; margin-right: 15px;
+			}
+
+			a {
+				&.ios {
+					background-position: 0 -66px;
+				}
+
+				&.android {
+					background-position: 0 -200px;
+				}
+			}
+		}
+	}
+
+	// CONTACT/SOCIAL MEDIA LINKS
+	a.contact-number {
+		font-family: $font-primary-en;
+	}
+
+	ul.social-media-links {
+		li {
+			+ li {
+				margin-right: 20px; margin-left: 0;
+			}
+		}
+	}
+}
+
+// EXPANDABLE LINK AREAS
+.ar footer-info-element small-nav-element {
+	.parent-link {
+		&:before {
+			float: left;
+		}
+	}
+}
+
+/* -------------------------------------> 2. NEWSLETTER SIGN UP */
+newsletter-signup-element {
+
+	.root {
+		background-color: $color-primary;
+		color: $color-body-alt;
+		text-align: center;
+		padding: 20px 10px 25px;
+		position: relative;
+		overflow: hidden;
+
+		&:before,
+		.success-container:before {
+			content: "\E811";
+			font-family: wadicons;
+			position: absolute;
+			top: -120px; left: -100px;
+			font-size: 300px; line-height: 1;
+			opacity: 0.1;
+		}
+	}
+
+	.heading {
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.subheading {
+		font-size: 14px;
+		margin-bottom: 12px;
+	}
+
+	form {
+		font-size: 0;
+		width: 90%;
+		margin: 0 auto;
+
+		.input-container {
+			margin-bottom: 12px;
+
+			input {
+				border: 0;
+				padding: 0 28px 0 8px;
+
+				&:focus {
+			        box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+			    }
+			}
+
+			p.input-helper-message {
+				color: $color-body-alt;
+			}
+		}
+
+		.cta-container {
+			width: 100%;
+			display: inline-block;
+			@include box-sizing(border-box);
+
+			+ .cta-container {
+				padding-left: 5px;
+				padding-right: 0;
+			}
+
+			button {
+				padding-left: 0;
+				padding-right: 0;
+			}
+		}
+	}
+
+	// SUCCESS MESSAGE
+	.success-container {
+		position: absolute;
+		top: 0; left: 0; bottom: 0; right: 0;
+		background-color: $color-primary;
+	    @include flexbox((
+		    display: flex,
+		    flex-direction: column,
+		    justify-content: center
+		));
+	    padding: 0 10px;
+	    z-index: 20;
+	}
+}
+
+/* -------------------------------------> 3. AR NEWSLETTER SIGN UP */
+.ar newsletter-signup-element {
+	.heading {
+		letter-spacing: 0;
+	}
+
+	&:before,
+	.success-container:before {
+		left: auto; right: -100px;
+	}
+
+	form {
+		.input-container {
+			input {
+				padding: 0 8px 0 28px;
+			}
+		}
+
+		.cta-container {
+			padding-left: 5px;
+			padding-right: 0;
+
+			+ .cta-container {
+				padding-right: 5px;
+				padding-left: 0;
+			}
+		}
+	}
+}
+

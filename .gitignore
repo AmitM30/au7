@@ -1,9 +1,14 @@
 .DS_Store
 #www/dist
 
+export/
+
 # Node
 node_modules
 npm-debug.log
+
+# Bower
+bower_components
 
 ### Cordova ###
 # https://gist.github.com/rjmunro/5831320
@@ -23,3 +28,5 @@ platforms/ios/.staging
 
 # Emulator logs
 platforms/ios/cordova/console.log
+
+.sass-cache/

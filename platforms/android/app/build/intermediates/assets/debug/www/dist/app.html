@@ -1,0 +1,72 @@
+
+<template>
+  <div id="wrapper" dir="${config.direction}" class="${config.locale.lang} ${common.bodyClass}">
+
+    <notifications-element message.two-way="notifier.message"></notifications-element>
+    <div class="loading-screen" if.bind="common.appLoading"><i class="wadicon-spinner wadicon-spin"></i></div>
+    <paper-drawer-panel ref="navigation" force-narrow drawer-focus-selector="" disable-swipe drawer-width="80%">
+
+      <div drawer>
+        <ul class="level-01 home-link">
+          <li><a href="/"><i class="wadicon-house"></i> ${ 'Home' }</a></li>
+        </ul>
+        <signup-element user.two-way="user.info" options='{ "title": "My Account" }'
+          logout.trigger="user.logout()"
+          login.trigger="loginUser($event)"
+          guest-login.trigger="guestLogin($event)"
+          password-reset-request.trigger="passwordResetRequest($event)"
+          password-reset.trigger="setPassword($event)"
+          otp-verify.trigger="otpVerify($event)"
+          otp-request.trigger="otpRequest($event)"
+          phone-config.one-way="config.countries[config.locale.country].phone"
+          primary-phone.two-way="user.primaryPhone"
+          customer-exist.trigger="checkUserExistence($event)"
+          social-login.trigger="socialLogin($event)"
+          skip-phone-verification.trigger="skipPhoneVerification($event)"
+          ctx.bind="common.ctx">
+        </signup-element>
+        <ul class="level-01 home-link" if.bind="user.info.isLoggedIn">
+          <li><a href="//${ config.myAccount }/wallet" target="_blank"><i class="wadicon-tablets-accessories"></i> ${ 'My Wallet' }</a></li>
+        </ul>
+
+        <small-nav-element nav.bind="nav" options='{ "mainNav": true }' ctx.bind="common.ctx"></small-nav-element>
+      </div>
+
+      <div main>
+        <header id="site-header">
+          <div class="primary-row">
+            <i paper-drawer-toggle class="main-nav-trigger" if.bind="common.state !== 'checkout'"><span></span><span></span><span></span></i>
+            <div itemtype="http://schema.org/Organization" itemscope="itemscope">
+              <a href="/" class="site-logo ${ config.locale.lang }" itemprop="url" alt="Wadi" rel="Home"><img src.bind="'z.wadicdn.com/dist/images/logo-' + config.locale.lang + '.png?app=v2'" alt="Wadi" /></a>
+              <!-- <a href="/" class="site-logo" itemprop="url" if.bind="config.locale.lang === 'ar'" alt="Wadi" rel="Home"><img src.bind="'z.wadicdn.com/dist/images/logo-ar.png'" width="80" height="31" /></a> -->
+            </div>
+            <a href="/cart" id="cart" if.bind="common.state !== 'checkout'">
+              <i class="wadicon-cart"></i>
+              <span class="badge ${cartCounterClass}" if.bind="common.cartCount > 0">${ common.cartCount }</span>
+            </a>
+          </div>
+          <search-element
+            ctx.bind='common.ctx'
+            direct-search.trigger='directSearch($event)'
+            search-suggest.trigger='search($event)'
+            suggest.bind='suggest'
+            options='{ "cdnURL": "${ config.CDNUrl }" }'
+            if.bind="common.state !== 'checkout'"
+            search-term.bind="plpModel.search.q"
+          ></search-element>
+        </header>
+        <div id="page-container">
+          <router-view></router-view>
+          <compose view-model="../shared/source/modules/super-view" model.one-way="tsaheyluModel.model" view.one-way="tsaheyluModel.view" containerless ></compose>
+        </div>
+        <app-download-element ctx.bind='common.ctx' if.bind="common.state !== 'checkout' && common.pageType !== 'detail' && common.pageType !== 'cart'"></app-download-element>
+        <!-- <div class="fixed-container" if.bind="common.state !== 'checkout' && common.pageType !== 'detail' && common.pageType !== 'cart'">
+          <a href="/shopathon" title="Shopathon">
+            <img src="//${ config.CDNUrl }/cms/phoenix/shopathon17/shopathon_17_${ config.locale.lang }-${ config.locale.country }.png" alt="Shopathon" />
+          </a>
+        </div> -->
+      </div>
+
+    </paper-drawer-panel>
+  </div>
+</template>

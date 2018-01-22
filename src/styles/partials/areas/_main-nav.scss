@@ -1,0 +1,320 @@
+/* -------------------------------------> INDEX */
+/* 0.  CORE */
+/* 1.  LOGIN ELEMENT */
+/* 2.  LINKS */
+
+/* -------------------------------------> 0. CORE */
+#drawer {
+	overflow-y: auto;
+	font-size: 15px;
+	color: $color-body-dark;
+}
+
+/* -------------------------------------> 1. LOGIN ELEMENT */
+#drawer {
+	signup-element {
+		border-top: 1px solid $color-border;
+
+		// TRIGGER/EXISTING USER
+		a.user-identifier,
+		.trigger {
+			padding: 12px 36px;
+			@include clearfix;
+			position: relative;
+			@include mx-text-ellipsis;
+
+			> i {
+				position: absolute;
+				top: 50%; left: 10px;
+				margin-top: -10px;
+			}
+
+			&:after {
+				font-family: wadicons;
+				position: absolute;
+				top: 50%;
+				right: 10px;
+				margin-top: -10px;
+			}
+		}
+		
+		a.user-identifier {
+			display: block;
+			background-color: $color-bg-tertiary;
+
+			&:after { content: "\e80c"; }
+		}
+
+		.trigger {
+			&:after { content: "\e812"; margin-top: -11px; }
+			&.opened { &:after { content: "\e813"; } }
+		}
+
+		// GREY CONTAINERS
+		.signup-scenario {
+			font-size: 13px;
+			padding: 10px 10px 15px;
+			background-color: $color-bg-support-light;
+			border-top: 1px solid $color-border;
+		}
+
+		// SOCIAL LOGIN
+		.social-option-wrapper {
+			border-bottom: 1px solid $color-border;
+			padding-bottom: 20px;
+			margin-bottom: 15px;
+		}
+
+		.social-signin-button {
+			font-size: 13px;
+		}
+
+		// GENERAL MESSAGING
+		.highlight-memo {
+			@include mx-background-transparency($color-primary, 0.1);
+			padding: 8px 10px 9px;
+			margin-bottom: 15px;
+			border-radius: 4px;
+
+			strong {
+			  color: $color-body-dark;
+			}
+		}
+
+		.step-overview {
+			position: relative;
+			padding-right: 66px;
+			margin-bottom: 8px;
+
+			p {
+			  @include mx-text-ellipsis;
+			  color: $color-body;
+			}
+
+			.value {
+			  color: $color-body-dark;
+			}
+
+			button {
+			  color: $color-primary;
+			  position: absolute;
+			  top: 0; right: 0;
+			}
+		}
+
+		p.title {
+			color: $color-body-dark;
+			margin-bottom: 10px;
+		}
+
+		// FORM SPACING
+		.input-container {
+			margin-bottom: 10px;
+
+			input {
+			  padding: 0 28px 0 8px;
+			}
+		}
+	}
+}
+
+.ar #drawer {
+	signup-element {
+		// TRIGGER/EXISTING USER
+		a.user-identifier,
+		.trigger {
+			> i {
+				right: 10px; left: auto;
+			}
+
+			&:after {
+				left: 10px; right: auto;
+			}
+		}
+
+		a.user-identifier {
+			&:after { content: "\E80B"; }
+		}
+
+		.step-overview {
+			padding-left: 66px; padding-right: 0;
+
+			button {
+			  left: 0; right: auto;
+			}
+		}
+
+		// FORM SPACING
+		.input-container {
+			input {
+			  padding: 0 8px 0 28px;
+			}
+		}
+	}
+}
+
+/* -------------------------------------> 2. LINKS */
+#drawer {
+	// SHARED
+	li a, li span {
+		display: block;
+		text-transform: capitalize;
+		padding: 12px 10px 12px 36px;
+    position: relative;
+    i {
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      margin-top: -10px;
+    }
+	}
+
+	// WITH CATEGORY ICON
+	ul.level-01 > li > a,
+	ul.level-02 > li > span.parent-link {
+		position: relative;
+		padding-left: 36px;
+
+		> i {
+			position: absolute;
+			top: 50%; left: 10px;
+			margin-top: -10px;
+		}
+
+		&.highlight {
+			color: $color-primary;
+		}
+	}
+
+	// CATEGORY HEADER
+	span.category {
+		text-transform: uppercase;
+		font-size: 14px;
+		padding: 14px 10px 2px;	
+		letter-spacing: 0.02em;
+		color: $color-body !important;
+	}
+
+	.parent-link {
+		@include clearfix;
+		background-color: $color-bg-primary;
+
+		&:after {
+			content: "\e812";
+			font-family: wadicons;
+			float: right;
+		}
+
+		&:before {
+			content: "";
+		}
+
+		&.opened {
+			&:after {
+				content: "\e813";
+			}
+		}
+	}
+
+	// LEVEL 01
+	ul.level-01 {
+		> li {
+			border-top: 1px solid $color-border;
+		}
+	}
+
+	ul.level-02 {
+		> li {
+			// border-top: 1px solid $color-border;
+
+			&:first-child {
+				border-top: 0;
+			}
+		}
+	}
+
+	ul.level-03 {
+		background-color: $color-bg-tertiary;
+		> li {
+			border-top: 1px solid $color-border;
+
+			> span, > a {
+				padding-left: 36px;
+			}
+		}
+	}
+
+	ul.level-04 {
+		background-color: $color-bg-tertiary;
+		border-top: 1px solid $color-border;
+
+		> li {
+			margin-left: 26px;
+
+			+ li {
+				border-top: 1px solid $color-border;
+			}
+		}
+	}	
+}
+
+.ar #drawer {
+  li a {
+    padding-right: 36px;
+    padding-left: 10px;
+    i {
+      right: 10px;
+      left: auto;
+    }
+  }
+	// WITH CATEGORY ICON
+	ul.level-01 > li > a,
+	ul.level-02 > li > span.parent-link {
+		padding-right: 36px;
+		padding-left: 10px;
+
+		> i {
+			right: 10px; left: auto;
+		}
+	}
+
+	// CATEGORY HEADER
+	span.category {	
+		letter-spacing: 0;
+	}
+
+	.parent-link {
+		&:after {
+			float: left;
+		}
+	}
+
+	ul.level-03 {
+		> li {
+			> span, > a {
+				padding-right: 36px;
+				padding-left: 10px;
+			}
+		}
+	}
+
+	ul.level-04 {
+		> li {
+			margin-right: 26px;
+			margin-left: 0;
+		}
+	}	
+}
+span.category.nolink {
+	a {
+		padding-left: 7px !important;
+		font-size: 18px;
+		color: #333;
+	}
+}
+.ar span.category.nolink {
+	a {
+		padding-left: 0 !important;
+		padding-right: 7px !important;
+	}
+}

@@ -1,0 +1,108 @@
+<!--
+An element that provides the user the option to sign up to the newsletter
+
+Example:
+    <newsletter-signup-element></newsletter-signup-element>
+@demo
+-->
+<dom-module id="newsletter-signup-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+    <div class="root">
+      <div class="newsletter-signup-text">
+        <p class="heading">[[_translate('Sign up')]] &amp; [[_translate('get a')]] <strong>150 [[ctx.currency]]</strong> [[_translate('voucher')]]</p>
+        <p class="subheading">[[_translate('_NewsletterSignUpSubtitle')]]</p>
+      </div>
+      <validation-email></validation-email>
+      <form id="signupForm" is="iron-form" method="GET" novalidate on-submit="_onSubmit">
+        <div class="input-container">
+          <input required type="email" on-input="_clearValidation" is="iron-input" bind-value="{{ newsletter.email }}" placeholder="[[ _translate('Enter your email here') ]]">
+          <template is="dom-if" if="{{ newsletter.email.length }}">
+            <a on-tap="_clearField" class="field-clear"><i class="wadicon-cancel"></i></a>
+          </template>
+          <p class="input-helper-message" hidden$="[[validEmail]]"><i class="wadicon-alert"></i>[[_translate('Please enter a valid email address')]]</p>
+          <p class="input-helper-message" hidden$="[[!alreadySubscribed]]"><i class="wadicon-alert"></i>[[_translate('This email has already been subscribed')]]</p>
+          <p class="input-helper-message" hidden$="[[!subscriptionUnsuccessful]]"><i class="wadicon-alert"></i>[[_translate('Something went wrong. Please try again.')]]</p>
+        </div>
+        <div class="cta-container">
+          <button class="core-block-cta core-block-cta-outlined-secondary cta-full-width" type="submit" on-tap="_setGender" data-value="female">[[ _translate('SIGN ME UP') ]]<paper-ripple></paper-ripple></button>
+        </div>
+        <!--<div class="cta-container">
+          <button class="core-block-cta core-block-cta-outlined-secondary cta-full-width" type="submit" on-tap="_setGender" data-value="male">[[ _translate('For Men') ]]<paper-ripple></paper-ripple></button>
+        </div>-->
+        <!-- TODO - MAIL CHECK  -->
+        <!-- <div><p class="suggestion">Did you mean<a>....</a>?</p></div> -->
+      </form>
+
+      <div class="success-container" hidden$="[[!subscriptionSuccessful]]">
+        <p class="heading">[[_translate('Sign Up Successful!')]]</p>
+        <p class="subheading">[[_translate('_NewsletterSuccessMessage')]]</p>
+      </div>
+    </div>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'newsletter-signup-element',
+
+    properties: {
+      newsletter: {
+        type: Object,
+        value: function() {
+          return { email: '', gender: 'female' };
+        }
+      },
+    },
+
+    attached: function () {
+      this.validator = new Polymer.IronMeta({type: 'validator'}).byKey('validation-email');
+      this.validEmail = true;
+      this.alreadySubscribed = false;
+      this.subscriptionSuccessful = false;
+      this.subscriptionUnsuccessful = false;
+
+      this.querySelector('#signupForm').addEventListener('iron-form-presubmit', function (event) { event.preventDefault(); });
+    },
+
+    _clearValidation: function() {
+      this.validEmail = true;
+      this.alreadySubscribed = false;
+      this.subscriptionUnsuccessful = false;
+    },
+
+    _onSubmit: function(event) {
+      this.validEmail = this.validator.validate(this.newsletter.email);
+      if (!this.validEmail) {
+        event.preventDefault();
+      }
+      else {
+        this.fire('submit-form', {"ref": this});
+      }
+    },
+
+    _clearField: function() {
+      this.set('newsletter.email', '');
+    },
+
+    _setGender: function(e) {
+      this.newsletter.gender = e.target.getAttribute('data-value');
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+
+  });
+
+</script>

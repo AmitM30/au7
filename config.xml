@@ -24,6 +24,10 @@
     </platform>
     <preference name="iosExtraFilesystems" value="library,library-nosync,documents,documents-nosync,cache,bundle,root" />
     <preference name="AndroidExtraFilesystems" value="files,files-external,documents,sdcard,cache,cache-external,assets,root" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#0FB0AA" />
+    <preference name="StatusBarStyle" value="blacktranslucent" />
+    <plugin name="cordova-plugin-statusbar" spec="^2.4.1" />
     <engine name="browser" spec="^5.0.3" />
     <engine name="ios" spec="~4.5.4" />
 </widget>

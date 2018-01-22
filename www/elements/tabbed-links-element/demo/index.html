@@ -1,0 +1,159 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>tabbed-links-element Demo</title>
+    <script src="//idangero.us/swiper/dist/js/swiper.min.js"></script>
+    <script src="/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="stylesheet" href="//idangero.us/swiper/dist/css/swiper.css">
+    <link rel="import" href="/bower_components/polymer/polymer.html">
+    <link rel="import" href="../tabbed-links-element.html">
+    <style>
+      .swiper-indexer li { list-style:none; margin:0;}
+      .swiper-indexer li a { display: block; padding:5px; background: #ddd; margin-right:1px; }
+      .swiper-indexer li { list-style:none; margin:0; float: left}
+      .swiper-indexer li a { display: block; padding:5px; background: #ddd; margin-right:1px; }
+      .clearfix:after{
+        content: " ";
+        visibility: hidden;
+        display: block;
+        height: 0;
+        clear: both;
+      }
+    </style>
+  </head>
+  <body>
+    <tabbed-links-element
+      banners='{
+        "assets": [{
+          "imageUrl": "https://d.wadicdn.com/cms/phoenix/offers/offers_1.png",
+          "activeImageUrl": "https://d.wadicdn.com/cms/phoenix/offers/offers_2.png",
+          "title": "Offers 1",
+          "links": [
+            {
+              "redirectUrl": "/electronics/",
+              "title": "Electronics 1"
+            },
+            {
+              "redirectUrl": "/pricePointDeals/",
+              "title": "Mobile Phones 1"
+            }
+          ]
+        },
+        {
+          "imageUrl": "https://d.wadicdn.com/cms/phoenix/offers/offers_1.png",
+          "activeImageUrl": "https://d.wadicdn.com/cms/phoenix/offers/offers_2.png",
+          "title": "Offers 2",
+          "links": [
+            {
+              "redirectUrl": "/electronics/",
+              "title": "Electronics 2"
+            },
+            {
+              "redirectUrl": "/pricePointDeals/",
+              "title": "Mobile Phones 2"
+            }
+          ]
+        },
+        {
+          "imageUrl": "https://d.wadicdn.com/cms/phoenix/offers/offers_3.png",
+          "activeImageUrl": "https://d.wadicdn.com/cms/phoenix/offers/offers_2.png",
+          "title": "Offers 3",
+          "links": [
+            {
+              "redirectUrl": "/electronics/",
+              "title": "Electronics 3"
+            },
+            {
+              "redirectUrl": "/pricePointDeals/",
+              "title": "Mobile Phones 3"
+            }
+          ]
+        },
+        {
+          "imageUrl": "https://d.wadicdn.com/cms/phoenix/offers/offers_1.png",
+          "activeImageUrl": "https://d.wadicdn.com/cms/phoenix/offers/offers_2.png",
+          "title": "Offers 4",
+          "links": [
+            {
+              "redirectUrl": "/electronics/",
+              "title": "Electronics 4"
+            },
+            {
+              "redirectUrl": "/pricePointDeals/",
+              "title": "Mobile Phones 4"
+            }
+          ]
+        },
+        {
+          "imageUrl": "https://d.wadicdn.com/cms/phoenix/offers/offers_1.png",
+          "activeImageUrl": "https://d.wadicdn.com/cms/phoenix/offers/offers_2.png",
+          "title": "Offers 5",
+          "links": [
+            {
+              "redirectUrl": "/electronics/",
+              "title": "Electronics 5"
+            },
+            {
+              "redirectUrl": "/pricePointDeals/",
+              "title": "Mobile Phones 5"
+            }
+          ]
+        },
+        {
+          "imageUrl": "https://d.wadicdn.com/cms/phoenix/offers/offers_3.png",
+          "activeImageUrl": "https://d.wadicdn.com/cms/phoenix/offers/offers_2.png",
+          "title": "Offers 6",
+          "links": [
+            {
+              "redirectUrl": "/electronics/",
+              "title": "Electronics 6"
+            },
+            {
+              "redirectUrl": "/pricePointDeals/",
+              "title": "Mobile Phones 6"
+            }
+          ]
+        },
+        {
+          "imageUrl": "https://d.wadicdn.com/cms/phoenix/offers/offers_3.png",
+          "activeImageUrl": "https://d.wadicdn.com/cms/phoenix/offers/offers_2.png",
+          "title": "Offers 7",
+          "links": [
+            {
+              "redirectUrl": "/electronics/",
+              "title": "Electronics 7"
+            },
+            {
+              "redirectUrl": "/pricePointDeals/",
+              "title": "Mobile Phones 7"
+            }
+          ]
+        }]
+      }'
+      options='{
+        "hidePrevNext": false,
+        "paginationHide": false,
+        "title": "Banner Title",
+        "sliderOptions": {
+          "slidesPerView": 3,
+          "centeredSlides": true,
+          "loop": true,
+          "paginationClickable": true
+        }
+      }'
+      ctx='{ "country": "sa", "lang": "en" }'
+    >
+    </tabbed-links-element>
+  </body>
+</html>

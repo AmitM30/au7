@@ -1,0 +1,29 @@
+{
+  "name": "tabbed-links-element",
+  "version": "1.0.0",
+  "authors": [
+    "Dinesh Kumar <dinesh.kumar@wadi.com>"
+  ],
+  "description": "Widget with tabbing title and products listing option",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "banner"
+  ],
+  "main": "tabbed-links-element.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "/demo/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  }
+}

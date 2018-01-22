@@ -9,6 +9,10 @@
         <param name="onload" value="true" />
     </feature>
     <allow-navigation href="cdvfile:*" />
+    <feature name="StatusBar">
+        <param name="android-package" value="org.apache.cordova.statusbar.StatusBar" />
+        <param name="onload" value="true" />
+    </feature>
     <name>Au7</name>
     <description>Lightweight Mobile App Development Platform</description>
     <author email="mangalamitash@gmail.com" href="http://doodle.studio">Amit Mangal</author>
@@ -26,4 +30,7 @@
     <preference name="loglevel" value="DEBUG" />
     <preference name="iosExtraFilesystems" value="library,library-nosync,documents,documents-nosync,cache,bundle,root" />
     <preference name="AndroidExtraFilesystems" value="files,files-external,documents,sdcard,cache,cache-external,assets,root" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#0FB0AA" />
+    <preference name="StatusBarStyle" value="blacktranslucent" />
 </widget>

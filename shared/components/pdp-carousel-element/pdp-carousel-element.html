@@ -43,7 +43,7 @@ Example:
               <div class="image-wrapper">
                 <div class="image-container">
                   <img
-                    lazy-src$="[[ banner.zoomUrl ]]"
+                    lazy-src$="https://[[ banner.zoomUrl ]]"
                     index$="[[ i ]]"
                     id="zoomTrigger"
                     on-mousemove="_onMouseMoveZoom"
@@ -52,7 +52,7 @@ Example:
                     hidden$="[[isMobile]]"
                   />
                   <img
-                    lazy-src$="[[ banner.imageUrl ]]"
+                    lazy-src$="https://[[ banner.imageUrl ]]"
                     index$="[[ i ]]"
                     id="zoomTrigger"
                     on-tap="_showZoom"
@@ -111,7 +111,7 @@ Example:
           <template is="dom-repeat" items="[[ banners.assets ]]" as="banner" index-as="i">
             <div class="swiper-slide js_slide">
               <div class="thumbnail-container">
-                <img src$="[[ banner.imageUrl ]]" on-tap="_moveToSlide" index$="[[i]]">
+                <img src$="https://[[ banner.imageUrl ]]" on-tap="_moveToSlide" index$="[[i]]">
               </div>
             </div>
           </template>

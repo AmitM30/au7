@@ -1,0 +1,330 @@
+/* -------------------------------------> INDEX */
+/* 0.  SITE HEADER */
+/* 1.  AR SITE HEADER */
+/* 2.  SITE SEARCH */
+/* 3.  AR SITE SEARCH */
+
+/* -------------------------------------> 0. SITE HEADER */
+#site-header {
+	border-bottom: 1px solid $color-border;
+
+	.primary-row {
+		// text-align: center;
+		margin-top: -5px;
+		font-size: 0;
+		padding: 14px 0 15px;
+		position: relative;
+		background-color: $color-bg-primary;
+		z-index: 70;
+
+		a.site-logo {
+			display: inline-block;
+			margin-left: 42px;
+
+			img {
+				display: block;
+			}
+
+			&.en {
+				img {
+					width: 90px;
+					height: 24px;
+				}
+			}
+
+			&.ar {
+				img {
+					width: 80px;
+					height: 31px;
+				}
+			}
+		}
+	}
+
+	// MAIN NAV LINK
+	.main-nav-trigger {
+		width: 22px;
+		padding: 10px;
+		position: absolute;
+		top: 10px; left: 0;
+
+		span {
+			height: 1px;
+			background-color: $color-body-dark;
+			display: block;
+
+			+ span {
+				margin-top: 7px;
+			}
+		}
+	}
+
+	// CART LINK
+	#cart {
+		color: $color-body-dark;
+		padding: 19px 10px 8px;
+		position: absolute;
+		top: 0; right: 0;
+
+		i {
+			font-size: 24px;
+			display: block;
+			line-height: 1;
+		}
+
+		.badge {
+			position: absolute;
+			top: 11px; right: 2px;
+			border-radius: 50%;
+			background-color: $color-body-attention;
+			width: 18px; height: 18px;
+			line-height: 18px;
+			text-align: center;
+			color: $color-body-alt;
+			font-size: 10px;
+			@include transition(all ease-in-out 0.4s);
+
+			&.expand {
+				@include transform(scale(1.3, 1.3));
+			}
+		}
+	}
+
+	// SEARCH ICON
+	.search-icon {
+		color: $color-body-dark;
+		padding: 19px 10px 8px;
+		position: absolute;
+		top: 0; right: 30px;
+
+		i {
+			font-size: 24px;
+			display: block;
+			line-height: 1;
+
+			&:before {
+				content: "\e814";
+			}
+		}
+	}
+}
+
+/* -------------------------------------> 1. AR SITE HEADER */
+.ar #site-header {
+	.primary-row {
+		padding: 15px 0 10px;
+	}
+
+	// MAIN NAV LINK
+	.main-nav-trigger {
+		right: 0; left: auto;
+	}
+
+	// CART LINK
+	#cart {
+		left: 0; right: auto;
+
+		 i {
+		 	@include transform(scale(-1, 1));
+		 }
+
+		.badge {
+			left: 2px; right: auto;
+			font-family: $font-primary-en;
+		}
+	}
+}
+
+/* -------------------------------------> 2. SITE SEARCH */
+$site-search-height: 36px;
+
+search-element,
+.search-element-class {
+	position: relative;
+	font-size: 14px;
+	top: -1px;
+
+	.input-container {
+		padding: 0 10px 15px;
+		z-index: 71;
+		background-color: $color-bg-primary;
+
+		// SEARCH/CANCEL/LOADING ICON
+		&:after,
+		.loader-container,
+		a.field-clear {
+			position: absolute;
+			top: 1px; right: 11px;
+			line-height: $site-search-height - 2px;
+			padding: 0 8px;
+			color: $color-body-light;
+			font-size: 16px;
+		}
+
+		&:after {
+			content: "\e814";
+			font-family: wadicons;
+			font-size: 15px;
+		}
+
+		.loader-container,
+		a.field-clear {
+			background-color: $color-bg-secondary;
+		}
+
+		.loader-container {
+			z-index: 20;
+		}
+	}
+
+	input[type="text"] {
+		padding-right: 30px;
+		height: $site-search-height;
+		line-height: $site-search-height;
+		font-size: 16px;
+		border-color: $color-primary;
+		background-color: $color-bg-secondary;
+	}
+
+	.search-cover {
+		// position: fixed;
+		top: 0; right: 0; bottom: 0; left: 0;
+		z-index: 60;
+		background-color: rgba(0, 0, 0, 0.6);
+	}
+
+	.search-suggestions-container {
+		// position: absolute;
+		left: 0; right: 0;
+		z-index: 69;
+		background-color: $color-bg-primary;
+		border-top: 1px solid $color-border;
+		border-bottom: 1px solid $color-border;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+		li {
+			a {
+				display: block;
+				padding: 12px 10px;
+
+				&.direct-search-link {
+					position: relative;
+					padding-right: 34px;
+
+					&:after {
+						position: absolute;
+						top: 50%; right: 10px;
+						margin-top: -10px;
+						content: "\e814";
+						font-family: wadicons;
+						color: $color-primary;
+					}
+				}
+			}
+
+			&.product-suggestion,
+			&.category-suggestion {
+				border-top: 1px solid $color-border;
+
+				a {
+					position: relative;
+				}
+			}
+
+			.term {
+				color: $color-primary;
+			}
+
+			.category {
+				color: $color-body-dark;
+			}	
+		}
+
+		li.product-suggestion {
+			> a {
+				@include clearfix;
+
+				.image-container,
+				.details-container {
+					float: left;
+					width: 10%;
+				}
+
+				img {
+					max-width: 100%;
+					display: block;
+				}
+
+				.details-container {
+					width: 80%;
+					padding-left: 15px;
+					box-sizing: border-box;
+
+					p.name {
+						color: $color-body-dark;
+						margin-bottom: 5px;
+					}
+
+					p.search-suggest-price {
+						font-size: 12px;
+
+						.selling-price {
+							font-size: 15px;
+						}
+
+						.discount {
+							display: block;
+							font-size: 13px;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+/* -------------------------------------> 3. AR SITE SEARCH */
+.ar search-element {
+	.input-container {
+		// SEARCH/CANCEL/LOADING ICON
+		&:after,
+		.loader-container,
+		a.field-clear {
+			left: 11px; right: auto;
+		}
+	}
+
+	input {
+		padding-left: 30px;
+		padding-right: 8px;
+	}
+
+	.search-suggestions-container {
+		li {
+			a {
+				&.direct-search-link {
+					padding-left: 34px;
+					padding-right: 10px;
+
+					&:after {
+						left: 10px; right: auto;
+					}
+				}
+			}
+		}
+
+		li.product-suggestion {
+			> a {
+				.image-container,
+				.details-container {
+					float: right;
+				}
+
+				.details-container {
+					padding-right: 15px;
+					padding-left: 0;
+				}
+			}
+		}
+	}
+}

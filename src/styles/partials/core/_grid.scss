@@ -1,0 +1,71 @@
+/* -------------------------------------> INDEX */
+/* 0.  PERCENTAGE GRID */
+
+/* -------------------------------------> 0. PERCENTAGE GRID */
+.grid-row {
+	@include legacy-pie-clearfix;
+
+	.grid-column {
+		float: left;
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	.column-percent-100 {
+		width: 100%;
+	}
+
+	.column-percent-75 {
+		width: 75%;
+	}
+
+	.column-percent-66 {
+		width: 66%;
+	}
+
+	.column-percent-50 {
+		width: 50%;
+	}
+
+	.column-percent-33 {
+		width: 33.333%;
+	}
+
+	.column-percent-25 {
+		width: 25%;
+	}
+}
+
+.ar .grid-row {
+	.grid-column {
+		float: right;
+	}
+}
+
+/*****************
+	FLEX GRID
+******************/
+
+.column-percent-100-flex {
+	flex: 100% 0 0 !important;
+}
+
+.column-percent-75-flex {
+	flex: 75% 0 0 !important;
+}
+
+.column-percent-66-flex {
+	flex: 66% 0 0 !important;
+}
+
+.column-percent-50-flex {
+	flex: 49% 0 0 !important;
+}
+
+.column-percent-33-flex {
+	flex: 33.333% 0 0 !important;
+}
+
+.column-percent-25-flex {
+	flex: 25% 0 0 !important;
+}

@@ -1,0 +1,137 @@
+/* -------------------------------------> INDEX */
+/* 1.  VARIABLES */
+/* 2.  MIXINS */
+
+/* -------------------------------------> 1. VARIABLES */
+// BACKGROUND COLORS
+$color-bg-primary: #fff;
+$color-bg-secondary: #F7FAFA;
+$color-bg-tertiary: #fefce8;
+$color-bg-support: #f0f0f2;
+$color-bg-support-light: #f7f7f7;
+$color-bg-alt: #000;
+
+// TEXT/CONTENT COLORS
+$color-body: #666;
+$color-body-dark: #333;
+$color-body-light: #999;
+$color-body-alt: #fff;
+$color-body-attention: #E24253;
+$color-shadow: #C3C3C3;
+
+// BRAND COLORS
+$color-primary: #0FB0AA;
+// $color-secondary: #FB8702;
+$color-secondary: #FFDC50;
+
+// BORDERS
+$color-border: #E7E7E8;
+$cta-border-radius: 2px;
+
+// FONT FAMILIES
+$font-primary-en: 'Proxima Nova', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$font-primary-ar: 'Noto Kufi Arabic', Tahoma, serif;
+
+// SPECIFICS
+
+/* -------------------------------------> 2. MIXINS */
+@mixin mx-sprite {
+    background-image: url('../../dist/images/wadi-mobile-sprite.png');
+    background-repeat: no-repeat;
+
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+        background-image: url('../../dist/images/wadi-mobile-sprite@2x.png');
+        background-size: 186px auto;
+    }
+}
+
+@mixin mx-image-replacement {
+    text-indent: 200%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+@mixin mx-visually-hidden {
+    position: absolute !important;
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px !important;
+    width: 1px !important;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+}
+
+@mixin mx-background-transparency ($color, $alpha) {
+    background-color: rgba(red($color),green($color),blue($color), $alpha);
+}
+
+@mixin mx-text-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@mixin mx-triangle($dir, $size, $color) {
+    width: 0; height: 0;
+    display: inline-block;
+    border: $size transparent solid;
+     
+    @if ($dir == "top" or $dir == "up") {
+        border-top: 0;
+        border-bottom-color: $color;
+    }
+    @else if ($dir == "right" or $dir == "after") {
+        border-right: 0;
+        border-left-color: $color;
+    }
+    @else if ($dir == "bottom" or $dir == "down") {
+        border-bottom: 0;
+        border-top-color: $color;
+    }
+    @else if ($dir == "left" or $dir == "before") {
+        border-left: 0;
+        border-right-color: $color;
+    }
+}
+
+
+
+
+/* -------------------------------------> 1. VARIABLES */
+$site-breakpoint-small-medium: 1024px;
+$site-breakpoint-medium: 1280px;
+$site-breakpoint-large: 1440px;
+
+// RESPONSIVE
+$site-width-padding-small: 20px;
+$site-width-padding-medium: 30px;
+$site-width-padding-large: 40px;
+
+// SMALL
+@mixin site-width-padding {
+    padding-left: $site-width-padding-small; padding-right: $site-width-padding-small;
+
+    @media only screen and (min-width: $site-breakpoint-small-medium) {
+        padding-left: $site-width-padding-medium; padding-right: $site-width-padding-medium;
+    }
+
+    @media only screen and (min-width: $site-breakpoint-medium) {
+        padding-left: $site-width-padding-large; padding-right: $site-width-padding-large;
+    }
+}
+
+@mixin site-width-padding-offset {
+    margin-left: -$site-width-padding-small; margin-right: -$site-width-padding-small;
+    padding-left: $site-width-padding-small; padding-right: $site-width-padding-small;
+
+    @media only screen and (min-width: $site-breakpoint-small-medium) {
+        margin-left: -$site-width-padding-medium; margin-right: -$site-width-padding-medium;
+        padding-left: $site-width-padding-medium; padding-right: $site-width-padding-medium;
+    }
+
+    @media only screen and (min-width: $site-breakpoint-medium) {
+        margin-left: -$site-width-padding-large; margin-right: -$site-width-padding-large;
+        padding-left: $site-width-padding-large; padding-right: $site-width-padding-large;
+    }
+}

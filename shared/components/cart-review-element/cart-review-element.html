@@ -575,7 +575,7 @@ Example:
     },
 
     _getProductImage: function (numImages, key) {
-      return (numImages && numImages > 0) ? '//' + this.ctx.cdn + '/product/' + key + '/1-catalog.jpg' : '/dist/images/product-default-catalog-' + this.ctx.lang + '.png';
+      return (numImages && numImages > 0) ? 'https://' + this.ctx.cdn + '/product/' + key + '/1-catalog.jpg' : '/dist/images/product-default-catalog-' + this.ctx.lang + '.png';
     },
 
     _updateQuantity: function(e) {

@@ -1,0 +1,30 @@
+{
+  "name": "newsletter-signup-element",
+  "version": "1.0.0",
+  "authors": [
+    "Carine Li <carine.li@wadi.com>"
+  ],
+  "description": "An element that provides the user the option to sign up to the newsletter",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "newsletter",
+    "signup"
+  ],
+  "main": "newsletter-signup-element.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "/demo/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  }
+}

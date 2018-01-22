@@ -1,0 +1,579 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>Small Navigation Element Demo</title>
+    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../bower_components/polymer/polymer.html">
+    <link rel="import" href="../small-nav-element.html">
+  </head>
+  <body>
+
+    <p>An example of <code>&lt;small navigation-element&gt;</code>:</p>
+
+    <small-nav-element nav='{ "menu": [
+            {
+              "title": "tracking",
+              "url": "//track.wadi.com"
+            },
+            {
+              "title": "Best Price guarantee",
+              "url": "/Bestpriceguarantee/?ref=navigation"
+            },
+            {
+              "title":"Electronics",
+               "children":[
+                 {
+                   "title":"Mobiles & Tablets",
+                   "children":[
+                     {
+                       "title":"Mobile Phones",
+                       "children":[
+                          {
+                            "title":"iPhone",
+                            "url":"/electronics-mobiles_tablets-mobile_phones/apple/?tracker=hpmob_nmenu_electronics_mobiles_1_apple_1&ref=navigation"
+                          },
+                          {
+                            "title":"samsung",
+                            "url":"/electronics-mobiles_tablets-mobile_phones/samsung/?tracker=hpmob_nmenu_electronics_mobiles_1_samsung_2&ref=navigation"
+                          },
+                          {
+                            "title":"Htc",
+                            "url":"/electronics-mobiles_tablets-mobile_phones/htc/?tracker=hpmob_nmenu_electronics_mobiles_1_htc_3&ref=navigation"
+                          },
+                          {
+                            "title":"BlackBerry",
+                            "url":"/electronics-mobiles_tablets-mobile_phones/blackberry/?tracker=hpmob_nmenu_electronics_mobiles_1_blackberry_4&ref=navigation"
+                          },
+                          {
+                            "title":"Sony",
+                            "url":"/electronics-mobiles_tablets-mobile_phones/sony/?tracker=hpmob_nmenu_electronics_mobiles_1_sony_5&ref=navigation"
+                          },
+                          {
+                            "title":"Android Phones",
+                            "url":"/electronics-mobiles_tablets-mobile_phones/all-products/?limit=20&q=android&sidentifier=promotion&?tracker=hpmob_nmenu_electronics_mobiles_1_androidphones_6&ref=navigation"
+                          },
+                          {
+                            "title":"Under 499",
+                            "url":"/electronics-mobiles_tablets-mobile_phones/all-products/?price=*-499&sort=new&limit=20&?tracker=hpmob_nmenu_electronics_mobiles_1_under499_8&ref=navigation"
+                          },
+                          {
+                            "title":"Under 999",
+                            "url":"/electronics-mobiles_tablets-mobile_phones/all-products/?price=499-999&sort=new&limit=20&?tracker=hpmob_nmenu_electronics_mobiles_1_under999_9&ref=navigation"
+                          },
+                          {
+                            "title":"Under 1999",
+                            "url":"/electronics-mobiles_tablets-mobile_phones/all-products/?price=999-1999&sort=new&limit=20&?tracker=hpmob_nmenu_electronics_mobiles_1_under1999_10&ref=navigation"
+                          },
+                          {
+                            "title":"Under 2999",
+                            "url":"/electronics-mobiles_tablets-mobile_phones/all-products/?price=1999-2999&sort=new&limit=20&?tracker=hpmob_nmenu_electronics_mobiles_1_under2999_11&ref=navigation"
+                          },
+                          {
+                            "title":"All Mobiles",
+                            "url":"/mobile_phones/?tracker=hpmob_nmenu_electronics_mobiles_1_all-mobiles_12&ref=navigation"
+                          }
+
+                       ]
+
+
+                     },
+                     {
+                       "title":"Tablets & Accessories",
+                       "children":[
+                          {
+                            "title":"Apple iPads",
+                            "url":"/electronics-mobiles_tablets-tablets/apple?tracker=hpmob_nmenu_electronics_tablets_accessories_2_ipads_1&ref=navigation"
+                          },
+                          {
+                            "title":"Tablet Accessories",
+                            "url":"/electronics-mobiles_tablets-tablet_accessories?tracker=hpmob_nmenu_electronics_tablets_accessories_2_tabletacc_4&ref=navigation"
+                          },
+                          {
+                            "title":"All Tablets",
+                            "url":"/electronics-mobiles_tablets-tablets/?ref=navigation"
+                          }
+                       ]
+                     },
+                     {
+                       "title":"Mobile Accessories",
+                       "children":[
+                          {
+                            "title":"Mobile Cases & Covers",
+                            "url":"/electronics-mobiles_tablets-mobile_accessories-mobile_cases_covers/?tracker=hpmob_nmenu_electronics_mobileaccessories_3_CasesnCovers_1&ref=navigation"
+                          },
+                          {
+                            "title":"Batteries",
+                            "url":"/electronics-mobiles_tablets-mobile_accessories-batteries/?limit=20?tracker=hpmob_nmenu_electronics_mobileaccessories_3_Batteries_2&ref=navigation"
+                          },
+                          {
+                            "title":"Bluetooth devices",
+                            "url":"/electronics-mobiles_tablets-mobile_accessories-bluetooth_devices/?tracker=hpmob_nmenu_electronics_mobileaccessories_3_Bluetooth Devices_3&ref=navigation"
+                          },
+                          {
+                            "title":"Headphones & Earphones",
+                            "url":"/electronics-mobiles_tablets-mobile_accessories-earphones_headsets/?tracker=hpmob_nmenu_electronics_mobileaccessories_3_EarphonesnHeadsets_5&ref=navigation"
+                          },
+                          {
+                            "title":"Memory Cards",
+                            "url":"/electronics-mobiles_tablets-mobile_accessories-memory_cards/?tracker=hpmob_nmenu_electronics_mobileaccessories_3_memorycards_6&ref=navigation"
+                          },
+                          {
+                            "title":"Power banks",
+                            "url":"/electronics-mobiles_tablets-mobile_accessories-power_banks/?tracker=hpmob_nmenu_electronics_mobileaccessories_3_Power Banks_7&ref=navigation"
+                          },
+                          {
+                            "title":"Screen Guards",
+                            "url":"/electronics-mobiles_tablets-mobile_accessories-screen_protector_screen_guards/?tracker=hpmob_nmenu_electronics_mobileaccessories_3_screenprotector-screenguard_8&ref=navigation"
+                          },
+                          {
+                            "title":"Wearable devices",
+                            "url":"/electronics-mobiles_tablets-mobile_accessories-wearable_devices/?tracker=hpmob_nmenu_electronics_mobileaccessories_3_wearable_9&ref=navigation"
+                          }
+
+                       ]
+                     }
+
+                   ]
+                 },
+                 {
+                   "title":"Gaming & Accessories",
+                   "children":[
+                      {
+                       "title":"Gaming Consoles",
+                       "children":[
+                          {
+                            "title":"Playstation",
+                            "url":"/electronics-gaming_accessories-gaming_consoles-sony_playstation/?tracker=hpmob_nmenu_electronics_gamingandaccessories4_Playstation_1&ref=navigation"
+                          },
+                          {
+                            "title":"Xbox",
+                            "url":"/electronics-gaming_accessories-gaming_consoles-microsoft_xbox/?tracker=hpmob_nmenu_electronics_gamingandaccessories4_Xbox_2&ref=navigation"
+                          },
+                          {
+                            "title":"Nintendo",
+                            "url":"/electronics-gaming_accessories-gaming_consoles-nintendo/?tracker=hpmob_nmenu_electronics_gamingandaccessories4_Nintendo_3&ref=navigation"
+                          },
+                          {
+                            "title":"All Gaming Consoles",
+                            "url":"/electronics-gaming_accessories-gaming_consoles/?tracker=hpmob_nmenu_electronics_gamingandaccessories4_all-gaming-console_4&ref=navigation"
+                          }
+                       ]
+                     },
+                     {
+                       "title":"Gaming Titles",
+                       "children":[
+                          {
+                            "title":"XBOX Games",
+                            "url":"/electronics-gaming_accessories-gaming_titles-xbox_games/?tracker=hpmob_nmenu_electronics_gamingandaccessories4_xbox Games_1&ref=navigation"
+                          },
+                          {
+                            "title":"PS4 Games",
+                            "url":"/electronics-gaming_accessories-gaming_titles-ps4_games/?tracker=hpmob_nmenu_electronics_gamingandaccessories4_PS4 Games_2&ref=navigation"
+                          },
+                          {
+                            "title":"PC Games",
+                            "url":"/electronics-gaming_accessories-gaming_titles-pc_games/?tracker=hpmob_nmenu_electronics_gamingandaccessories4_PC Games_3&ref=navigation"
+                          },
+                          {
+                            "title":"PS3 Games",
+                            "url":"/electronics-gaming_accessories-gaming_titles-ps3_games/?tracker=hpmob_nmenu_electronics_gamingandaccessories4_PS3Games_4&ref=navigation"
+                          }
+                       ]
+                     },
+                     {
+                       "title":"Gaming Accessories",
+                       "children":[
+                          {
+                            "title":"Controllers",
+                            "url":"/electronics-gaming_accessories-gaming_accessories-controllers/?tracker=hpmob_nmenu_electronics_gamingandaccessories4_Controllers_1&ref=navigation"
+                          },
+                          {
+                            "title":"Gaming Headsets",
+                            "url":"/electronics-gaming_accessories-gaming_accessories-headsets/?tracker=hpmob_nmenu_electronics_gamingandaccessories4_Headsets_2&ref=navigation"
+                          },
+                          {
+                            "title":"All Gaming Accessories",
+                            "url":"/electronics-gaming_accessories-gaming_accessories/?tracker=hpmob_nmenu_electronics_gamingandaccessories4_all-gaming-acc_3&ref=navigation"
+                          }
+                       ]
+                     }
+                   ]
+                 },
+                 {
+                   "title":"Camera Accessories",
+                   "children":[
+                        {
+                        "title":"DSLR Cameras",
+                        "url":"/electronics-cameras_photography-digital_cameras-dslr_cameras/?tracker=hpmob_nmenu_electronics_cameraandacc5_dslr-cameras_1&ref=navigation"
+                        },
+                        {
+                          "title":"Point & Shoot Cameras",
+                          "url":"/electronics-cameras_photography-digital_cameras-point_and_shoots/?tracker=hpmob_nmenu_electronics_cameraandacc5_point-shoot-cameras_2&ref=navigation"
+                        },
+                        {
+                          "title":"Camcorders",
+                          "url":"/electronics-cameras_photography-digital_cameras-camcorders/?tracker=hpmob_nmenu_electronics_cameraandacc5_camcorders_3&ref=navigation"
+                        }
+                   ]
+                 },
+                 {
+                   "title":"Laptops & Desktops",
+                   "children":[
+                      {
+                        "title":"Laptops",
+                        "children":[
+                            {
+                            "title":"Macbook",
+                            "url":"/electronics-computers_laptops_storage-laptops/apple/?tracker=hpmob_nmenu_electronics_laptops_desktops6_MacBook_1&ref=navigation"
+                            },
+                            {
+                              "title":"Dell",
+                              "url":"/electronics-computers_laptops_storage-laptops/dell/?tracker=hpmob_nmenu_electronics_laptops_desktops6_Dell_2&ref=navigation"
+                            },
+                            {
+                              "title":"Toshiba",
+                              "url":"/electronics-computers_laptops_storage-laptops/toshiba/?tracker=hpmob_nmenu_electronics_laptops_desktops6_Toshiba_3&ref=navigation"
+                            },
+                            {
+                              "title":"HP",
+                              "url":"/electronics-computers_laptops_storage-laptops/hp/?tracker=hpmob_nmenu_electronics_laptops_desktops6_HP_4&ref=navigation"
+                            },
+                            {
+                              "title":"Lenovo",
+                              "url":"/electronics-computers_laptops_storage-laptops/lenovo/?tracker=hpmob_nmenu_electronics_laptops_desktops6_Lenovo_5&ref=navigation"
+                            },
+                            {
+                              "title":"All Laptops",
+                              "url":"/electronics-computers_laptops_storage-laptops/?ref=navigation "
+                            }
+                        ]
+                      },
+                      {
+                        "title":"Accessories",
+                        "children":[
+                            {
+                            "title":"Storage devices",
+                            "url":"/electronics-computers_laptops_storage-storage_devices/?tracker=hpmob_nmenu_electronics_laptops_desktops6_storage-devices_10&ref=navigation"
+                            },
+                            {
+                              "title":"Routers & Modems",
+                              "url":"/electronics-computers_laptops_storage-routers_modems/?tracker=hpmob_nmenu_electronics_laptops_desktops6_routers-modems_11&ref=navigation"
+                            },
+                            {
+                              "title":"Laptop Bags",
+                              "url":"/electronics-computers_laptops_storage-computer_accessories-laptop_bags_sleeves/?tracker=hpmob_nmenu_electronics_laptops_desktops6_laptopbags-Sleeves_13&ref=navigation"
+                            },
+                            {
+                              "title":"KeyBoards",
+                              "url":"/electronics-computers_laptops_storage-computer_accessories-keyboards/?tracker=hpmob_nmenu_electronics_laptops_desktops6_keyboard_15&ref=navigation"
+                            },
+                            {
+                              "title":"All Accessories",
+                              "url":"/electronics-computers_laptops_storage-computer_accessories/?tracker=hpmob_nmenu_electronics_laptops_desktops6_all-computer-acc_16&ref=navigation"
+                            }
+                        ]
+                      }
+                    ]
+                 },
+                 {
+                   "title":"TV Audio & Video",
+                   "children":[
+                      {
+                        "title":"Audio Devices",
+                        "children":[
+                            {
+                            "title":"Headphones & Earphones",
+                            "url":"/electronics-tv_audio-headphones_and_earphones/?tracker=hpmob_nmenu_electronics_audiodevices7_headphones-earphones_1&ref=navigation"
+                            },
+                            {
+                              "title":"Portable Audio Players",
+                              "url":"/electronics-tv_audio-portable_audio_players/?tracker=hpmob_nmenu_electronics_audiodevices7_headphones-earphones_3&ref=navigation"
+                            },
+                            {
+                              "title":"Speakers",
+                              "url":"/electronics-tv_audio-speakers/?tracker=hpmob_nmenu_electronics_audiodevices7_headphones-earphones_4&ref=navigation"
+                            }
+                        ]
+                      },
+                      {
+                        "title":"Televisions & Accessories",
+                        "children":[
+                            {
+                            "title":"Televisions",
+                            "url":"/electronics-tv_audio-televisions/?tracker=hpmob_nmenu_electronics_televisionacc8_televisions_1&ref=navigation"
+                            },
+                            {
+                              "title":"Routers & Modems",
+                              "url":"/electronics-computers_laptops_storage-routers_modems/?tracker=hpmob_nmenu_electronics_laptops_desktops6_routers-modems_11&ref=navigation"
+                            },
+                            {
+                              "title":"TV, AV accessories",
+                              "url":"/electronics-tv_audio-tv_av_accessories/?tracker=hpmob_nmenu_electronics_televisionacc8_televisions_1&ref=navigation"
+                            }
+                        ]
+                      }
+                    ]
+                 }
+
+               ]
+            },
+            {
+              "title": "Fashion",
+              "children": [
+                 {
+                   "title": "Mens Fashion",
+                   "children":[
+                      {
+                         "title":"watches",
+                         "children":[
+                            {
+                              "title":"Chronograph",
+                              "url":"/fashion-mens_accessories-watches/?display_type=analog-chronograph--chronograph&ref=navigation"
+                            },
+                            {
+                              "title":"Digital",
+                              "url":"/fashion-mens_accessories-watches/?display_type=digital&dir=desc&ref=navigation"
+                            },
+                            {
+                              "title":"Budget Watches",
+                              "url":"/fashion-mens_accessories-watches/?price=*-199&ref=navigation"
+                            },
+                            {
+                              "title":"Luxury Watches",
+                              "url":"/fashion-mens_accessories-watches/?price=1000-*&ref=navigation"
+                            },
+                            {
+                              "title":"Casio",
+                              "url":"/fashion-mens_accessories/casio/?ref=navigation"
+                            },
+                            {
+                              "title":"Fossil",
+                              "url":"/fashion-mens_accessories/fossil/?ref=navigation"
+                            },
+                            {
+                              "title":"G-Shock",
+                              "url":"/fashion-mens_accessories/g_shock/?ref=navigation"
+                            },
+                            {
+                              "title":"JBW",
+                              "url":"/fashion-mens_accessories/jbw/?ref=navigation"
+                            },
+                            {
+                              "title":"Movado",
+                              "url":"/fashion-mens_accessories/movado/?ref=navigation"
+                            },
+                            {
+                              "title":"Diesel",
+                              "url":"/fashion-mens_accessories-watches-fashion-unisex_accessories-watches/diesel/?ref=navigation"
+                            },
+                            {
+                              "title":"Kenneth Cole",
+                              "url":"/fashion-mens_accessories-watches/kenneth_cole/?ref=navigation"
+                            }
+                         ]
+                      },
+                      {
+                         "title":"Fragrances",
+                         "children":[
+                            {
+                              "title":"Summer Fragrances",
+                              "url":"/beauty_health-fragrances-mens_fragrances/?fragrance_note=woody--fresh?fragrance_note=woody--fresh&ref=navigation"
+                            },
+                            {
+                              "title":"Under 200",
+                              "url":"/beauty_health-fragrances-mens_fragrances/?price=*-199&ref=navigation"
+                            },
+                            {
+                              "title":"Under 500",
+                              "url":"/beauty_health-fragrances-mens_fragrances/?sort=price&dir=asc&price=201-499&ref=navigation"
+                            },
+                            {
+                              "title":"Gift Sets",
+                              "url":"/beauty_health-fragrances-mens_fragrances-gift_sets/?ref=navigation"
+                            },
+                            {
+                              "title":"Calvin Klein",
+                              "url":"/beauty_health-fragrances-mens_fragrances/calvin_klein/?ref=navigation"
+                            },
+                            {
+                              "title":"Hugo Boss",
+                              "url":"/beauty_health-fragrances-mens_fragrances/hugo_boss/?ref=navigation"
+                            },
+                            {
+                              "title":"Lacoste",
+                              "url":"/beauty_health-fragrances-mens_fragrances/lacoste/?ref=navigation"
+                            }
+                         ]
+                      },
+                      {
+                         "title":"Sunglasses",
+                         "children":[
+                            {
+                              "title":"Aviators",
+                              "url":"/fashion-mens_accessories-sunglasses/?q=aviator&sidentifier=promotion&ref=navigation"
+                            },
+                            {
+                              "title":"Wayfarers",
+                              "url":"/fashion-mens_accessories-sunglasses/?q=wayfarer&sidentifier=promotion&ref=navigation"
+                            },
+                            {
+                              "title":"Under 300",
+                              "url":"/fashion-mens_accessories-sunglasses/?price=*-300&ref=navigation"
+                            },
+                            {
+                              "title":"Ray Ban",
+                              "url":"/fashion-mens_accessories-sunglasses/ray_ban/?ref=navigation"
+                            },
+                            {
+                              "title":"Edwardson",
+                              "url":"/fashion-mens_accessories-sunglasses/edwardson_eyewear/?ref=navigation"
+                            }
+                         ]
+                      },
+                      {
+                         "title":"accessories",
+                         "children":[
+                            {
+                              "title":"Oakley",
+                              "url":"/fashion-mens_accessories-sunglasses/oakley/?ref=navigation"
+                            },
+                            {
+                              "title":"Wedding Rings & Bands",
+                              "url":"/fashion-mens_accessories/breuning--paradiso?ref=navigation"
+                            },
+                            {
+                              "title":"Headwear",
+                              "url":"/fashion-mens_accessories-head_wear/?ref=navigation"
+                            },
+                            {
+                              "title":"Bracelets",
+                              "url":"/fashion-mens_accessoroies-jewellery-bracelets/?ref=navigation"
+                            },
+                            {
+                              "title":"Belts",
+                              "url":"/fashion-mens_accessories-belts/?ref=navigation"
+                            }
+                         ]
+                      },
+                      {
+                         "title":"Clothing",
+                         "children":[
+                            {
+                              "title":"T shirt & Vests",
+                              "url":"/fashion-mens_clothing-t_shirts_vests/?ref=navigation"
+                            },
+                            {
+                              "title":"Shirts",
+                              "url":"/fashion-mens_clothing-shirts/?ref=navigation"
+                            },
+                            {
+                              "title":"Jeans",
+                              "url":"/fashion-mens_clothing-jeans/?ref=navigation"
+                            },
+                            {
+                              "title":"Shorts",
+                              "url":"/fashion-mens_clothing-shorts/?ref=navigation"
+                            },
+                            {
+                              "title":"Pants & Chinos",
+                              "url":"/fashion-mens_clothing-pants_chinos/?ref=navigation"
+                            },
+                            {
+                              "title":"Polo Shirts",
+                              "url":"/fashion-mens_clothing-polo_shirts/?ref=navigation"
+                            },
+                            {
+                              "title":"Sportswear",
+                              "url":"/fashion-mens_clothing-sportswear/?ref=navigation"
+                            },
+                            {
+                              "title":"Basic T shirts",
+                              "url":"/fashion-mens_clothing-t_shirts_vests/?q=solid&sidentifier=promotion&ref=navigation"
+                            },
+                            {
+                              "title":"Graphic T shirts",
+                              "url":"/fashion-mens_clothing-t_shirts_vests/?q=graphic&sidentifier=promotion&ref=navigation"
+                            },
+                            {
+                              "title":"Phosphorus",
+                              "url":"/fashion-mens_clothing/phosphorus/?dir=desc&ref=navigation"
+                            },
+                            {
+                              "title":"Dubai Hero",
+                              "url":"/fashion-mens_clothing/dubai_hero/?ref=navigation"
+                            },
+                            {
+                              "title":"Incult",
+                              "url":"/fashion-mens_clothing/incult/?dir=desc&ref=navigation"
+                            }
+                         ]
+                      },
+                      {
+                         "title":"Personal Care",
+                         "children":[
+                            {
+                              "title":"Shavers",
+                              "url":"/electronics-small_appliances-personal_appliances-shavers/?ref=navigation"
+                            },
+                            {
+                              "title":"Trimmers",
+                              "url":"/electronics-small_appliances-personal_appliances-trimmers/?ref=navigation"
+                            }
+                         ]
+                      },
+                      {
+                         "title":"Shoes",
+                         "children":[
+                            {
+                              "title":"Sneakers",
+                              "url":"/fashion-mens_footwear-sneakers/?ref=navigation"
+                            },
+                            {
+                              "title":"Slip Ons",
+                              "url":"/fashion-mens_footwear-slip_ons/?ref=navigation"
+                            },
+                            {
+                              "title":"Sports Shoes",
+                              "url":"/fashion-mens_footwear-sports_shoes/?ref=navigation"
+                            }
+                         ]
+                      },
+                      {
+                         "title":"New Arrivals",
+                         "children":[
+                            {
+                              "title":"New in clothing",
+                              "url":"/fashion-mens_clothing/new-products/?ref=navigation"
+                            },
+                            {
+                              "title":"New in watches",
+                              "url":"/fashion-mens_accessories-watches/?sort=new&ref=navigation"
+                            },
+                            {
+                              "title":"New in fragrances",
+                              "url":"/beauty_health-fragrances-mens_fragrances/?sort=new&ref=navigation"
+                            }
+                         ]
+                      }
+                   ]
+                 }
+              ]
+            }
+
+          ]}'>
+
+    </small-nav-element>
+
+  </body>
+</html>

@@ -55,6 +55,7 @@ export class App {
     config.addPipelineStep('postcomplete', PostCompleteStep);
     config.map([
       { route: ['', 'home', appDir + 'index.html'],    name: 'home',         moduleId: '../shared/source/modules/home',     nav: true },
+      { route: 'search',        name: 'search',       moduleId: '../shared/source/modules/search',   nav: true,  title: 'Search' },
       { route: 'cart',          name: 'cart',         moduleId: '../shared/source/modules/cart',     nav: true,  title: 'Cart' },
       { route: 'checkout',      name: 'checkout',     moduleId: '../shared/source/modules/checkout', nav: true,  title: 'Checkout'},
       { route: 'something-went-wrong', name: 'error', moduleId: '../shared/source/modules/error',    nav: false, title: 'What went Wrong !' }
@@ -91,6 +92,7 @@ export class App {
       this.request.suggest(event.detail.term).then((response) => {
           this.suggest = response;
           event.detail.ref.set('searchSuggestLoading', false);
+          event.detail.ref.set('suggest', response);
         });
     };
 

@@ -1,0 +1,172 @@
+<!--
+Example:
+
+    <promotional-campaign-element></promotional-campaign-element>
+
+@demo
+-->
+<dom-module id="promotional-campaign-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+    <validation-email></validation-email>
+    <validation-phone phone-config="[[ phoneConfig ]]"></validation-phone>
+    <div class="site-width-container">
+      <template is="dom-if" if="[[ campaign.imageUrl ]]">
+        <img lazy-src$="[[ campaign.imageUrl ]]" alt$="[[ _getAltText(campaign.title) ]]" on-load="_onLazyImageReady" />
+      </template>
+      <div class="content-holder">
+        <template is="dom-if" if="[[ campaign.title ]]">
+          <h2>[[ campaign.title ]]</h2>
+        </template>
+        <template is="dom-if" if="[[ campaign.subTitle ]]">
+          <marked-element markdown="[[ campaign.subTitle ]]">
+            <div class="markdown-html"></div>
+          </marked-element>
+        </template>
+        <div class="form-holder" hidden$="[[ successMessage ]]">
+          <form id="promotionForm" is="iron-form" method="GET" novalidate on-submit="_onSubmit">
+            <div class="input-container">
+              <template is="dom-if" if="[[ options.emailRequired ]]">
+                <input class$="validity-{{validEmail}}" is="iron-input" bind-value="{{ userEmail }}" on-input="_clearEmailValidation" type="email" placeholder="[[ _translate('Email') ]]" />
+                <p class="input-helper-message" hidden$="[[validEmail]]"><i class="wadicon-alert"></i> [[_translate('Please enter a valid email address')]]</p>
+              </template>
+              <template is="dom-if" if="[[ !options.emailRequired ]]">
+                <input is="iron-input" bind-value="{{ userEmail }}" type="email" placeholder="[[ _translate('Email') ]]" />
+              </template>
+            </div>
+            <div class="input-container">
+              <template is="dom-if" if="[[ options.phoneRequired ]]">
+                <input class$="validity-{{validPhone}}" is="iron-input" bind-value="{{ userPhone }}" type="text" on-input="_clearPhoneValidation" placeholder="[[ _translate('Phone Number') ]]" />
+                <p class="input-helper-message" hidden$="[[validPhone]]"><i class="wadicon-alert"></i> [[ _translate(validPhoneMessage.message) ]]</p>
+              </template>
+              <template is="dom-if" if="[[ !options.phoneRequired ]]">
+                <input is="iron-input" bind-value="{{ userPhone }}" type="text" placeholder="[[ _translate('Phone Number') ]]" />
+              </template>
+            </div>
+            <button class="core-block-cta cta-full-width" type="submit">[[ _translate('Submit') ]]<paper-ripple></paper-ripple></button>
+          </form>
+        </div>
+        <template is="dom-if" if="[[ successMessage ]]">
+          <div class="message">
+            [[ successMessage ]]
+          </div>
+        </template>
+      </div>
+    </div>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'promotional-campaign-element',
+
+    properties: {
+
+      /**
+       * Products array that needs to be displayed to UI
+       */
+      campaign: {
+        type: Object,
+        value: {
+          imageUrl: String,
+          title: String,
+          subTitle: String,
+          campaignName: String,
+          success: String,
+          failed: String,
+        }
+      },
+
+      phoneConfig: {
+        type: Object
+      },
+
+      /**
+       * Options supported by carousel element
+       */
+      options: {
+        type: Object,
+        value: {
+          emailRequired: false,
+          phoneRequired: false
+        }
+      },
+
+      response: {
+        type: Object,
+        observer: '_responseChanged'
+      }
+    },
+
+    ready: function () {
+      this.internals = {};
+    },
+
+    attached: function () {
+      this.validEmail = true;
+      this.validPhone = true;
+
+      this.validPhoneMessage = {};
+    },
+
+    _onSubmit: function(event) {
+      promotionForm.addEventListener('iron-form-presubmit', function (event) {
+        event.preventDefault();
+      });
+
+      this.validatorEmail = new Polymer.IronMeta({ type: 'validator' }).byKey('validation-email');
+      this.validatorPhone = new Polymer.IronMeta({ type: 'validator' }).byKey('validation-phone');
+
+      this.validEmail = this.options.emailRequired ? this.validatorEmail.validate(this.userEmail) : true;
+      this.validPhone = this.options.phoneRequired ? this.validatorPhone.validate(this.userPhone) : true;
+      this.validPhoneMessage = this.validatorPhone.phoneNumberWithCountry(this.userPhone);
+      if (!this.validEmail || !this.validPhone) {
+        return;
+      }
+      else {
+        this.fire('promotional-signup', { ref: this, email: this.userEmail, phone: this.userPhone, type: this.campaign.name });
+      }
+    },
+
+    _responseChanged: function (res) {
+      this.successMessage = res.success ? this.campaign.success : this.campaign.failed;
+    },
+
+    _clearEmailValidation: function() {
+      this.validEmail = true;
+    },
+
+    _clearPhoneValidation: function() {
+      this.validPhone = true;
+    },
+
+    _getAltText: function (altT) {
+      return altT || null;
+    },
+
+    _onLazyImageReady: function (event) {
+      var image = event.target;
+      // this.fire('promo-view', {
+      //   'name': image.getAttribute('data-creative'),
+      //   'creative': image.getAttribute('alt'),
+      //   'id': image.getAttribute('data-id'),
+      //   'position': 'banner_slot' + (parseInt(image.getAttribute('position')) + 1)
+      // });
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+  });
+
+</script>

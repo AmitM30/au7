@@ -1,0 +1,16 @@
+
+<template>
+  <section class="au-animate" id="page-search">
+
+    <search-element
+      ctx.bind='common.ctx'
+      direct-search.trigger='directSearch($event)'
+      search-suggest.trigger='search($event)'
+      suggest.bind='suggest'
+      options='{ "cdnURL": "${ config.CDNUrl }" }'
+      if.bind="common.state !== 'checkout'"
+      search-term.bind="plpModel.search.q"
+    ></search-element>
+
+  </section> 
+</template>
