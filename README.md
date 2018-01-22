@@ -43,6 +43,9 @@ And:
 
 - ``cordova platform add android``
 - ``cordova emulate android``
+List all iOS emulators on system:
+- `cordova emulate ios --list`
+- ``cordova emulate ios --target="iPhone-X, 11.1"``
 
 Consult Cordova's docs for instructions on how to download platform dependencies like Java and Android Studio and deploying to the App and Play stores.
 

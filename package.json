@@ -86,13 +86,13 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-runtime": "^6.23.0",
     "basic-swiper": "git://github.com/AmitM30/basic-swiper.git#0.2.7.1",
-    "cordova-browser": "^5.0.3",
-    "cordova-ios": "~4.5.4",
     "cordova-plugin-file": "^6.0.1",
     "cordova-plugin-statusbar": "^2.4.1",
     "cordova-plugin-whitelist": "1",
     "framework7": "^1.5.2",
-    "isomorphic-fetch": "^2.2.1"
+    "isomorphic-fetch": "^2.2.1",
+    "cordova-browser": "^5.0.3",
+    "cordova-ios": "~4.5.4"
   },
   "devDependencies": {
     "@easy-webpack/config-aurelia": "^2.2.2",
