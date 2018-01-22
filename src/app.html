@@ -32,21 +32,29 @@
         <small-nav-element nav.bind="nav" options='{ "mainNav": true }' ctx.bind="common.ctx"></small-nav-element>
       </div>
 
-      <div main>
+      <div main class="view view-main">
         <header id="site-header">
           <div class="primary-row">
-            <i paper-drawer-toggle class="main-nav-trigger" if.bind="common.state !== 'checkout'"><span></span><span></span><span></span></i>
+            <!-- <i paper-drawer-toggle class="main-nav-trigger" if.bind="common.state !== 'checkout'"><span></span><span></span><span></span></i> -->
             <div itemtype="http://schema.org/Organization" itemscope="itemscope">
               <a href="/" class="site-logo ${ config.locale.lang }" itemprop="url" alt="Wadi" rel="Home"><img src.bind="'dist/images/logo-' + config.locale.lang + '.png?app=v2'" alt="Wadi" /></a>
             </div>
-            <a href="/search" class="search-icon" if.bind="common.state !== 'checkout'">
+            <!-- <a href="/search" class="search-icon" if.bind="common.state !== 'checkout'">
               <i class="wadicon-cart"></i>
             </a>
             <a href="/cart" id="cart" if.bind="common.state !== 'checkout'">
               <i class="wadicon-cart"></i>
               <span class="badge ${cartCounterClass}" if.bind="common.cartCount > 0">${ common.cartCount }</span>
-            </a>
+            </a> -->
           </div>
+          <a href="/search" title="search">
+            <search-element>
+              <div class="input-container">
+                <input type="search" is="iron-input" placeholder="What are you searching for?" disabled />
+                <span class="search-icon"></span>
+              </div>
+            </search-element>
+          </a>
         </header>
         <div id="page-container">
           <router-view></router-view>
@@ -57,6 +65,30 @@
             <img src="//${ config.CDNUrl }/cms/phoenix/shopathon17/shopathon_17_${ config.locale.lang }-${ config.locale.country }.png" alt="Shopathon" />
           </a>
         </div> -->
+        <div class="views tabs ios-edges">
+          <div class="toolbar tabbar-labels toolbar-bottom-md">
+            <div class="toolbar-inner">
+              <a href="#view-home" class="tab-link tab-link-active">
+                <i class="icon f7-icons ios-only">home</i>
+                <i class="icon f7-icons ios-only icon-ios-fill">home_fill</i>
+                <i class="icon material-icons md-only">home</i>
+                <span class="tabbar-label">Home</span>
+              </a>
+              <a href="#view-catalog" class="tab-link">
+                <i class="icon f7-icons ios-only">list</i>
+                <i class="icon f7-icons ios-only icon-ios-fill">list_fill</i>
+                <i class="icon material-icons md-only">view_list</i>
+                <span class="tabbar-label">Catalog</span>
+              </a>
+              <a href="#view-settings" class="tab-link">
+                <i class="icon f7-icons ios-only">settings</i>
+                <i class="icon f7-icons ios-only icon-ios-fill">settings_fill</i>
+                <i class="icon material-icons md-only">settings</i>
+                <span class="tabbar-label">Settings</span>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
 
     </paper-drawer-panel>

@@ -9,10 +9,10 @@
 	border-bottom: 1px solid $color-border;
 
 	.primary-row {
-		// text-align: center;
+		text-align: center;
 		margin-top: -5px;
 		font-size: 0;
-		padding: 14px 0 15px;
+		padding: 12px 0 12px;
 		position: relative;
 		background-color: $color-bg-primary;
 		z-index: 70;
@@ -145,7 +145,7 @@ search-element,
 	top: -1px;
 
 	.input-container {
-		padding: 0 10px 15px;
+		padding: 0 10px 10px;
 		z-index: 71;
 		background-color: $color-bg-primary;
 

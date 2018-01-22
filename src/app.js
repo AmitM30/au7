@@ -293,7 +293,7 @@ export class App {
   }
 
   attached () {
-    // setUpFramework7();
+    setUpFramework7();
 
     // Set locale cookie
     this.common.setLocaleCookie();
