@@ -142,7 +142,7 @@ Example:
       }
 
       var _self = this;
-      this.startSliding = window.setTimeout(function () { _self._switchClass(i); }, _self.slideTime );
+      this.startSliding = window.requestTimeout(function () { _self._switchClass(i); }, this.slideTime );
     }
   });
 

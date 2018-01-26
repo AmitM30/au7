@@ -70,7 +70,7 @@ export class Utils {
       };
       var callNow = immediate && !timeout;
       clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
+      timeout = requestTimeout(later, wait);
       if (callNow) func.apply(context, args);
     };
   };
@@ -79,14 +79,14 @@ export class Utils {
     var wait = false;
     return function () {
       if (!wait) {
-        func.call(); 
+        func.call();
         wait = true;
-        setTimeout(function () {
+        window.requestTimeout(function () {
             wait = false;
         }, limit);
       }
     }
-  }; 
+  };
 
   static getOffset (elem) {
     var box = elem.getBoundingClientRect();

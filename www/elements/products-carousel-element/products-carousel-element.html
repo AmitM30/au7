@@ -200,7 +200,7 @@ Example:
 
     _isNearViewPortChanged: function (val) {
       if (this.isNearViewPort && !this.hasProductsLoaded) {
-        this.classList.add("hidden");
+        // this.classList.add("hidden");
         if (!this.options.baseApi) {
           this.fire('load-products', { url: this.options.url, ref: this });
         } else {
@@ -228,7 +228,7 @@ Example:
       this.hasProductsLoaded = true;
       if (!this.isEmpty) {
         var _self = this;
-        this.classList.remove("hidden");
+        // this.classList.remove("hidden");
         this.async(function () {
           _self.swiperInstance = window.swiper(_self.querySelector('.product-carousel-content'), _self.internals.swiperOptions);
           _self.fire('lazy-load-images', _self);

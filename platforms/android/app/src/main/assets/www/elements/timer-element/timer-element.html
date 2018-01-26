@@ -166,7 +166,7 @@ Example:
       timer.call(this);
 
       var _self = this;
-      this.startTimer = setInterval(function () { timer.call(_self); }, 250);
+      this.startTimer = window.requestInterval(function () { timer.call(_self); }, 250);
     }
   });
 

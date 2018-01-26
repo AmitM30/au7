@@ -49,7 +49,7 @@
           </div>
         </header>
         <div id="page-container">
-          <router-view></router-view>
+          <router-view swap-order="with"></router-view>
           <compose view-model="../shared/source/modules/super-view" model.one-way="tsaheyluModel.model" view.one-way="tsaheyluModel.view" containerless ></compose>
         </div>
         <!-- <div class="fixed-container" if.bind="common.state !== 'checkout' && common.pageType !== 'detail' && common.pageType !== 'cart'">
