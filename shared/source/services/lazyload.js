@@ -5,28 +5,7 @@ import { Router }               from 'aurelia-router';
 
 import { Utils }                from '../misc/utils';
 
-// TODO - Not used as of now - under POC
-let imgLoad = function (url) {
-  return new Promise((resolve, reject) => {
-    var request = new XMLHttpRequest();
-    request.open('GET', url);
-    request.responseType = 'blob';
-
-    request.onload = () => {
-      if (request.status === 200) {
-        resolve(request.response);
-      } else {
-        reject(Error('Image didn\'t load successfully; error code:' + request.statusText));
-      }
-    };
-
-    request.onerror = () => {
-      reject(Error('There was a network error.'));
-    };
-
-    request.send();
-  });
-};
+// https://developer.mozilla.org/en-US/docs/Web/Events/scroll
 
 @inject(EventAggregator, Router)
 export class Lazyload {
@@ -35,12 +14,12 @@ export class Lazyload {
     this.ea = ea;
     this.events = router.events;
 
-    // this.activate();
+    this.DEBOUNCE = 220;
   }
 
   lazyLoad (source) {
     this.lazyLoadImages(source);
-    Utils.debounce(this.lazyLoadCarousels(source), 200);
+    this.lazyLoadCarousels(source);
   }
 
   lazyLoadImages (source) {
@@ -64,15 +43,6 @@ export class Lazyload {
         item.setAttribute('src', item.getAttribute('lazy-src'));
         item.removeAttribute('lazy-src');
         item.onload = function () { item.classList.add('loaded'); };
-
-        // let myImage = new Image();
-        // let imgSrc = item.getAttribute('lazy-src');
-        // item.removeAttribute('lazy-src');
-        // imgLoad(imgSrc).then((response) => {
-        //   let imageURL = window.URL.createObjectURL(response);
-        //   item.setAttribute('src', imageURL);
-        //   item.classList.add('loaded');
-        // }, (e) => { console.log(e); });
       }
     });
   }
@@ -85,7 +55,7 @@ export class Lazyload {
       let rect = item.getBoundingClientRect();
       if (rect.top >= 0 &&
         rect.left >= 0 &&
-        rect.top <= ((window.innerHeight || document.documentElement.clientHeight) + window.innerHeight) &&
+        rect.top <= ((window.innerHeight || document.documentElement.clientHeight) + (window.innerHeight / 2)) &&
         rect.right <= (window.innerWidth || document.documentElement.clientWidth)) {
           item.isNearViewPort = true;
       }
@@ -93,14 +63,16 @@ export class Lazyload {
   }
 
   init () {
-    window.addEventListener('load', this.lazyLoad.bind(this));
+    let fn = Utils.throttle(this.lazyLoad.bind(this), this.DEBOUNCE);
+
     window.addEventListener('resize', this.lazyLoadImages, { passive: true });
-    window.addEventListener('scroll', this.lazyLoad.bind(this), { passive: true });
+    window.addEventListener('scroll', () => { fn(); }, { passive: true });
     window.addEventListener('lazy-load-images', this.lazyLoadImages);
     this.ea.subscribe('lazy-load-images', this.lazyLoadImages);
-    this.events.subscribe('router:navigation:complete', this.lazyLoadImages);
     this.events.subscribe('router:navigation:complete', this.lazyLoad.bind(this));
-    window.addEventListener('animation:enter:done', this.lazyLoad.bind(this));
+    // window.addEventListener('load', this.lazyLoad.bind(this));
+    // window.addEventListener('scroll', this.lazyLoad.bind(this), { passive: true });
+    // this.events.subscribe('router:navigation:complete', this.lazyLoadImages);
 
     this.lazyLoadImages();
   }

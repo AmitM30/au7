@@ -194,14 +194,14 @@ export class App {
         this.router.navigateToRoute(this.config.cart.buyNowRedirect);
       } else {
         let _self = this; // Safari hack
-        window.setTimeout(function () {
+        window.requestTimeout(function () {
           _self.detail.ref.set('addCartText', window.translate('Go To Cart'));
           _self.detail.ref.set('buttonProgressClass', '');
           _self.detail.ref.className = 'full-width';
           _self.detail.ref.set('inCart', true);
           _self.smoothScrollToTop();
           _self.cartCounterClass = 'expand';
-          window.setTimeout(function () { _self.cartCounterClass = ''; }, 1000);
+          window.requestTimeout(function () { _self.cartCounterClass = ''; }, 1000);
         }, 800);
       }
 
@@ -329,14 +329,22 @@ export class App {
     let previousRoute;
 
     this.router.events.subscribe('router:navigation:processing', (navigationInstruction) => {
+      // console.log('isNavigatingBack: ', this.router.isNavigatingBack);
+      console.log('isNavigatingFirst: ', this.router.isNavigatingFirst);
       // Close navigation panel
       if (document.querySelector('paper-drawer-panel')) {
         document.querySelector('paper-drawer-panel').closeDrawer();
       }
       previousRoute = previousRoute || window.location.href;
-      if (this.common.firstLoad) { return; }
-      // route fade out
-      document.querySelector('section.au-animate').classList.add('cha');
+      // if (this.common.firstLoad) { return; }
+
+      document.querySelector('body').classList.remove('move-back');
+      document.querySelector('body').classList.remove('move-forward');
+      let direction = this.router.isNavigatingBack ? 'move-back' : 'move-forward';
+      // console.log('fragment: ', navigationInstruction.instruction.fragment);
+      direction = navigationInstruction.instruction.fragment === '/' ? 'move-back': direction;
+      console.log('direction: ', direction);
+      document.querySelector('body').classList.add(direction);
     });
 
     this.router.events.subscribe('router:navigation:success', (navInstructions) => {

@@ -60,7 +60,7 @@
             lang: window.location.host.substring(0, 2),
             country: window.location.host.substring(3,5)
         };
-        window.Polymer = { dom: 'shady', lazyRegister: true };
+        window.Polymer = { dom: 'shady', lazyRegister: true, passiveTouchGestures: true };
         window.translate = function (value) { return value; };
 
         document.addEventListener('deviceready', onDeviceReady, false);
