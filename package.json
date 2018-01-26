@@ -90,7 +90,9 @@
     "cordova-plugin-statusbar": "^2.4.1",
     "cordova-plugin-whitelist": "1",
     "framework7": "^1.5.2",
-    "isomorphic-fetch": "^2.2.1"
+    "isomorphic-fetch": "^2.2.1",
+    "cordova-browser": "^5.0.3",
+    "cordova-ios": "~4.5.4"
   },
   "devDependencies": {
     "@easy-webpack/config-aurelia": "^2.2.2",
