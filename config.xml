@@ -28,6 +28,10 @@
     <preference name="StatusBarBackgroundColor" value="#0FB0AA" />
     <preference name="StatusBarStyle" value="blacktranslucent" />
     <preference name="AllowBackForwardNavigationGestures" value="true" />
+    <preference name="Orientation" value="portrait" />
+    <preference name="FullScreen" value="true" />
+    <preference name="KeepRunning" value="false" />
+    <preference name="LogLevel" value="INFO" />
     <plugin name="cordova-plugin-statusbar" spec="^2.4.1" />
     <engine name="browser" spec="^5.0.3" />
     <engine name="ios" spec="~4.5.4" />
