@@ -63,13 +63,12 @@
         window.Polymer = { dom: 'shady', lazyRegister: true, passiveTouchGestures: true };
         window.translate = function (value) { return value; };
 
-        document.addEventListener('deviceready', onDeviceReady, false);
         function onDeviceReady() {
-            console.log('StatusBar: ', StatusBar);
             StatusBar.hide();
             window.appDirectory = cordova.file.applicationDirectory + 'www/';
             console.log(window.appDirectory);
         };
+        document.addEventListener('deviceready', onDeviceReady, false);
     </script>
     <script src="dist/app-launch-v3.js"></script>
     <script src="dist/ext/swiper.min.js"></script>
