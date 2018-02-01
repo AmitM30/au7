@@ -1,0 +1,423 @@
+<!--
+Example:
+    <products-listing-element></products-listing-element>
+@demo
+-->
+<dom-module id="products-listing-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+    <!-- <content></content> -->
+    <header class="plp-header">
+      <div class="plp-options-container">
+
+        <div class="plp-switch-view-container">
+          <p class="plp-option-label" hidden$="[[isMobile]]">[[ _translate('View') ]]:</p>
+          <i class="wadicon-rows switch-view" view="list"></i>
+          <i class="wadicon-grid switch-view active" view="grid"></i>
+        </div>
+      </div>
+      <breadcrumb-element list$="[[ breadcrumbs ]]"></breadcrumb-element>
+      <template is="dom-if" if="[[ !search.q ]]">
+        <h1>[[pagetitle]] <span>([[totalcount]] [[_translate('Items')]])&#8206;</span></h1>
+      </template>
+      <template is="dom-if" if="[[ search.q ]]">
+        <h1><span>([[totalcount]] [[_translate('Items')]])</span> [[ _translate('for') ]] '[[ search.q ]]'</h1>
+      </template>
+    </header>
+
+    <info-element
+      content="[[ seoContent ]]"
+      showTitle="false"
+      ctx="[[ ctx ]]"
+    ></info-element>
+
+    <div class="product-listings-container" id="product-listings-container">
+      <ul class="core-product-listing grid-row">
+        <template is="dom-repeat" items="[[ listing ]]" as="product">
+          <li class$="[[ columnClass ]]">
+            <a title$="[[ product.name ]]" class$="plp-link out-of-stock-[[ _isOOS(product.visible) ]]" href="/[[ product.link ]]">
+
+              <div class="plp-image-container">
+                <img lazy-src$="[[ _getProductImage(product.maxImages, product.imageKey) ]]" on-load="_imgLoaded" on-click="_onClick" alt="[[ product.name ]]" sku$="[[ product.sku ]]" position$="[[ index ]]">
+                <div class="core-product-image-preloader"><i class="wadicon-spinner wadicon-spin"></i></div>
+                <template is="dom-if" if="[[ _isOOS(product.visible) ]]">
+                  <p class="core-product-badge out-of-stock"><span>[[_translate('Out Of Stock')]]</span></p>
+                </template>
+
+                <template is="dom-if" if="[[ !_isOOS(product.visible) ]]">
+
+                  <template is="dom-if" if="[[ _hasDiscount(product.price, product.offerPrice) ]]">
+                    <p class="discount-tag">[[ product.discount ]]% [[ _translate('off') ]]</p>
+                  </template>
+
+                  <!-- NOT FLASH -->
+                  <template is="dom-if" if="[[!product.flash]]">
+                    <!-- PRODUCT BADGE -->
+                    <template is="dom-repeat" items="{{ product.badges }}" as="badge">
+                      <p class$="core-product-badge promo-badge {{badge}}">{{badge}}</p>
+                    </template>
+
+                    <!-- PRODUCT TAG -->
+                    <template is="dom-if" if="[[product.ribbon]]">
+                      <p class="product-tag">[[product.ribbon.name]]</p>
+                    </template>
+                  </template>
+
+                  <!-- FLASH SALE -->
+                  <template is="dom-if" if="{{ product.flash }}">
+                    <p class="product-tag attention">[[ _translate('Flash Sale') ]]</p>
+                    <timer-element end="[[ product.flash.endAt ]]" total-qty="[[ product.flash.totQty ]]" available-qty="[[ product.flash.availableQty ]]"></timer-element>
+                  </template>
+                </template>
+
+              </div>
+
+              <div class="plp-details-container">
+                <p class="plp-name">[[ product.name ]]</p>
+                <template is="dom-if" if="[[product.highlights.length]]" restamp="true">
+                  <template is="dom-if" if="[[isRowView]]">
+                    <ul class="highlights">
+                      <template is="dom-repeat" items="[[product.highlights]]" as="highlight">
+                        <li>[[ highlight ]]</li>
+                      </template>
+                    </ul>
+                  </template>
+                </template>
+
+                <!-- PRICE START -->
+                <template is="dom-if" if="{{!_isOOS(product.visible)}}">
+                  <!-- SALE PRICE -->
+                  <template is="dom-if" if="[[ _hasDiscount(product.price, product.offerPrice) ]]">
+                    <p class="core-product-price plp-price">
+                      <span class="pre-reduction">[[ product.price ]] [[ ctx.currency ]]</span>
+                      <span class="selling-price">[[ product.offerPrice ]] [[ ctx.currency ]]</span>
+                    </p>
+                  </template>
+                  <!-- NORMAL PRICE -->
+                  <template is="dom-if" if="[[ !_hasDiscount(product.price, product.offerPrice) ]]">
+                    <p class="core-product-price plp-price">
+                      <span class="selling-price">[[ product.price ]] [[ ctx.currency ]]</span>
+                    </p>
+                  </template>
+                </template>
+                <!-- PRICE END -->
+
+                <!-- DELIVERY AND WARRANTY START -->
+                <template is="dom-if" if="[[!isMobile]]" restamp="true">
+                  <template is="dom-if" if="[[isRowView]]">
+                    <div class="supplier-additional-info">
+                      <p class="shipping">[[ _translate('Ships in') ]] [[ _getShippingTime(product.simples.0.suppliers.0.shipping_time_min, product.simples.0.suppliers.0.shipping_time_max) ]] [[ _translate('days') ]], [[ _translate('delivered in') ]] [[ _getShippingTime(product.simples.0.suppliers.0.delivery_time_min, product.simples.0.suppliers.0.delivery_time_max) ]] [[ _translate('days') ]]</p>
+                      <p class="warranty">[[ product.simples.0.suppliers.0.warranty_period ]]</p>
+                    </div>
+                  </template>
+                </template>
+                <!-- DELIVERY AND WARRANTY END -->
+              </div>
+            </a>
+            <!-- ADD TO CART BUTTONS START -->
+            <template is="dom-if" if="[[!isMobile]]" restamp="true">
+              <template is="dom-if" if="[[isRowView]]">
+                <div class="cta-container align-flex-end">
+                  <template is="dom-if" if="[[!_hasVariations(product)]]" restamp="true">
+                    <cart-button-element
+                      item$="[[_addToCartProduct(product.simples.0.suppliers.0.sku, product)]]"
+                      selected-sku="[[product.simples.0.suppliers.0.sku]]"
+                      options='{ "className": "core-block-cta cta-full-width" }'
+                    ></cart-button-element>
+                    <cart-button-element
+                      item$="[[_addToCartProduct(product.simples.0.suppliers.0.sku, product)]]"
+                      selected-sku="[[product.simples.0.suppliers.0.sku]]"
+                      options='{ "redirect": true, "className": "core-block-cta core-block-cta-secondary cta-full-width" }'
+                    ></cart-button-element>
+                  </template>
+                  <template is="dom-if" if="[[_hasVariations(product)]]" restamp="true">
+                    <a
+                     class="core-block-cta cta-container-support core-block-cta-tertiary"
+                     href$="[[ product.link ]]" index$="[[ i ]]">[[ _translate('View Details') ]]
+                    </a>
+                  </template>
+                </div>
+              </template>
+            </template>
+            <!-- ADD TO CART BUTTONS END -->
+          </li>
+        </template>
+      </ul>
+      <template is="dom-if" if="[[ !_isEndOfListings(pageNo, pageslength) ]]" restamp="true">
+        <div class="products-loader" id="more-products-loader"><i class="wadicon-spinner wadicon-spin"></i></div>
+        <!-- <iron-scroll-threshold id="scrollThreshold" scroll-target="document" lower-threshold$="[[ _getLowerThreshold(pageNo) ]]" on-lower-threshold="_loadMoreData"></iron-scroll-threshold> -->
+      </template>
+      <template is="dom-if" if="[[ _isEndOfListings(pageNo, pageslength) ]]">
+        <div class="products-loader"><p>[[ _translate('There are no more products to load.') ]]</p></div>
+      </template>
+    </div>
+  </template>
+</dom-module>
+
+<script>
+
+  Polymer({
+    is: 'products-listing-element',
+
+    properties: {
+
+      /**
+       * Products array that needs to be displayed to UI
+       */
+      listing: {
+        type: Object,
+        observer: '_listingUpdated'
+      },
+
+      seoContent: {
+        type: String,
+      },
+
+      /**
+       * Breadcrumbs
+       */
+      breadcrumbs: {
+        type: Array
+      },
+
+      /**
+       * Options supported by carousel element
+       */
+      options: {
+        type: Object
+      },
+
+      /**
+       * Listings title
+       */
+      pagetitle: {
+        type: String
+      },
+
+      /**
+       * Search Term
+       */
+      search: {
+        type: Object
+      },
+
+      /**
+       * application context
+       */
+      ctx: {
+        type: Object
+      },
+
+      alreadyLoading: {
+        type: Boolean,
+        value: false
+      }
+    },
+
+    listeners: {
+      'click': '_handleToggle'
+    },
+
+    ready: function() {
+      this.internals = {};
+      this.internals.defaultOptions = {
+        columnOptions: 1
+      };
+
+      var _self = this;
+      document.addEventListener('switch-view', function (e) {
+        _self._handleToggle.call(_self, e);
+      });
+    },
+
+    attached: function () {
+      // console.log('listing: ', this.listing);
+      // console.log('ctx: ', this.ctx);
+      // console.log('options: ', this.options);
+      this.search = this.search || {};
+      // Merge default option with element input options
+      Object.assign(this.internals.defaultOptions, this.options);
+
+      this.pagetitle = this.pagetitle || this._translate('Results');
+      this.pageNo = 1;
+      this.isMobile = window.config.device === 'mobile' ? true : false;
+      this.initialCols = this.options.columnOptions;
+      this._computeClass();
+      this._computeProductView();
+
+      this.sourceUrl = window.location.pathname;
+      var _self = this;
+      this.scrollListener = window.addEventListener('scroll', function (e) {
+          _self._loadMoreData();
+      }, { passive: true });
+    },
+
+    _hasDiscount: function (price, special) {
+      return price > special;
+    },
+
+    _imgLoaded: function (event) {
+      this._onLazyImageReady(event.target);
+    },
+
+    _onLazyImageReady: function (image) {
+      var index = parseInt(image.getAttribute('position'));
+      this.fire('impressions-listing', {
+        "product": this.listing[index],
+        "list": this.sourceUrl,
+        "position": index + 1
+      });
+    },
+
+    _onClick: function (event) {
+      index = parseInt(event.target.getAttribute('position'));
+      this.fire('product-click', {
+        "product": this.listing[index],
+        "list": this.sourceUrl,
+        "position": index + 1
+      });
+    },
+
+    _isOOS: function (visibility) {
+      return visibility === 1 ? false : true;
+    },
+
+    _computeDiscount: function (product) {
+      return (product.price - product.offerPrice);
+    },
+
+    _handleToggle: function (e) {
+      // Switch View event
+      if(e.target.className.indexOf('switch-view') >= 0) {
+        this.set('options.columnOptions', (e.target.getAttribute('view') === 'list') ? 1 : this.initialCols);
+        this._computeClass();
+        this._computeProductView();
+        // add and remove active class from switches
+        Array.prototype.filter.call(e.target.parentNode.children, function (child) {
+          child.classList.remove('active');
+        });
+        e.target.classList.add('active');
+      }
+      if (e.type === 'switch-view') {
+        this.set('options.columnOptions', (this.options.columnOptions !== this.initialCols) ? this.initialCols : 1);
+        this._computeClass();
+        this._computeProductView();
+      }
+    },
+
+    _isEndOfListings: function (currPage, totalPages) {
+      return currPage < totalPages ? false : true;
+    },
+
+    /**
+     * Change bootstrap class as per user specified No. of columns
+     */
+    _computeClass: function () {
+      var numColumn = this.options['columnOptions'];
+      var realColumn = Math.floor(100 / numColumn);
+
+      this.columnClass = 'grid-column column-percent-' + realColumn;
+    },
+
+    // TODO - create global function
+    _getProductImage: function (numImages, key) {
+      var type = this.isMobile ? 'catalog' : 'product';
+
+      return (numImages && numImages > 0) ? 'https://' + this.ctx.cdn + '/product/' + key + '/1-' + type + '.jpg' : '/dist/images/product-default-catalog-v2-' + this.ctx.lang + '.png';
+    },
+
+    // IS THE VIEW ROW?
+    _computeProductView: function () {
+      this.isRowView = (this.options.columnOptions === 1) ? true : false;
+    },
+
+    // Determine if an element is in the visible viewport
+    _isInViewport: function (element) {
+      if (!element) { return false; }
+      
+      var rect = element.getBoundingClientRect();
+      var html = document.documentElement;
+      return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || html.clientHeight) &&
+        rect.right <= (window.innerWidth || html.clientWidth)
+      );
+    },
+
+    _loadMoreData: function () {
+      if (this.alreadyLoading) { return; }
+
+      if (this._isInViewport(this.querySelector('#more-products-loader'))) {
+        this.alreadyLoading = true;
+        this.fire('load-more-products', { pageNo: this.pageNo, listing: this.listing});
+      }
+    },
+
+    _listingUpdated: function (val) {
+      if (this.querySelector('#scrollThreshold')) {
+        this.querySelector('#scrollThreshold').clearTriggers();
+      }
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    },
+
+    _addToCartProduct: function(sku, item) {
+      var json = {
+        'sku': null,
+        'vendor': null,
+        'price': null
+      };
+
+      if (sku) {
+        json.sku = sku;
+        var found = item.simples.find(function (d) { return d.sku === sku; });
+        if (found.suppliers && found.suppliers.length > 0) {
+          json.vendor = found.suppliers[0].vendor_code;
+          json.price = found.suppliers[0].specialPrice || found.suppliers[0].price;
+        }
+
+        return json;
+      }
+
+      json.sku = item.simples[0].sku;
+      json.vendor = (item.simples[0].suppliers && item.simples[0].suppliers.length) ? item.simples[0].suppliers[0].vendor_code : undefined;
+      json.price = (item.simples[0].suppliers && item.simples[0].suppliers.length) ? item.simples[0].suppliers[0].specialPrice || item.simples[0].suppliers[0].price : item.offerofferPrice || item.price;
+
+      return json;
+    },
+
+    _hasVariations: function (product) {
+      return product.sizes.length > 1;
+    },
+
+    _getLowerThreshold: function (param) {
+      var offset = function (el) {
+        var rect = el.getBoundingClientRect(),
+        scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+        scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        return { bottom: rect.bottom + scrollTop }
+      };
+
+      return offset(this).bottom;
+    },
+
+    _getShippingTime: function (min, max) {
+      return min == 0 ? max : min + ' - ' + max;
+    },
+
+    detached: function () {
+      window.removeEventListener('scroll', this.scrollListener);
+    }
+  });
+
+</script>

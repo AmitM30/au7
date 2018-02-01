@@ -1,0 +1,243 @@
+<!--
+An element providing Search functionality
+
+Example:
+    <search-element></search-element>
+@demo
+-->
+<dom-module id="search-element">
+  
+    <style>
+      :host {
+        display: block;
+        box-sizing: border-box;
+      }
+    </style>
+  
+    <template>
+      <div class="input-container">
+        <!-- <input-suggest-element suggest-name="city" data-list="[[ categories ]]" data-selected="{{ selectedCat }}" view-value="{{ selectedCityValue }}"></input-suggest-element> -->
+        <input is="iron-input" bind-value="{{ searchTerm }}" on-keyup="_searchSuggest" type="text" placeholder="[[ _translate('What are you searching for?') ]]" />
+        <template is="dom-if" if="{{searchSuggestLoading}}">
+          <div class="loader-container">
+            <i class="wadicon-spinner wadicon-spin"></i>
+          </div>
+        </template>
+        <!-- <template is="dom-if" if="{{searchTerm.length}}">
+          <a on-tap="_clearSearch" class="field-clear"><i class="wadicon-cancel"></i></a>
+        </template> -->
+        <span class="search-icon" on-tap="_directSearch"></span>
+      </div>
+  
+      <template is="dom-if" if="{{ suggest.data }}" restamp="true">
+        <div class="search-cover" on-tap="_clearSearch"></div>
+        <div class="search-suggestions-container">
+          <ul class="suggest-list-container">
+            <li class="suggest-list"><a on-tap="_directSearch" class="direct-search-link">[[ _translate('Search all') ]] <span class="term">{{searchTerm}}</span> [[ _translate('products') ]]</a></li>
+            <template is="dom-repeat" items="{{ suggest.data.popular }}" as="suggestions">
+              <li>
+                <ul>
+                  <li class="category-suggestion suggest-list">
+                    <a href="/catalog/?q={{ suggestions.keyword }}">
+                      <paper-ripple></paper-ripple>
+                      <span class="term">[[ suggestions.keyword ]] </span>
+                    </a>
+                  </li>                    
+  
+                    <!-- <template is="dom-repeat" items="{{ suggestions.categories }}" as="category">
+                  <li class="category-suggestion suggest-list">
+                    <a href="/{{ category.key }}?q={{ suggestions.keyword }}">
+                      <div dom-if="{{ category.name }}">
+                        <span class="term">[[ suggestions.keyword ]] </span>
+                        in 
+                        <span class="category">[[ category.name ]]</span>
+                      </div>
+                    </a>
+                </li>
+                </template> -->
+              </ul>
+            </li>
+            </template>
+            <template is="dom-repeat" items="{{ suggest.data.suggest }}" as="product" restamp="true">
+              <li class="product-suggestion suggest-list">
+                <a href="/{{ product.link }}">
+                  <div class="image-container">
+                    <img src="//{{ options.cdnURL }}/product/{{ product.imageKey }}/1-cart.jpg" alt="{{ product.name }}" />
+                  </div>
+                  <div class="details-container">
+                    <p class="name">[[ product.name ]]</p>
+                    <!-- PRICE -->
+                    <!-- SALE PRICE -->
+                     <template is="dom-if" if="[[ product.specialPrice ]]" restamp="true">
+                      <p class="core-product-price search-suggest-price">
+                        <span class="pre-reduction">[[ product.price ]] [[ ctx.currency ]]</span>
+                        <span class="selling-price">[[ product.specialPrice ]] [[ ctx.currency ]]</span>
+                        <span class="discount"> [[ _translate('Save') ]] [[_minus(product.price, product.specialPrice)]] [[ ctx.currency ]] ([[_discountPercentage(product.price, product.specialPrice)]]%)</span>
+                      </p>
+                    </template>
+                    <!-- NORMAL PRICE -->
+                    <template is="dom-if" if="{{ !product.specialPrice }}" restamp="true">
+                      <p class="core-product-price search-suggest-price">
+                        <span class="selling-price">[[ product.price ]] [[ ctx.currency ]]</span>
+                      </p>
+                    </template>
+                  </div>
+                </a>
+              </li>
+            </template>
+          </ul>
+        </div>
+      </template>
+  
+    </template>
+  
+  </dom-module>
+  
+  <script>
+  
+    Polymer({
+  
+      is: 'search-element',
+  
+      properties: {
+  
+        /**
+         * suggest results
+         */
+        suggest: {
+          type: Object,
+          observer: '_suggestChanged'
+        },
+  
+        /**
+         * suggest results
+         */
+        categories: {
+          type: Object,
+          observer: '_catsChanged'
+        },
+  
+        /**
+         * options
+         */
+        options: {
+          type: Object
+        },
+  
+        /**
+         * application context
+         */
+        ctx: {
+          type: Object
+        }
+      },
+  
+      attached: function () {
+        this.searchSuggestLoading = false;
+        if (typeof this.options === 'string') {
+          this.options = JSON.parse(this.options);
+        }
+  
+        this.selectedIndex = 0;
+        this.suggestLength = 0;
+  
+        // if (window.config.device === 'desktop') {
+        //   this.fire('load-categories');
+        // }
+      },
+  
+      json: function (data) {
+        return JSON.stringify(data);
+      },
+  
+      _suggestChanged: function (val) {
+        console.log('_suggestChanged: ', val);
+        if (!(this.suggest && this.suggest.data)) { return };
+  
+        this.suggestLength = this.suggest.data.suggest.length + this.suggest.data.popular.length;
+        var _self = this;
+        this.suggest.data.popular.forEach(function (pop) { _self.suggestLength = _self.suggestLength + pop.categories.length; });
+      },
+  
+      _catsChanged: function (val) {
+        // console.log('val: ', val);
+      },
+  
+      _searchSuggest: function(e) {
+        this._searchTraversing(e);
+        
+        if (e.keyCode === 13) { return; }
+  
+        this.debounce('keyup', function () {
+          if (e.target.value.length >= 3) {
+            this.searchSuggestLoading = true;
+            this.fire('search-suggest', { ref: this, term: e.target.value, keyCode: e.keyCode });
+          } else {
+            this.set('suggest.data', null);
+            this.fire('close-cover');
+          }
+        }, 200);
+      },
+  
+      _minus: function(a, b) {
+        return a - b;
+      },
+  
+      _discountPercentage: function(a, b) {
+        return Math.round(100 - ( (b / a) * 100 ));
+      },
+  
+      _clearSearch: function() {
+        this.set('suggest.data', null);
+        this.set('searchTerm', '');
+        this.fire('close-cover');
+      },
+  
+      _translate: function (key) {
+        return window.translate(key);
+      },
+  
+      _directSearch: function(e) {
+        e.preventDefault();
+        var list = this.querySelectorAll('.suggest-list-container li.suggest-list');
+        var li = list[this.selectedIndex - 1];
+        if (li) {
+          this.searchTerm = li.textContent.trim();
+        }
+        this.querySelector('input').blur();
+        this.fire('direct-search', { term: this.searchTerm });
+        this.set('suggest.data', null);
+        this.selectedIndex = 0;
+      },
+  
+      _searchTraversing: function (event) {
+        event.preventDefault();
+  
+        switch (event.keyCode) {
+          //Down Arrow
+          case 40: this.selectedIndex = (this.selectedIndex <= this.suggestLength) ? ++this.selectedIndex : this.selectedIndex;
+            break;
+          //Up Arrow
+          case 38: this.selectedIndex = this.selectedIndex > 0 ? --this.selectedIndex : this.selectedIndex;
+            break;
+          //Enter or Return
+          case 13: this._directSearch(event);
+            break;
+          //Esc Key
+          case 27: this._clearSearch();
+            break;
+        }
+  
+        if (this.selectedIndex > 0) {
+          var list = this.querySelectorAll('.suggest-list-container li.suggest-list');
+          list.forEach(function (li) { li.classList.remove('active'); });
+          var li = list[this.selectedIndex - 1];
+          if (li) {
+            li.classList.add('active');
+          }
+        }
+      }
+    });
+  
+  </script>
+  

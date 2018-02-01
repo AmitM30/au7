@@ -1,0 +1,898 @@
+<!--
+    ************************************************************************
+    * Anything Inside -> _initAssisstant()                                 *
+    ************************************************************************
+    * Material floating button                                             *
+    * By: Nobita                                                           *
+    * Repo and docs: https://github.com/nobitagit/material-floating-button *
+    *                                                                      *
+    * License: MIT                                                         *
+    *                                                                      *
+    * Source: https://github.com/nobitagit/material-floating-button        *
+    ************************************************************************
+-->
+
+<!--
+Example:
+    <facets-element></facets-element>
+@demo
+-->
+
+<dom-module id="facets-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+
+    #menu + .scrim {
+      position: fixed;
+      top: 0; right: 0; bottom: 0; left: 0;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 40;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity ease-in-out 0.4s;
+    }
+
+    #menu span.title {
+      position: absolute;
+      top: 30px;
+      font-size: 12px;
+      color: #333;
+      text-align: center;
+      display: block;
+      width: 56px;
+      pointer-events: none;
+    }
+
+    .facets-options {
+      display: block;
+    }
+
+    #menu {
+      opacity: 0;
+      z-index: -1;
+    }
+
+    #menu.active {
+      opacity: 1;
+      bottom: 0;
+      z-index: 79;
+      transition: opacity 0.4s;
+    }
+
+    #menu.active li {
+      border: 0;
+    }
+  </style>
+
+  <template>
+    <content id="content"></content>
+    <!-- SORT -->
+    <template is="dom-if" if="[[!isMobile]]" restamp>
+      <div class="plp-sort-container">
+        <p class="plp-option-label">[[ _translate('Sort By') ]]:</p>
+        <li class="plp-sort-options plp-option-label">
+          <div class="dropdown-element-container reverse">
+            <span class="option">[[ _translate(selectedSort) ]]</span>
+            <div class="dropdown-wrapper">
+              <div class="dropdown-container">
+                <ul class="dropdown-options">
+                  <template is="dom-repeat" items="[[ filters ]]" as="option">
+                    <li id="sort" on-click="_handleChange" data-type="[[ option ]]"><a class="option">[[ _translate(option) ]]</a></li>
+                  </template>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+      </div>
+    </template>
+    <template is="dom-if" if="[[isMobile]]" restamp>
+      <div class="plp-sort-container">
+        <select id="sort">
+          <template is="dom-repeat" items="[[ filters ]]" as="option">
+            <option value="[[ option ]]" selected="[[ _displayfilter(option) ]]">[[ _translate(option) ]]</option>
+          </template>
+        </select>
+      </div>
+    </template>
+
+    <!-- FILTER MODAL TRIGGER -->
+    <template is="dom-if" if="[[isMobile]]">
+      <a class="facets-trigger" on-click="_toggleFilterModal">[[ _translate('Filters') ]]</a>
+    </template>
+
+
+    <!-- SELECTED FACETS START -->
+    <template is="dom-if" if="[[ _isNotEmptyObject(selectedFacetOptions) ]]" restamp>
+      <div class="selected-facets-container">
+        <ul class="perfect-scrollbar">
+          <li><a class="clear-all" on-click="_resetFilters">[[ _translate('Reset All') ]]</a></li>
+          <template is="dom-repeat" items="[[ _toArray(selectedFacetOptions) ]]" as="facetGroup">
+            <template is="dom-repeat" items="[[ facetGroup.value ]]" as="facet">
+              <li>
+                <a class="facet" on-click="_removeFilter" data-facet="[[ facet ]]" data-group="[[ facetGroup.name ]]">
+                  [[ _getFacetNameByKey(facet, facetGroup.name) ]]
+                  <i class="wadicon-cancel"></i>
+                  <paper-ripple></paper-ripple>
+                </a>
+              </li>
+            </template>
+          </template>
+        </ul>
+      </div>
+    </template>
+    <!-- SELECTED FACETS END -->
+
+
+
+    <!-- FILTER MODAL -->
+    <div id="facets-modal-wrapper" class$="oov-[[filterModalClosed]]">
+
+      <!-- MOBILE SCRIM -->
+      <template is="dom-if" if="[[isMobile]]" restamp>
+        <div class="facets-scrim"></div>
+      </template>
+
+      <!-- FILTERS MODAL -->
+      <div class="facets-modal">
+
+        <!-- HEADER START -->
+        <template is="dom-if" if="[[isMobile]]" restamp>
+          <div class="facets-modal-header">
+            <p class="modal-title">[[ _translate('Filter Products') ]] </p>
+            <i class="wadicon-cancel facets-modal-close" on-click="_toggleFilterModal"></i>
+          </div>
+        </template>
+        <!-- HEADER END -->
+
+        <!-- FILTER CATEGORIES -->
+        <div class="facets-body">
+          <div class="facets-list">
+            <template id="renderFacets" is="dom-repeat" items="[[ facetList ]]" as="facet">
+              <template is="dom-if" if="[[ _facetType(facet) ]]" id$="[[ facet ]]" class="facets-options" restamp>
+                <template is="dom-if" if="[[isMobile]]">
+                  <a class="filter-category-heading" collapse$="#toggle[[facet]]" on-click="toggle">
+                    [[ _getName(facet) ]] [[ _showFacetCount(facet) ]]
+                    <template is="dom-if" if="[[_getSelectedFacetOptions(facet)]]">
+                      <span class="active-facets">
+                        <template is="dom-repeat" items="[[ _getSelectedFacetOptions(facet) ]]" as="facetItem">
+                        <span>
+                          [[ _getFacetNameByKey(facetItem, facet) ]]
+                          <template is="dom-if" if="[[_isNotLastFilterItem(index, facet)]]">
+                             ,&nbsp;
+                          </template>
+                        </span>
+                        </template>
+                      </span>
+                    </template>
+                  </a>
+                </template>
+                <template is="dom-if" if="[[!isMobile]]">
+                  <p class="filter-category-heading">[[ _getName(facet) ]]</p>
+                </template>
+                [[ _renderFacetByType(facet) ]]
+              </template>
+            </template>
+          </div>
+        </div>
+
+        <!-- FILTER APPLY OR RESET -->
+        <template is="dom-if" if="[[isMobile]]" restamp>
+          <div class="facets-cta-container">
+            <button
+              class="core-block-cta core-block-cta-lg cta-full-width"
+              on-click="_applyFilters"
+              disabled$="[[ disableFilterButtons ]]"
+            >
+              [[ _translate('Apply Filters') ]] ([[ selectedFacetsCounter ]])
+            </button>
+          </div>
+        </template>
+
+      </div>
+    </div>
+
+  </template>
+</dom-module>
+
+<script>
+
+  Polymer({
+    is: 'facets-element',
+
+    properties: {
+
+      /**
+       * Facets to be rendered onto the page
+       */
+      facets: {
+        type: Object
+      },
+
+      /**
+       * query params
+       */
+      query: {
+        type: Object
+      },
+
+      search: {
+        type: Object
+      },
+
+      /**
+       * Selected Facets
+       */
+      selected: {
+        type: Object
+      },
+
+      /**
+       * Options supported by carousel element
+       */
+      options: {
+        type: Object
+      },
+
+      filterModalClosed: {
+        type: Boolean,
+        value: true
+      },
+
+      /**
+       * Facets Types
+       */
+      // types: {
+      //   type: Object
+      // },
+
+      ctx: {
+        type: Object
+      }
+    },
+
+    listeners: {
+      'change': '_handleChange'
+    },
+
+    ready: function() {
+      this.internals = {};
+      this.internals.defaultOptions = {
+        columnOptions: 1
+      };
+
+      this.filters = ['popularity' , 'new' , 'price-asc' , 'price-desc' , 'discount'];
+      // Selected sort filter
+      this.selectedSort = 'popularity';      
+      this.disableFilterButtons = true;
+      // Object for store selected facets
+      this.selectedFacetOptions = {};
+      // Object for selected but not applied facets
+      this._tempSelectedFacetOptions = {};
+
+      var _self = this;
+      this.addEventListener('scroll', function () {
+        _self._setPaperTabDisplay(document.getElementsByTagName('body')[0].scrollTop > 80);
+      }, { passive: true });
+    },
+
+    attached: function () {
+      this.isMobile = window.config.device === 'mobile' ? true : false;
+      this.isEngish = this.ctx.lang === 'en' ? true : false;
+
+      this.facetList = Object.keys(this.facets);
+      // TODO - Hack to make category as first
+      var catFacet = this.facetList.splice(this.facetList.indexOf('category'), 1);
+      this.facetList.unshift(catFacet[0]);
+
+      this.selectedFacetOptions = JSON.parse(JSON.stringify(this.selected));
+      this.disableFilterButtons = true;
+
+      this._setFilterCount();
+
+      for(var i = 0; i < this.filters.length; i++) {
+        if( this.filters[i].split('-')[0] == 'price' ) {
+          if( this.filters[i] == ( this._getQueryVariable ('sort') + '-' + this._getQueryVariable('dir') )) {
+            this.selectedSort = this._getQueryVariable ('sort') + '-' + this._getQueryVariable('dir');
+          } else {
+            this.selectedSort = this._getQueryVariable ('sort');
+          }
+        }
+        else if( this.filters[i].split('-')[0] == this._getQueryVariable ('sort') ) {
+          this.selectedSort = this._getQueryVariable ('sort');
+        }
+      }
+
+      this.addEventListener('facet-filter', function (e) {
+        e.stopPropagation();
+
+        var facetName = e.detail.selected.name;
+        this._tempSelectedFacetOptions[facetName] = [];
+        var alreadySelectedKey = this.selectedFacetOptions[facetName] || [];
+        this.selectedFacetOptions[facetName] = [];
+        var _self = this;
+        e.detail.selected.selected.map(function (key, index) {
+          if (alreadySelectedKey.indexOf(key) < 0) {
+            _self._tempSelectedFacetOptions[facetName].push(key);
+          } else {
+            _self.selectedFacetOptions[facetName].push(key);
+          }
+        });
+
+        this._setFilterCount();
+        if (this.isMobile) {
+          this._tempSelectedFacetOptionsChanged(facetName);
+        } else {
+          this._applyFilters();
+        }
+      });
+
+      var _self = this;
+      if (!this.isMobile) {
+        _self.debounce('dom-change', function () {
+          // Perfect scrollbar initialized
+          var perfectScrollbarNodes = _self.querySelectorAll('.perfect-scrollbar');
+          for(var i = 0; i < perfectScrollbarNodes.length; i++) {
+            // Ps.destroy(perfectScrollbarNodes[i]);
+            Ps.initialize(perfectScrollbarNodes[i]);
+          }
+        }, 350);
+      }
+    },
+
+    _tempSelectedFacetOptionsChanged : function (facet) {
+      var selectedNode = this.querySelector('a[collapse="#toggle' + facet + '"]');
+      [].forEach.call(selectedNode.querySelectorAll('span.not.active-facets'), function(node) { node.parentNode.removeChild(node); });
+
+      var inactive = document.createElement('span');
+      inactive.className = 'not active-facets';
+      var child = document.createElement('span');
+      var name = [];
+      var _self = this; // Safari hack
+      this._tempSelectedFacetOptions[facet].map(function (item) { name.push(_self._getFacetNameByKey(item, facet)); });
+      if (name.length > 0) {
+        child.innerHTML = name.join(', ');
+        inactive.appendChild(child);
+
+        selectedNode.appendChild(inactive);
+      }
+    },
+
+    _getName: function (name) {
+      // TODO - hack for category facet
+      if (window.config.device === 'desktop' && name === 'category') {
+        return '';
+      }
+
+      return this.facets[name].name;
+    },
+
+    _displayfilter: function (ele) {
+
+      // Get filter name
+      ele = ele || ele.target.dataset.option;
+
+      if( this._getQueryVariable ('sort') == 'price' ) {
+        if( ele == ( this._getQueryVariable ('sort') + '-' + this._getQueryVariable('dir') )) {
+          this.selectedSort = this._getQueryVariable ('sort') + '-' + this._getQueryVariable('dir');
+          return 'selected';
+        }
+        return null;
+      }
+      else if( ele == this._getQueryVariable ('sort') ) {
+        this.selectedSort = this._getQueryVariable ('sort');
+        return 'selected';
+      }
+      return null;
+    },
+
+    _getQueryVariable: function (variable) {
+      var query = window.location.search.substring(1);
+      var vars = query.split("&");
+      for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split("=");
+        if( pair[0] == variable ) {
+          return pair[1];
+        }
+      }
+      return('popularity');
+    },
+
+    _getSelectedFacetOptions: function (facet) {
+      return this.selectedFacetOptions[facet];
+    },
+
+    _setFilterCount: function () {
+      this.selectedFacetsCounter = 0;
+      for (var option in this._tempSelectedFacetOptions) {
+        this.selectedFacetsCounter += this._tempSelectedFacetOptions[option].length;
+      }
+      for (var option in this.selectedFacetOptions) {
+        this.selectedFacetsCounter += this.selectedFacetOptions[option].length;
+      }
+
+      this.disableFilterButtons = this.selectedFacetsCounter === 0 ? true : false;
+    },
+
+    // Open Filters
+    _toggleFilterModal: function () {
+      this.filterModalClosed = !this.filterModalClosed;
+    },
+
+    // Switch between grid and list view
+    _switchView: function (event) {
+      this.fire('switch-view', event);
+    },
+
+    _sortByPrice: function () {
+      if (this.query['sort'] && this.query['sort'] === 'price') {
+        this.query['dir'] = this.query['dir'] === 'asc' ? 'desc' : 'asc';
+      } else {
+        this.query['sort'] = 'price';
+        this.query['dir'] = 'asc';
+      }
+
+      this._applyFilters();
+    },
+
+    toggle: function (event) {
+      if (!event.currentTarget.getAttribute('collapse')) { return ; }
+
+      this.querySelector(event.currentTarget.getAttribute('collapse')).toggle();
+      event.currentTarget.classList.toggle('opened');
+    },
+
+    _isNotEmptyObject: function(obj) {
+      return Object.keys(obj).length === 0 ? false : true;
+    },
+
+    _setPaperTabDisplay: function (condition) {
+      this.showPaperTab = condition ? 'active' : '';
+    },
+
+    _facetType: function (facet) {
+      return this.facets && this.facets[facet] && this.facets[facet].type;
+    },
+
+    _getFacetData: function (facet) {
+      return this.facets[facet].data;
+    },
+
+    json: function (data) {
+      return JSON.stringify(data);
+    },
+
+    _toArray: function(obj) {
+      return Object.keys(obj).map(function(key) {
+        return {
+          name: key,
+          value: obj[key]
+        };
+      });
+    },
+
+    _showFacetCount: function (facet) {
+      return this.selected[facet] ? '(' + this.selected[facet].length + ')' : '';
+    },
+
+    // Method to render facet
+    // New facet names should be created by convention - 'facets-element-<facetType>'
+    // For e.g. facets-element-multiselect
+    _renderFacetByType: function (facet) {
+      var facetToggleArea = window.config.device === 'mobile' ? document.createElement('iron-collapse') : document.createElement('div');
+      facetToggleArea.classList.add('filter-section');
+      facetToggleArea.id = "toggle" + facet;
+
+      var facetEl = document.createElement('facets-element-' + this._facetType(facet));
+      facetEl.id = facet;
+      facetEl.facetKey = facet;
+      facetEl.facetList = this._getFacetData(facet);
+      facetEl.selected = { "name": facet, "selected": this.selected[facet] ? JSON.parse(JSON.stringify(this.selected[facet])) : [] };
+      facetEl.search = this.search;
+      document.getElementById(facet).appendChild(facetToggleArea).appendChild(facetEl);
+
+    },
+
+    // Method to apply aggregated filter options
+    _applyFilters: function () {
+      // Assign temporarily selected filters to main object
+      var _self = this; // Safari hack
+      Object.keys(this._tempSelectedFacetOptions).map(function (key) {
+        _self.selectedFacetOptions[key] = _self.selectedFacetOptions[key] || [];
+        _self.selectedFacetOptions[key] = _self.selectedFacetOptions[key].concat(_self._tempSelectedFacetOptions[key]);
+      });
+
+      var url = window.location.pathname.split('/').splice(0, 2).join('/') + '/'; // Brand is also part of pathname, removing that.
+      var params = '';
+
+      // Brands go into uri, so need to be parsed separately
+      if (this.selectedFacetOptions['brand'] && this.selectedFacetOptions['brand'].length) {
+        url = url + this.selectedFacetOptions['brand'].join('--');
+        delete this.selectedFacetOptions['brand'];
+      }
+
+      // filters
+      for (var key in this.selectedFacetOptions) {
+        if (this.selectedFacetOptions[key].length) {
+          params += '&' + key + '=' + this.selectedFacetOptions[key].join('--');
+        }
+      }
+
+      // sort options
+      // if condition for reset filters
+      if (Object.keys(this.selectedFacetOptions).length !== 0) {
+        for (var key in this.query) {
+          if (!this.selectedFacetOptions.hasOwnProperty(key)) {
+            params += '&' + key + '=' + this.query[key];
+          }
+        }
+      }
+
+      url = url + ((params) ? params.replace('&', '?') : '');
+      this.fire('redirect', { url: url });
+    },
+
+    // Method to reset all filters
+    _resetFilters: function () {
+      this.set('selectedFacetOptions', {});
+      this._applyFilters();
+    },
+
+    // Method to handle Sort Filter
+    _handleChange: function (event) {
+      /**
+       * filter value
+       */
+      var value = (event.target) ? (event.target.dataType || event.target.value) : null;
+    
+      if (event.target.id === 'sort') {
+        switch (value) {
+          case 'new':
+            this.query.sort = 'new';
+            delete this.query.dir;
+            break;
+          case 'popularity':
+            delete this.query.sort;
+            delete this.query.dir;
+            break;
+          case 'price-asc':
+            this.query.sort = 'price';
+            this.query.dir = 'asc';
+            break;
+          case 'price-desc':
+            this.query.sort = 'price';
+            delete this.query.dir;
+            break;
+          case 'discount':
+            this.query.sort = 'discount';
+            delete this.query.dir;
+            break;
+        }
+        this._setFilterCount();
+        if (this.selectedFacetsCounter === 0) {
+          var url = window.location.pathname;
+          var params = '';
+          for (var key in this.query) {
+            params += '&' + key + '=' + this.query[key];
+          }
+          url = url + ((params) ? params.replace('&', '?') : '');
+          this.fire('redirect', { url: url });
+        } else {
+            this._applyFilters();
+        }
+      }
+    },
+
+    // Get Facet name by passing facet key and it's group
+    _getFacetNameByKey: function (key, facetGroup) {
+      if (this.facets[facetGroup]) {
+        var found = this.facets[facetGroup].data.find(function (d) { return d.key == key; });
+        return found ? found.name : key;
+      }
+    },
+
+    _removeFilter: function (event) {
+      this.selectedFacetOptions[event.target.dataGroup].splice(event.model.index, 1);
+      this._applyFilters();
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    },
+
+    _isNotLastFilterItem: function(index, items) {
+      return (index + 1) === this._getSelectedFacetOptions(items).length ? false : true;
+    }
+  });
+
+</script>
+
+<!--
+  **************************** Facet Partials - Multiselect ****************************
+-->
+<dom-module id="facets-element-multiselect">
+  <template>
+    <template is="dom-if" if="[[_isBrand(facetKey)]]">
+      <div class="search-container">
+        <div class="input-container">
+          <input type="text" placeholder="[[ _translate('Search Brands') ]]" value="{{ filterVal::input }}">
+          <template is="dom-if" if="[[ filterVal.length ]]">
+            <a on-tap="_clearField" class="field-clear"><i class="wadicon-cancel"></i></a>
+          </template>
+        </div>
+      </div>
+    </template>
+    <ul class="perfect-scrollbar">
+      <template is="dom-repeat" items="[[ facetList ]]" as="obj" filter="[[ _filter(filterVal) ]]">
+        <li>
+          <div class="custom-checkbox-container">
+            <label for$="facet-[[ obj.key ]]" class$="custom-checkbox-label [[ _isActive(obj.key) ]]">
+              <input id$="facet-[[ obj.key ]]" type="checkbox" value="[[ obj.key ]]" checked$="[[ _isChecked(obj.key) ]]" on-click="_selectAMultifacet" />
+              <span class="label-text">[[ obj.name ]] <span class="count">([[ obj.count ]])</span></span>
+              <div class="check-indicator"></div>
+            </label>
+          </div>
+        </li>
+      </template>
+    </ul>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+
+    is: 'facets-element-multiselect',
+
+    properties: {
+      facetList: {
+        type: Object
+      },
+      facetKey: '',
+      selected: {
+        type: Object
+      }
+    },
+
+    _isBrand: function (facet) {
+      return facet === 'brand' ? true : false;
+    },
+
+    _clearField: function() {
+      this.set('filterVal', '');
+    },
+
+    _filter: function(val) {
+      return function(item) {
+        if (!val) return true;
+        if (!item) return false;
+        return (item.name && ~item.name.toLowerCase().indexOf(val.toLowerCase()));
+      };
+    },
+
+    _selectAMultifacet: function (e) {
+      if (e.target.checked) {
+        e.target.parentNode.classList.add('active');
+        this.selected.selected.push(e.target.value);
+      } else {
+        e.target.parentNode.classList.remove('active');
+        this.selected.selected.splice(this.selected.selected.indexOf(e.target.value), 1);
+      }
+
+      this.fire('facet-filter', { selected: JSON.parse(JSON.stringify(this.selected)), src: e.target });
+    },
+
+    _isChecked: function (key) {
+      return this.selected.selected.indexOf(key) >= 0;
+    },
+
+    _isActive: function (key) {
+      return this.selected.selected.indexOf(key) >= 0 ? 'active' : '';
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+  });
+</script>
+
+<!--
+  **************************** Facet Partials - Links ****************************
+-->
+<dom-module id="facets-element-links">
+  <template>
+    <ul class="perfect-scrollbar">
+      <template is="dom-repeat" items="[[ facetList ]]" as="obj">
+        <li>
+          <a href$="/[[ obj.key ]][[ searchQuery ]]" title="[[ obj.name ]]">[[ obj.name ]]</a>
+        </li>
+      </template>
+    </ul>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+
+    is: 'facets-element-links',
+
+    properties: {
+      facetList: {
+        type: Object
+      },
+      facetKey: '',
+      selected: {
+        type: Object
+      },
+
+      searchQuery: {
+        type: String,
+        value: ''
+      },
+
+      search: {
+        type: Object,
+        value: {}
+      }
+    },
+
+    attached: function () {
+      if (this.search) {
+        var brand = this.search.brand || null;
+        var searchKey = this.search.searchKey || null;
+        var url = '/' + ((brand && brand.length > 0) ? (brand.join('--')  + '/') : '') + ((searchKey && searchKey.length > 0) ? (searchKey.join('/')) : '') + window.location.search;
+        this.set('searchQuery', url);
+      }
+    }
+  });
+</script>
+
+<!--
+  **************************** Facet Partials - Checkbox ****************************
+-->
+<dom-module id="facets-element-singleselect">
+  <template>
+    <ul class="perfect-scrollbar">
+      <template is="dom-repeat" items="[[ facetList ]]" as="obj">
+        <li>
+          <div class="custom-checkbox-container">
+            <label for$="facet-[[ obj.key ]]" class$="custom-checkbox-label [[ _isActive(obj.key) ]]">
+              <input type="checkbox" id$="facet-[[ obj.key ]]" value="[[ obj.key ]]" on-click="_selectACheckboxfacet" checked$="[[ _isChecked(obj.key) ]]" />
+              <span class="label-text">[[ obj.name ]] <span class="count">([[ obj.count ]])</span></span>
+              <div class="check-indicator"></div>
+            </label>
+          </div>
+        </li>
+      </template>
+    </ul>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+
+    is: 'facets-element-singleselect',
+
+    properties: {
+      facetList: {
+        type: Object
+      },
+      facetKey: '',
+      selected: {
+        type: Object
+      }
+    },
+
+    _selectACheckboxfacet: function (e) {
+      if (e.target.checked) {
+        e.target.parentNode.classList.add('active');
+        this.selected.selected = [e.target.value];
+      } else {
+        e.target.parentNode.classList.remove('active');
+        this.selected.selected = [];
+      }
+
+      this.fire('facet-filter', { selected: JSON.parse(JSON.stringify(this.selected)), src: e.target });
+    },
+
+    _isChecked: function (key) {
+      return this.selected.selected.indexOf(key.toString()) >= 0;
+    },
+
+    _isActive: function (key) {
+      return this.selected.selected.indexOf(key.toString()) >= 0 ? 'active' : '';
+    }
+  });
+</script>
+
+<!--
+  **************************** Facet Partials - Range ****************************
+  ********************** TODO - Copy of multiselect for now **********************
+-->
+<dom-module id="facets-element-range">
+  <template>
+    <template is="dom-if" if="[[_isBrand(facetKey)]]">
+      <div class="search-container">
+        <div class="input-container">
+          <input type="text" placeholder="[[ _translate('Search Brands') ]]" value="{{ filterVal::input }}">
+          <template is="dom-if" if="[[ filterVal.length ]]">
+            <a on-tap="_clearField" class="field-clear"><i class="wadicon-cancel"></i></a>
+          </template>
+        </div>
+      </div>
+    </template>
+    <ul class="perfect-scrollbar">
+      <template is="dom-repeat" items="[[ facetList ]]" as="obj" filter="[[ _filter(filterVal) ]]">
+        <li>
+          <div class="custom-checkbox-container">
+            <label for$="facet-[[ obj.key ]]" class$="custom-checkbox-label [[ _isActive(obj.key) ]]">
+              <input id$="facet-[[ obj.key ]]" type="checkbox" value="[[ obj.key ]]" checked$="[[ _isChecked(obj.key) ]]" on-click="_selectAMultifacet" />
+              <span class="label-text">[[ obj.name ]] <span class="count">([[ obj.count ]])</span></span>
+              <div class="check-indicator"></div>
+            </label>
+          </div>
+        </li>
+      </template>
+    </ul>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+
+    is: 'facets-element-range',
+
+    properties: {
+      facetList: {
+        type: Object
+      },
+      facetKey: '',
+      selected: {
+        type: Object
+      }
+    },
+
+    _isBrand: function (facet) {
+      return facet === 'brand' ? true : false;
+    },
+
+    _clearField: function() {
+      this.set('filterVal', '');
+    },
+
+    _filter: function(val) {
+      return function(item) {
+        if (!val) return true;
+        if (!item) return false;
+        return (item.name && ~item.name.toLowerCase().indexOf(val.toLowerCase()));
+      };
+    },
+
+    _selectAMultifacet: function (e) {
+      if (e.target.checked) {
+        e.target.parentNode.classList.add('active');
+        this.selected.selected.push(e.target.value);
+      } else {
+        e.target.parentNode.classList.remove('active');
+        this.selected.selected.splice(this.selected.selected.indexOf(e.target.value), 1);
+      }
+
+      this.fire('facet-filter', { selected: JSON.parse(JSON.stringify(this.selected)), src: e.target });
+    },
+
+    _isChecked: function (key) {
+      return this.selected.selected.indexOf(key) >= 0;
+    },
+
+    _isActive: function (key) {
+      return this.selected.selected.indexOf(key) >= 0 ? 'active' : '';
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+  });
+</script>

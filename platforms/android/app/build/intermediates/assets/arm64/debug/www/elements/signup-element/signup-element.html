@@ -1,0 +1,328 @@
+<!--
+Login / Signup module
+
+Example:
+    <signup-element submit.trigger="loginUser()" user.two-way="user.info" options='{ "title": "My Account" }'></signup-element>
+@demo
+-->
+
+<dom-module id="signup-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+
+    <!-- USER IS LOGGED ON START -->
+    <template is="dom-if" if="[[ user.isLoggedIn ]]">
+      <!-- DOESNT NEED PHONE VERIFCATION/DIRECT LINK TO MY -->
+      <template is="dom-if" if="[[!options.requiresPhoneVerification]]">
+        <a href$="//my.[[ _getDomain() ]].com" target="_blank" class="user-identifier"><i class="wadicon-account"></i>[[ _translate('Welcome back') ]] <strong>[[ user.firstname ]] [[ user.surname ]]</strong></a>
+      </template>
+      <!-- NEEDS PHONE VERIFICATION E.G. CHECKOUT -->
+      <template is="dom-if" if="[[options.requiresPhoneVerification]]">
+        <div class="signup-scenario">
+          <div class="step-overview">
+            <p>[[ _translate('Email') ]]: <span class="value">[[ user.email ]]</span></p>
+            <button on-tap="_clearEnteredEmail">[[ _translate('Change') ]]</button>
+          </div>
+          <template is="dom-if" if="[[ !user.primaryPhone ]]">
+            <phone-verification-element
+              phone-config="[[ phoneConfig ]]"
+              type="[[ options.type ]]"
+              otp-verified="{{ phoneVerified }}"
+              phone-number="{{ newAddress.phone }}"
+              skip-phone-verification="{{ skipPhoneVerification }}"
+              ctx="[[ ctx ]]" user="[[user]]"
+              primary-phone="[[ primaryPhone ]]"
+              opens-independently="true">
+            </phone-verification-element>
+          </template>
+        </div>
+      </template>
+    </template>
+    <!-- USER IS LOGGED ON END -->
+
+    <!-- USER IS NOT LOGGED ON START -->
+    <template is="dom-if" if="[[ !user.isLoggedIn ]]">
+      <div class="trigger" collapse="#myaccountcollapse" on-click="_toggle" hidden$="[[ options.expanded ]]"><i class="wadicon-account"></i> [[ _translate(options.title) ]]</div>
+      <iron-collapse id="myaccountcollapse" opened$="[[ _isExpanded() ]]">
+        <validation-email></validation-email>
+        <validation-password></validation-password>
+        <template is="dom-if" if="[[ !proceedingWithEmail ]]">
+          <div class="signup-scenario initial-step">
+            <!-- SOCIAL LOGIN START -->
+            <div class="content-holder social-option-wrapper">
+              <p class="title">[[ _translate('Use your existing social media account') ]]:</p>
+              <div id="google-my-signin2" class="google-signin social-signin-button google">
+                <span>[[ _translate('Sign in with Google') ]]</span>
+                <paper-ripple></paper-ripple>
+              </div>
+              <div on-click="_loginFB" class="social-signin-button facebook" scope="public_profile,user_birthday,email">
+                <span>[[ _translate('Sign in with Facebook') ]]</span>
+              </div>
+            </div>
+            <!-- SOCIAL LOGIN END -->
+            <!-- PROCEED WITH EMAIL START -->
+            <div class="content-holder">
+              <!-- EMAIL ADDRESS START -->
+              <p class="title">[[ _translate('Or continue with your email') ]]:</p>
+              <form is="iron-form" novalidate method="GET" on-submit="_checkUserExistence">
+                <div class="input-field">
+                  <div class="input-container">
+                    <input class$="validity-[[ validEmail ]]" is="iron-input" bind-value="{{ loginEmail }}" type="email" placeholder="[[ _translate('Email') ]]" />
+                    <template is="dom-if" if="[[ loginEmail.length ]]">
+                      <a on-tap="_clearEmailField" class="field-clear"><i class="wadicon-cancel"></i></a>
+                    </template>
+                    <p class="input-helper-message" hidden$="[[ validEmail ]]"><i class="wadicon-alert"></i>[[ _translate('Please enter a valid email address') ]]</p>
+                  </div>
+                </div>
+                <button class="core-block-cta cta-full-width" disabled$="[[ !loginEmail.length ]]" type="submit">[[ _translate('Continue') ]]<paper-ripple></paper-ripple></button>
+              </form>
+              <!-- EMAIL ADDRESS END -->
+            </div>
+            <!-- PROCEED WITH EMAIL END -->
+          </div>
+        </template>
+
+        <!-- ENTER PASSWORD AND LOGIN START -->
+        <template is="dom-if" if="[[ proceedingWithEmail ]]">
+          <template is="dom-if" if="[[ !isNewCustomer ]]">
+            <div class="signup-scenario">
+              <div class="highlight-memo">
+                <p>[[ _translate('Welcome back! Please enter your password to sign in to your account.') ]]</p>
+              </div>
+              <div class="step-overview">
+                <p>[[ _translate('Email') ]]: <span class="value">[[ loginEmail ]]</span></p>
+                <button on-tap="_clearEnteredEmail">[[ _translate('Change') ]]</button>
+              </div>
+              <form is="iron-form" method="GET" novalidate on-submit="_login">
+                <div class="input-field">
+                  <div class="input-container">
+                    <input class$="validity-{{validPassword}}" is="iron-input" autofocus bind-value="{{ loginPassword }}" on-input="_clearPasswordValidation" type="password" placeholder="[[ _translate('Password') ]]" />
+                    <template is="dom-if" if="[[ loginPassword.length ]]">
+                      <a on-tap="_clearPasswordField" class="field-clear"><i class="wadicon-cancel"></i></a>
+                    </template>
+                    <p class="input-helper-message" hidden$="[[validPassword]]"><i class="wadicon-alert"></i>[[_translate('Please enter your password')]]</p>
+                  </div>
+                </div>
+                <button class="core-block-cta cta-full-width" disabled$="[[ !loginPassword.length ]]" type="submit">[[ _translate('Sign In') ]]<paper-ripple></paper-ripple></button>
+              </form>
+              <forget-password-element email="{{ loginEmail }}"></forget-password-element>
+            </div>
+          </template>
+          <!-- ENTER PASSWORD AND LOGIN END -->
+
+          <!-- PHONE VERIFICATION START -->
+          <template is="dom-if" if="[[ isNewCustomer ]]">
+            <div class="signup-scenario">
+              <phone-verification-element
+                phone-config="[[ phoneConfig ]]"
+                type="[[ options.type ]]"
+                otp-verified="{{ phoneVerified }}"
+                phone-number="{{ newAddress.phone }}"
+                skip-phone-verification="{{ skipPhoneVerification }}"
+                ctx="[[ ctx ]]" user="[[user]]"
+                primary-phone="[[ primaryPhone ]]"
+                opens-independently="true">
+              </phone-verification-element>
+            </div>
+          </template>
+          <!-- PHONE VERIFICATION END -->
+        </template>
+
+
+
+
+      </iron-collapse>
+
+    </template>
+    <!-- USER IS NOT LOGGED ON END -->
+
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'signup-element',
+
+    properties: {
+
+      options: {
+        type: Object
+      },
+
+      /**
+       * Products array that needs to be displayed to UI
+       */
+      user: {
+        type: Object,
+        value: function () {
+          return { };
+        }
+      },
+
+      phoneConfig: {
+        type: Object
+      },
+
+      ctx: {
+        type: Object
+      }
+    },
+
+    attached: function () {
+      this.validatorEmail = new Polymer.IronMeta({type: 'validator'}).byKey('validation-email');
+      this.validatorPassword = new Polymer.IronMeta({type: 'validator'}).byKey('validation-password');
+      this.options.requiresPhoneVerification = this.options.requiresPhoneVerification === undefined ? false : this.options.requiresPhoneVerification;
+      this.validEmail = true;
+      this.validPassword = true;
+      this.proceedingWithEmail = false;
+      this.isNewCustomer = false;
+
+      this.addEventListener('iron-form-presubmit', function(event) { event.preventDefault(); });
+
+      this.initoAuth();
+    },
+
+    _toggle: function () {
+      var node = event.target.getAttribute('collapse');
+      Polymer.dom(Polymer.dom(event.target).parentNode).querySelector(node).toggle();
+      event.target.classList.toggle('opened');
+    },
+
+    initoAuth: function () {
+      this.initGoogleoAuth();
+      this.initFBoAuth();
+      this.oAuthsLoaded = true;
+    },
+
+    initGoogleoAuth: function () {
+      // Google Login
+      var oAuth = document.createElement('script');
+      oAuth.src = '//apis.google.com/js/api:client.js';
+      oAuth.setAttribute('defer', 'defer');
+
+      var _self = this;
+      oAuth.onload = function () {
+        gapi.load('auth2', function () {
+          auth2 = gapi.auth2.init({
+            client_id: _self.ctx.social.google[_self.ctx.domain],
+            cookiepolicy: 'single_host_origin',
+            'scope': 'profile email'
+          });
+          _self._googleAttachSignin.call(_self, document.getElementById('google-my-signin2'));
+        });
+      };
+
+      document.body.appendChild(oAuth);
+    },
+
+    initFBoAuth: function () {
+      // FB Login
+      var _self = this;
+      (function(d, s) {
+        var fjs = d.getElementsByTagName(s)[0];
+        var e = d.createElement(s);
+        e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+        e.async = true;
+        fjs.parentNode.insertBefore(e, fjs);
+      }(document, 'script'));
+
+      window.fbAsyncInit = function () {
+        window.FB.init({
+          appId      : _self.ctx.social.facebook[_self.ctx.domain],
+          xfbml      : true,
+          version    : 'v2.8',
+          status     : true,
+          scope      : 'public_profile,user_birthday,email'
+        });
+      };
+    },
+
+    _login: function(event) {
+      this.validEmail = this.validatorEmail.validate(this.loginEmail);
+      this.validPassword = this.validatorPassword.validate(this.loginPassword);
+      if (!this.validEmail || !this.validPassword) {
+        event.preventDefault();
+      }
+      else {
+        this.fire('login', { email: this.loginEmail, password: this.loginPassword }, { bubbles: false });
+      }
+    },
+
+    _googleAttachSignin: function (element) {
+      var _self = this;
+      auth2.attachClickHandler(element, {}, function(googleUser) {
+        _self.fire('social-login', { provider: "googlev3", token: googleUser.getAuthResponse().id_token }, { bubbles: false });
+      }, function(error) {
+        _self._onGoogleSignInFailure(error);
+      });
+    },
+
+    _onGoogleSignInFailure: function (e) {
+      // console.log('Google Failure: ', e);
+      // this.fire('login-success', { error: e });
+    },
+
+    _loginFB: function () {
+      var _self = this;
+      FB.login(function(response) {
+        if (response.authResponse) {
+          access_token = response.authResponse.accessToken; //get access token
+          user_id = response.authResponse.userID; //get FB UID
+          _self.fire('social-login', { provider: "facebook", "token": response.authResponse.accessToken }, { bubbles: false });
+        } else {
+          // user hit cancel button
+          // console.log('User cancelled login or did not fully authorize.');
+        }
+      }, { scope: 'public_profile,user_birthday,email' });
+    },
+
+    _checkUserExistence: function (event) {
+      this.validEmail = this.validatorEmail.validate(this.loginEmail);
+      if (this.validEmail) {
+        this.fire('customer-exist', { email: this.loginEmail });
+      }
+    },
+
+    _clearEnteredEmail: function() {
+      this.isNewCustomer = false;
+      this.proceedingWithEmail = false;
+      this.set('loginEmail', '');
+      this.fire('logout');
+    },
+
+    _clearPasswordValidation: function() {
+      this.validPassword = true;
+    },
+
+    _clearEmailField: function () {
+      this.set('loginEmail', '');
+    },
+
+    _clearPasswordField: function () {
+      this.set('loginPassword', '');
+    },
+
+    _getDomain: function () {
+      return window.location.host.split('.')[1];
+    },
+
+    _isExpanded: function () {
+      return !!this.options.expanded;
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+  });
+
+</script>

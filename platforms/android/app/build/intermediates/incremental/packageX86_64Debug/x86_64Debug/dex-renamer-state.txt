@@ -1,0 +1,4 @@
+#Tue Jan 30 08:27:37 IST 2018
+base.0=C\:\\Users\\manga\\Desktop\\wadi\\au7\\platforms\\android\\app\\build\\intermediates\\transforms\\dexMerger\\x86_64\\debug\\0
+renamed.0=classes.dex
+file.0=C\:\\Users\\manga\\Desktop\\wadi\\au7\\platforms\\android\\app\\build\\intermediates\\transforms\\dexMerger\\x86_64\\debug\\0\\classes.dex

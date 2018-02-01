@@ -1,0 +1,84 @@
+<!--
+usps-element
+
+Example:
+    <app-download-element></app-download-element>
+@demo
+-->
+
+<dom-module id="app-download-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+
+    <div id="app-download-banner" hidden$="[[!showBanner]]">
+      <a href="//192305.tlnk.io/serve?action=click&publisher_id=334718&site_id=126575&my_placement=header&my_campaign=organic&my_publisher=web&my_site=mobile_site&site_id_android=126573">
+        <i class="wadicon-download"></i>
+        <p><span class="highlight">[[_translate('Get an extra')]] <strong>50 [[ctx.currency]] [[_translate('off')]]!</strong></span><br/>[[_translate('Use code')]] <span>A50</span> [[_translate('on the Wadi app')]]</p>
+        <span class="badge"></span>
+      </a>
+      <i class="wadicon-cancel" on-tap="_closeBanner"></i>
+    </div>
+
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+    is: 'app-download-element',
+
+    properties: {
+      /**
+       * application context
+       */
+      ctx: {
+        type: Object,
+        value: {
+          lang: 'en',
+          country: 'sa'
+        }
+      }
+    },
+
+    // Element Lifecycle
+    attached: function () {
+      this.showBanner = false;
+      this._getMobileOperatingSystem();
+      this.isAE = this.ctx.country === 'ae' ? true : false;
+    },
+
+    _closeBanner: function() {
+      this.showBanner = false;
+      document.getElementById('wrapper').classList.remove('app-banner-showing');
+    },
+
+    _getMobileOperatingSystem: function() {
+      var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+      // Windows Phone must come first because its UA also contains "Android"
+      // if (/windows phone/i.test(userAgent)) {
+      //     return;
+      // }
+      if (/android/i.test(userAgent)) {
+        this.showBanner = true;
+        document.getElementById('wrapper').classList.add('app-banner-showing');
+      }
+      if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        this.showBanner = true;
+        document.getElementById('wrapper').classList.add('app-banner-showing');
+      }
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+  });
+
+</script>

@@ -1,0 +1,115 @@
+<!--
+User Address Book handler
+
+Example:
+    <id-document-upload-element></id-document-upload-element>
+@demo
+-->
+
+<dom-module id="id-document-upload-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+    <div class="content-holder">
+      <h3><i class="wadicon-alert"></i>[[ _translate('Upload Your ID Document') ]]</h3>
+      <p>[[ _translate('Saudi customs require us to have a valid ID for all shipments entering Saudi Arabia.') ]]</p>
+      <p>[[ _translate('For no delays in delivery please upload a scan or photo of your Saudi National ID or Iqama below.') ]]</p>
+      <div class="file-upload-area" hidden$="[[ messaging ]]">
+        <input type="file" name="file" id="fileUpload" accept=".jpg,.jpeg,.png" on-change="_documentUpload">
+        <label for="fileUpload" class="upload-label core-block-cta core-block-cta-lg">[[ _translate('Upload Your ID') ]]</label>
+        <p>[[ _translate('File Types Allowed') ]]: <strong>.jpg</strong>, <strong>.jpeg</strong> [[ _translate('or') ]] <strong>.png</strong>.</p>
+        <p>[[ _translate('Size Limit') ]]: <strong>2MB</strong></p>
+        <template is="dom-if" if="[[ invalidationMessage ]]">
+          <p>[[ invalidationMessage ]]</p>
+        </template>
+      </div>
+      <template is="dom-if" if="[[ messaging ]]">
+        <marked-element markdown="[[ _errTranslate('thanksUploaded') ]]">
+          <div class="markdown-html"></div>
+        </marked-element>
+        <p>[[ _translate('status') ]]: <strong>[[ messaging ]]</strong></p>
+      </template>
+    </div>
+  </template>
+</dom-module>
+
+<script>
+
+  Polymer({
+    is: 'id-document-upload-element',
+
+    properties: {
+
+      options: {
+        type: Object,
+        value: {
+          allowedFileTypes: {
+            type: Array
+          },
+          allowedSize: {
+            type: Number
+          }
+        }
+      },
+
+      /**
+       * document upload status message
+       */
+      messaging: {
+        type: String,
+        observer: '_messageUpdated'
+      },
+
+      /**
+       * Application context
+       */
+      ctx: {
+        type: Object
+      }
+    },
+
+    attached: function () {
+      this.invalidationMessage = null;
+    },
+
+    _documentUpload: function (ele) {
+      this.invalidationMessage = '';
+      if (ele.target.files.length < 1) {
+        this.invalidationMessage = this._translate('No Files Selected');
+        return;
+      }
+
+      var file = ele.target.files[0];
+      var ext = file.name.match(/\.([^\.]+)$/)[1];
+      var size = file.size / 1024;
+
+      if (this.options.allowedFileTypes.indexOf(ext.toLowerCase()) >= 0 && size <= this.options.allowedSize) {
+        this.invalidationMessage = null;
+        this.fire('upload-document', { file: file });
+      } else {
+        this.invalidationMessage = this._translate('idDocumentError');
+      }
+    },
+
+    _messageUpdated: function (val) {
+      if (val) {
+        this.messaging = this._errTranslate(val);
+      }
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    },
+
+    _errTranslate: function (key) {
+      return window.translate.messaging(key);
+    }
+  });
+
+</script>

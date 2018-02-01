@@ -1,0 +1,29 @@
+{
+  "name": "pdp-carousel-element",
+  "version": "1.0.0",
+  "authors": [
+    "Dinesh Kumar <carine.li@wadi.com>"
+  ],
+  "description": "PDP Carousel with Zoom",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "banner"
+  ],
+  "main": "pdp-carousel-element.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "/demo/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  }
+}

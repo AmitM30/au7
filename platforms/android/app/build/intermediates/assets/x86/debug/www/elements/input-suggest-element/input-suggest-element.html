@@ -1,0 +1,218 @@
+<!--
+SKU details element
+
+Example:
+    <input-suggest-element></input-suggest-element>
+@demo
+-->
+
+<dom-module id="input-suggest-element">
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+  <template>
+    <template is="dom-if" if="[[ freeInput ]]" restamp="true">
+        <span on-tap="_toggle" class$="controls-trigger controls-open-[[showControls]]">[[ _getViewValue(dataSelected) ]]</span>
+        <div class="controls-container" hidden$="[[!showControls]]">
+          <div class="input-container">
+            <input type="text" is="iron-input" name$="[[ suggestName ]]" autocomplete="off" bind-value="{{ filterVal }}"/>
+            <template is="dom-if" if="[[ filterVal.length ]]" restamp="true">
+              <a on-tap="_clearInputField" class="field-clear"><i class="wadicon-cancel"></i></a>
+            </template>
+          </div>
+          <ul>
+            <li class="separator">[[ _translate('Top Results') ]]</li>
+            <template is="dom-repeat" items="[[ dataList ]]" as="item" filter="[[ _filter(filterVal) ]]" restamp="true">
+              <li on-tap="_selectOption" data-value="[[ item ]]"><a>[[item.label]]<paper-ripple></paper-ripple></a></li>
+            </template>
+            <template is="dom-if" if="[[ customInput ]]">
+              <li on-tap="_selectOption" data-value="[[ filterVal ]]"><a>[[ filterVal ]]<paper-ripple></paper-ripple></a></li>
+            </template>
+          </ul>
+        </div>
+    </template>
+    <template is="dom-if" if="[[ !freeInput ]]" restamp="true">
+      <div class="input-container">
+        <input type="text" is="iron-input" name$="[[ suggestName ]]" autocomplete="off" bind-value="{{ dataSelected }}"/>
+        <template is="dom-if" if="[[ dataSelected.length ]]" restamp="true">
+          <a on-tap="_clearFreeInputField" class="field-clear"><i class="wadicon-cancel"></i></a>
+        </template>
+      </div>
+    </template>
+  </template>
+</dom-module>
+
+<script>
+
+  Polymer({
+    is: 'input-suggest-element',
+
+    properties: {
+
+      // SHOW CONTROLS
+      showControls: {
+        type: Boolean,
+        value: false,
+        observer: '_ShowControlObserver'
+      },
+
+      /**
+      * selected data
+      **/
+      dataSelected: {
+        type: String,
+        value: function () {
+          return '';
+        },
+        notify: true,
+        observer: '_dataSelectedObserver'
+      },
+
+      /**
+      * List of data
+      **/
+      dataList: {
+        type: Array,
+        value:function() {
+          return [];
+        },
+        observer:'_dataListObserver'
+      },
+
+      /**
+      * suggest element name
+      **/
+      suggestName: {
+        type: String
+      },
+
+      /**
+       * Show free input field flag
+       */
+       customInput: {
+         type: Boolean,
+         value: false
+       },
+
+       viewValue: {
+         type: String,
+         value: '',
+         notify: true
+       }
+    },
+
+    // Element Lifecycle
+    attached: function () {
+
+      // ON CLICK OUTSIDE
+      var thisEl = this;
+      this.clickListener = window.addEventListener('click', function(e){
+        var target = e.target;
+        while (target && target != thisEl && target != document.body) {
+          target = Polymer.dom(target).node.parentElement;
+        }
+        if (target == thisEl) {
+          return;
+        } else {
+          thisEl.set('showControls', false);
+        }
+      });
+
+      this.addEventListener('keydown', function(event) {
+        if (event.keyCode === 13) {
+          event.preventDefault();
+          thisEl.filterVal = this._getViewValue(this.dataSelected);
+          thisEl.set('showControls', false);
+        }
+      });
+    },
+
+    detached: function () {
+      if (this.clickListener) {
+        window.removeEventListener(this.clickListener);
+      }
+    },
+
+    _getViewValue: function(dataSelected) {
+      if (this.dataList && this.dataList.length) {
+        if (dataSelected) {
+          var viewVal = this.dataList.find(function(item) {
+            if (dataSelected.toLowerCase() === item.value.toLowerCase()){
+              return item;
+            }
+          });
+          if (viewVal) {
+            return viewVal.label;
+          } else {
+            return dataSelected;
+          }
+        }
+      }
+    },
+
+    _filter: function (val) {
+      return function (item) {
+        if (!val) return true;
+        if (!item.label && !item.value) return false;
+        return ((item.label && ~item.label.toLowerCase().indexOf(val.toLowerCase())) || (item.value && ~item.value.toLowerCase().indexOf(val.toLowerCase())));
+      };
+    },
+
+    _selectOption: function (event) {
+      var _self = this;
+      var val = event.currentTarget.dataValue;
+      window.setTimeout(function() {
+        _self.set('dataSelected', (val.value || val));
+        _self.set('filterVal', (val.label || val));
+        _self.set('showControls', false);
+        _self.fire('input-suggest-selected');
+      }, 200);
+    },
+
+    _ShowControlObserver: function() {
+      if (this.showControls) {
+        var _self = this;
+        window.setTimeout(function(){
+          if (_self.querySelector('.input-container input')) {
+            _self.querySelector('.input-container input').focus();
+          }
+        }, 0);
+      }
+    },
+
+    _dataListObserver: function (newValue, oldValue) {
+        this.list = [];
+        this.push('list', this.dataList);
+        this.set("freeInput", false);
+
+        if (this.dataList && this.dataList.length > 0) {
+          this.set("freeInput", true);
+        }
+    },
+
+    _clearInputField: function () {
+      this.set('filterVal', '');
+    },
+
+     _clearFreeInputField: function () {
+      this.set('dataSelected', '');
+    },
+
+    _toggle: function() {
+      this.showControls = !this.showControls;
+      var _self = this;
+    },
+
+    _dataSelectedObserver: function(newVal, oldVal) {
+      this.set('viewValue', this._getViewValue(this.dataSelected));
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+  });
+
+</script>

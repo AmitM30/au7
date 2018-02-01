@@ -1,0 +1,115 @@
+<!--
+User Address Book handler
+
+Example:
+    <gifting-element></gifting-element>
+@demo
+-->
+
+<dom-module id="gifting-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+    <div class="gift-wrap-option-container">
+      <div class="checkout-highlight-memo">
+        <div class="custom-checkbox-container gift-wrap-option">
+          <label class="custom-checkbox-label" for="giftwrap">
+            <input type="checkbox" id="giftwrap" collapse="#giftMessage" on-change="_toggle" />
+            <span class="label-text">
+              <i class="wadicon-gift"></i>
+              [[ _translate('Need gift wrap? Add that finishing touch for just')]] <strong>[[ _giftingAmount(giftingAmount) ]] [[ ctx.currency ]]</strong>
+            </span>
+            <div class="check-indicator"></div>
+          </label>
+        </div>
+        <iron-collapse id="giftMessage">
+          <div class="input-container gift-message">
+            <textarea maxlength="200" value="{{ giftingMessage::input }}" placeholder="[[ _translate('Include a personalized gift message') ]]"></textarea>
+            <p class="gift-message-counter">[[ _translate('Characters remaining')]]: <strong>{{giftingMessageCharRemaining}}</strong></p>
+          </div>
+        </iron-collapse>
+      </div>
+    </div>
+  </template>
+</dom-module>
+
+<script>
+
+  Polymer({
+    is: 'gifting-element',
+
+    properties: {
+      /*
+      *   gifting option
+      */
+      giftOption:{
+        value: function(){
+          return { };
+        }
+      },
+
+      /*
+      *  gifting message
+      */
+      giftingMessage:{
+        value: function() {
+          return { };
+        },
+        observer: '_giftMessageLimit'
+      },
+
+      /**
+       * gifting amount
+       */
+      giftingAmount: {
+        type: String
+      },
+
+      /**
+       *  app context
+       */
+       ctx: {
+         type:Object
+       }
+    },
+
+    // Element Lifecycle
+    attached: function () {
+      this.giftingMessageCharRemaining = 200;
+      if (this.giftOption === 't') {
+        var tempMessage = this.giftingMessage;
+        this.querySelector('input[type=checkbox]').checked = true;
+        this.set("giftingMessage", tempMessage);
+        this.querySelector('#giftMessage').setAttribute("opened", true);
+      }
+    },
+
+    _giftMessageLimit: function(){
+      this.giftingMessageCharRemaining =  200 - this.giftingMessage.length;
+    },
+
+    _toggle: function() {
+      this.querySelector('#giftMessage').toggle();
+      this.set("giftOption", this.giftOption === 'f' ? 't' : 'f');
+      if (this.giftOption === 'f') {
+        this.set("giftingMessage", '');
+      }
+      this.fire('gifting-toggle', { giftOption: this.giftOption });
+    },
+
+    _giftingAmount:function (amount) {
+      return parseInt(amount)/100;
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+  });
+
+</script>

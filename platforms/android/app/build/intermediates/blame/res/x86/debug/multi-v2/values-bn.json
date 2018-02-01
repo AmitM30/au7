@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "C:\\Users\\manga\\Desktop\\wadi\\au7\\platforms\\android\\app\\build\\intermediates\\incremental\\mergeX86DebugResources\\merged.dir\\values-bn\\values-bn.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\manga\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-27.0.2.aar\\e81c53164b18ea02018927d1692dda76\\res\\values-bn\\values-bn.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    }
+                }
+            ]
+        }
+    ]
+}

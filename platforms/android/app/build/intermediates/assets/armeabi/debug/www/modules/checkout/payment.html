@@ -1,0 +1,217 @@
+<template>
+	<section class="checkout-step" id="checkout-step-payment">
+
+		<!-- NO PAYMENT MESSAGE START -->
+	 	<!-- <div class="checkout-area single-memo-container" if.bind="!needsPayment">
+			<div class="checkout-highlight-memo">
+				<p>${'Thanks for using your voucher code, there is no further payment required for this order.' | t}</p>
+			</div>
+		</div> -->
+		<!-- NO PAYMENT MESSAGE END -->
+
+		<!-- WALLET SUBSCRIPTION -->
+		<div class="checkout-area-wallet single-memo-container" if.bind="cartModel.details.wallet.amount">
+			<div class="custom-checkbox-container wallet-container">
+				<label class="custom-checkbox-label" for="checkout-wallet">
+					<input type="checkbox" id="checkout-wallet" name="paymentMethod" change.trigger="useWallet()" checked checked.bind="cartModel.use_wallet"/>
+					<span class="label-text">${ 'Spend' | t } <span class="wallet-money"> ${ cartModel.details.wallet.amount }</span> ${ common.ctx.currency } ${'From Wadi Wallet' | t}</span>
+					<div class="check-indicator"></div>
+				</label>
+				<span class="icon-info" click.trigger="showInfo()">&#9432;</span>
+			</div>
+			<div class="info" if.bind="!hideDiscountInfo">
+				${ 'Maximum usage allowed: 10% of cart value up to 100 SAR' | t } ${ common.ctx.currency }
+			</div>
+		</div>
+
+		<!-- REVIEW -->
+		<div class="checkout-area-wallet top-summary single-memo-container">
+			<div class="cart-total ${ hideSummary }" click.trigger="showSummary()"><span class="heading">${ 'Total Payable' | t }:</span> <span class="value">${ cartModel.cartReviewData.invoice[7].value / 100 } ${ common.ctx.currency }</span></div>
+			<div class="cart-invoice-container" if.bind="!hideSummary">
+				<ul class="cart-invoice">
+					<li><span class="heading">${ 'Subtotal' | t }:</span> <span class="value">${ cartModel.cartReviewData.invoice[0].value / 100 } ${ common.ctx.currency }</span></li>
+					<li>
+						<span class="heading">${ 'Shipping' | t }:</span>
+						<span if.bind="cartModel.cartReviewData.invoice[2].value > 0" class="value">${ cartModel.cartReviewData.invoice[2].value / 100 } ${ common.ctx.currency }</span>
+						<span if.bind="cartModel.cartReviewData.invoice[2].value == 0" class="value free">${ 'Free' | t }</span>
+					</li>
+					<li if.bind="cartModel.cartReviewData.invoice[1].value > 0"><span class="heading">${ 'Cash on Delivery Fee' | t }:</span> <span class="value">${ cartModel.cartReviewData.invoice[1].value / 100 } ${ common.ctx.currency }</span></li>
+					<li if.bind="cartModel.cartReviewData.invoice[3].value > 0"><span class="heading">${ 'Gift Wrap' | t }:</span> <span class="value"> ${ cartModel.cartReviewData.invoice[3].value / 100 } ${ common.ctx.currency }</span></li>
+					<li if.bind="cartModel.cartReviewData.invoice[4].value > 0"><span class="heading">${ 'Tax' | t }:</span> <span class="value">${ cartModel.cartReviewData.invoice[4].value / 100 } ${ common.ctx.currency }</span></li>
+					<li if.bind="cartModel.cartReviewData.invoice[5].value > 0"><span class="heading">${ 'Coupon' | t }:</span> <span class="value discount">- ${ cartModel.cartReviewData.invoice[5].value / 100 } ${ common.ctx.currency }</span></li>
+					<li if.bind="cartModel.cartReviewData.invoice[6].value > 0"><span class="heading">${ 'Wallet' | t }:</span> <span class="value free">- ${ cartModel.cartReviewData.invoice[6].value / 100 } ${ common.ctx.currency }</span></li>
+					<li class="total"><span class="heading">${ 'Total Payable' | t }:</span> <span class="value">${ cartModel.cartReviewData.invoice[7].value / 100 } ${ common.ctx.currency }</span></li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="checkout-area">
+			<div class="cart-items-container">
+				<p class="title">${ 'Ship to' | t }:</p>
+					<div class="step-overview">
+						<p class="shipping-address">
+							<!-- <span if.bind="cartModel.addresses.shipping.default" class="address-tag">${'Default Address' | t}</span> -->
+							<span class="name">${ cartModel.addresses.shipping.name }</span>
+							<span class="address">
+								${ cartModel.addresses.shipping.building_street_no },
+								${ cartModel.addresses.shipping.area },  ${ cartModel.addresses.shipping.landmark }
+							</span>
+							<span class="address">
+								${ cartModel.addresses.shipping.city }, ${ cartModel.addresses.shipping.country }
+							</span>
+							<span class="contact-number">${ cartModel.addresses.shipping.phone }</span>
+						</p>
+						<button class="step-trigger" tap.trigger="moveToShipping()">${'Change' | t}</button>
+					</div>
+					<!-- <p class="gift-wrap" if.bind="cartModel.gift_option === 't'">${'This order will be gift wrapped' | t}</p> -->
+					<div class="custom-checkbox-container default-shipping" if.bind="!cartModel.addresses.shipping.default && user.info.isLoggedIn">
+						<label class="custom-checkbox-label" for="defaultShipping">
+							<input id="defaultShipping" type="checkbox" change.trigger="makeDefaultShipping()" />
+							<span class="label-text">${ 'Set this address as default' | t }</span>
+							<div class="check-indicator"></div>
+						</label>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- PAYMENT OPTIONS -->
+		<div class="checkout-area payment-options-wrapper" if.bind="needsPayment">
+			<!-- <ul class="options">
+				<li>
+					<a id="payment-prepay" click.trigger="selectPaymentMethod('cc')" class="${ selectedMethod === 'cc' ? 'active' : ''} disabled-${!cartModel.details.allowed_payment_method.cc.allowed}">
+						${'_prepayOptions' + common.ctx.country.toUpperCase() | t}
+						<paper-ripple></paper-ripple>
+					</a>
+				</li>
+				<li>
+					<a id="payment-cod" click.trigger="selectPaymentMethod('cod')" class="${ selectedMethod === 'cod' ? 'active' : ''} disabled-${!cartModel.details.allowed_payment_method.cod.allowed}">
+						${'Cash On Delivery' | t}
+						<paper-ripple></paper-ripple>
+					</a>
+				</li>
+			</ul> -->
+
+			<ul class="payment-options-list">
+				<li>
+					<div class="custom-radio-container disabled-${!cartModel.details.allowed_payment_method.cod.allowed}">
+						<label class="custom-radio-label" for="cod">
+							<input type="radio" id="cod" name="paymentMethod" value="cod" change.trigger="selectPaymentMethod('cod')" checked.bind="cartModel.payment.method">
+							<span class="label-text">
+								<span class="name">
+									${'Cash On Delivery' | t}
+								</span>
+							</span>
+							<div class="check-indicator"></div>
+							<!-- <paper-ripple></paper-ripple> -->
+						</label>
+					</div>
+					<!-- COD DISABLED START -->
+					<div class="checkout-area single-memo-container payment-helper-message" if.bind="!cartModel.details.allowed_payment_method.cod.allowed">
+						<div class="checkout-highlight-memo">
+							<p>${'Cash on delivery is not available for one or more of your items. Please proceed with debit/credit card.' | t}</p>
+						</div>
+					</div>
+					<!-- COD DISABLED END -->
+					<!-- COD -->
+					<checkout-payment-cod-element
+						selected-method.two-way="selectedMethod"
+						ctx.bind="common.ctx"
+						cod-charges.bind="cartModel.cartReviewData.invoice[1].value"
+						payment-method-prepay.trigger="selectPaymentMethod('cc')"
+						can-place-order.two-way="canPlaceOrder"
+						if.bind="selectedMethod == 'cod'"
+					></checkout-payment-cod-element>
+				</li>
+
+				<li>
+				  <div class="custom-radio-container disabled-${!cartModel.details.allowed_payment_method.cc.allowed}">
+						<label class="custom-radio-label" for="cc">
+							<input type="radio" id="cc" name="paymentMethod" value="cc" change.trigger="selectPaymentMethod('cc')" checked.bind="cartModel.payment.method">
+							<span class="label-text">
+								<span class="name">
+									${'_prepayOptions' + common.ctx.country.toUpperCase() | t}
+								</span>
+							</span>
+							<div class="check-indicator"></div>
+							<!-- <paper-ripple></paper-ripple> -->
+						</label>
+				  </div>
+				  <!-- PREPAY -->
+				  <checkout-payment-prepay-element
+					  ctx.bind="common.ctx"
+					  save-new-address.trigger="saveBillingAddress($event)"
+					  card-details.two-way="cartModel.payment.card"
+					  cities-list.one-way="config.citiesList"
+					  areas-list.bind="config.areasList"
+					  phone-config.bind="phoneConfig"
+					  billing-address.two-way="cartModel.addresses.billing"
+					  can-place-order.two-way="canPlaceOrder"
+					  year-range.bind="config.creditCardYearRange"
+					  selected-method.two-way="selectedMethod"
+					  post-order-review.trigger="postOrderReview()"
+					  saved-cards.bind="savedCards"
+					  token.two-way="cartModel.payment.token"
+					  delete-saved-card.trigger="deleteSavedCard($event)"
+					  if.bind="selectedMethod == 'cc'"
+				  ></checkout-payment-prepay-element>
+			  </li>
+			</ul>
+			<!-- NEWSLETTER SUBSCRIPTION -->
+			<div class="custom-checkbox-container newsletter-subscription-container">
+				<label class="custom-checkbox-label" for="checkout-newsletter-subscription">
+					<input type="checkbox" id="checkout-newsletter-subscription" name="paymentMethod" checked checked.bind="cartModel.misc.newsletter"/>
+					<span class="label-text">${ 'Subscribe to our newsletters & get exclusive offers!' | t }</span>
+					<div class="check-indicator"></div>
+				</label>
+			</div>
+		</div>
+
+		<div class="checkout-area">
+			<div class="cart-items-container">
+		        <p class="title">${ 'Review Your Order' | t }:</p>
+		        <cart-review-element
+		          cartreview.one-way='cartModel.cartReviewData'
+		          cartproducts.one-way='cartModel.products'
+		          remove-item.trigger='remove($event)'
+		          update-quantity.trigger='updateItemQuantity($event)'
+		          oositems.one-way='oosItems'
+		          ctx.bind='common.ctx'
+		          messages.bind='messenger.messages'
+		          options.bind='{ "isInCheckoutReview": true, "isShowOverview": false, "isShowCoupon": false }'
+		        >
+		        </cart-review-element>
+		    </div>
+		    <coupon-code-element apply-coupon.trigger="checkCoupon($event)" remove-coupon.trigger="removeCoupon()" code.one-way="cartModel.coupon"></coupon-code-element>
+			<div class="cart-invoice-container">
+				<ul class="cart-invoice">
+					<li><span class="heading">${ 'Subtotal' | t }:</span> <span class="value">${ cartModel.cartReviewData.invoice[0].value / 100 } ${ common.ctx.currency }</span></li>
+					<li>
+						<span class="heading">${ 'Shipping' | t }:</span>
+						<span if.bind="cartModel.cartReviewData.invoice[2].value > 0" class="value">${ cartModel.cartReviewData.invoice[2].value / 100 } ${ common.ctx.currency }</span>
+						<span if.bind="cartModel.cartReviewData.invoice[2].value == 0" class="value free">${ 'Free' | t }</span>
+					</li>
+					<li if.bind="cartModel.cartReviewData.invoice[1].value > 0"><span class="heading">${ 'Cash on Delivery Fee' | t }:</span> <span class="value">${ cartModel.cartReviewData.invoice[1].value / 100 } ${ common.ctx.currency }</span></li>
+					<li if.bind="cartModel.cartReviewData.invoice[3].value > 0"><span class="heading">${ 'Gift Wrap' | t }:</span> <span class="value"> ${ cartModel.cartReviewData.invoice[3].value / 100 } ${ common.ctx.currency }</span></li>
+					<li if.bind="cartModel.cartReviewData.invoice[4].value > 0"><span class="heading">${ 'Tax' | t }:</span> <span class="value">${ cartModel.cartReviewData.invoice[4].value / 100 } ${ common.ctx.currency }</span></li>
+					<li if.bind="cartModel.cartReviewData.invoice[5].value > 0"><span class="heading">${ 'Coupon' | t }:</span> <span class="value discount">- ${ cartModel.cartReviewData.invoice[5].value / 100 } ${ common.ctx.currency }</span></li>
+					<li if.bind="cartModel.cartReviewData.invoice[6].value > 0"><span class="heading">${ 'Wallet' | t }:</span> <span class="value free">- ${ cartModel.cartReviewData.invoice[6].value / 100 } ${ common.ctx.currency }</span></li>
+					<li class="total"><span class="heading">${ 'Total Payable' | t }:</span> <span class="value">${ cartModel.cartReviewData.invoice[7].value / 100 } ${ common.ctx.currency }</span></li>
+				</ul>
+			</div>
+		</div>
+
+		<!-- WALLET SUBSCRIPTION -->
+<!-- 		<div class="checkout-area-wallet single-memo-container loyalty-message">
+			<div class="info" >
+				${ 'Order now to earn 500 Loyalty Points.' | t }
+			</div>
+		</div> -->
+
+		<!-- PLACE ORDER CTA -->
+		<div class="checkout-area step-cta-container">
+			<button disabled.bind="!canPlaceOrder && needsPayment" class="core-block-cta core-block-cta-lg cta-full-width" tap.trigger="order()">${ 'Place Order' | t }<paper-ripple></paper-ripple></button>
+		</div>
+
+	</section>
+</template>

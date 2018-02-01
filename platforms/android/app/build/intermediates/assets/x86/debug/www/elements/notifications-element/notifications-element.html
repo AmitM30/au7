@@ -1,0 +1,81 @@
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+    <carousel-element></carousel-element>
+@demo
+-->
+
+<dom-module id="notifications-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+    :host paper-toast {
+      -webkit-transform: translateY(-50px);
+      transform: translateY(-50px);
+      background-color: var(--paper-toast-background-color, #FFDC50);
+    }
+    .paper-toast-open {
+      -webkit-transform: translateY(0px);
+      transform: translateY(0px);
+    }
+  </style>
+
+  <template>
+    <paper-toast
+      id="notifier"
+      text="[[ message ]]"
+      vertical-align="top"
+      always-on-top="true"
+      duration="[[ options.duration ]]"
+    >
+      <button onclick="notifier.toggle()"><i class="wadicon-cancel"></i></button>
+    </paper-toast>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'notifications-element',
+
+    properties: {
+
+      /**
+       * Text that needs to be displayed as notification
+       */
+      message: {
+        type: String,
+        value: '',
+        notify: true,
+        observer: '_showNotification'
+      },
+
+      /**
+       * Options supported by carousel element
+       */
+      options: {
+        type: Object,
+        value: {
+          duration: 5000
+        }
+      }
+    },
+
+    _showNotification: function () {
+      if (this.message) {
+        this.querySelector('#notifier').open();
+      }
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+  });
+
+</script>

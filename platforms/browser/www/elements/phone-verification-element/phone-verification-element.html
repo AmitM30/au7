@@ -1,0 +1,283 @@
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+    <phone-verification-element ></phone-verification-element>
+@demo
+-->
+
+<dom-module id="phone-verification-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+
+    <!-- REQUEST CODE AND ENTER CODE -->
+    <div class$="phone-verification-wrapper otp-sent-[[otpSent]]">
+      <validation-phone-number phone-config="[[ phoneConfig ]]"></validation-phone-number>
+      <!-- REQUEST CODE START -->
+      <div class="phone-verification-step">
+        <div class="highlight-memo">
+          <p>[[ _translate('Please enter your phone number so we can send you a quick and easy verification code via SMS.') ]]</p>
+        </div>
+        <form is="iron-form" novalidate on-submit="_sendOtp" method="GET" data-medium="sms">
+          <div class="input-field">
+            <label>[[ _translate('Phone Number') ]] <span hidden$="[[ isBilling ]]">*</span></label>
+            <div class="input-container with-clear checkout-contact-number">
+              <input is="iron-input" class$="validity-{{validphone}}" autocomplete="off" name="phone" prevent-invalid-input allowed-pattern="\d" bind-value="{{ phoneNumberView }}" type="tel">
+              <template is="dom-if" if="[[ phoneNumberView.length ]]" restamp="true">
+                <a on-click="_clearPhoneNumber" class="field-clear"><i class="wadicon-cancel"></i></a>
+              </template>
+            </div>
+            <p class="input-helper-message" hidden$="[[validphone]]"><i class="wadicon-alert"></i>[[ _errorTranslate(validPhoneMessage.message) ]]</p>
+          </div>
+          <div id="send-otp-container" class="submit-field">
+            <button class="core-block-cta cta-full-width core-block-cta-tertiary" disabled$="{{ !phoneNumberView.length }}" type="submit">[[ _translate('Get Verification Code') ]]<paper-ripple></paper-ripple></button>
+          </div>
+        </form>
+      </div>
+      <!-- REQUEST CODE END -->
+
+      <!-- ENTER CODE START -->
+      <div class="phone-verification-step otp-sent-step">
+
+        <div class="step-overview">
+          <p>[[ _translate('Phone') ]]: <span class="value">[[ phoneNumber ]]</span></p>
+          <button type="button" on-tap="_clearPhoneNumber">[[ _translate('Change Number') ]]</button>
+        </div>
+
+        <p class="verification-code-helper" hidden$="[[ otpVerified ]]">[[ _translate("We've just sent a 4 digit code to your phone. Please enter it below to complete the verification process") ]]<i class="wadicon-discount"></i></p>
+
+        <!-- <div class="checkout-highlight-memo" hidden$="[[ !otpVerified ]]">
+          <p>[[ _translate('Congrats! Your number is now verified!') ]]</p>
+        </div> -->
+
+        <form is="iron-form" novalidate on-submit="_verifyOtp" method="GET" hidden$="[[ otpVerified ]]">
+          <div class="single-line-form no-label">
+            <div class="input-field">
+              <div class="input-container with-clear">
+                <input is="iron-input" prevent-invalid-input allowed-pattern="\d" autocomplete="off" bind-value="{{ verificationCode }}" type="tel" placeholder="[[ _translate('4 Digit Code') ]]">
+                <template is="dom-if" if="[[ verificationCode.length ]]" restamp="true">
+                  <a on-click="_clearVerficationCode" class="field-clear"><i class="wadicon-cancel"></i></a>
+                </template>
+                <p class="input-helper-message" hidden$="[[!otpError]]"><i class="wadicon-alert"></i>[[ _translate('Please double check the code and try again') ]]</p>
+              </div>
+            </div>
+            <div class="submit-field">
+              <button class="core-block-cta cta-full-width" disabled$="{{ !verificationCode.length }}" type="submit">[[ _translate('Verify') ]]<paper-ripple></paper-ripple></button>
+            </div>
+          </div>
+          <!-- RESEND TIMER START -->
+          <div class="resend-option">
+            <div class="highlight">
+              <template is="dom-if" if="[[!retryOtp]]">
+                <div class="resend-countdown">
+                  <p>[[ _translate('Not received a code? Try resending in:') ]]</p>
+                  <timer-element duration$="[[ endTime ]]" options='{ "hideIfZero": true, "hideProgressBar": true }'></timer-element>
+                </div>
+              </template>
+              <template is="dom-if" if="[[retryOtp]]">
+                <p><a on-click="_sendOtp" data-medium="sms">[[ _translate('Resend SMS') ]]</a> [[ _translate('or') ]] <a on-click="_sendOtp" data-medium="call">[[ _translate('Receive code by voice call') ]]</a></p>
+              </template>
+            </div>
+          </div>
+          <!-- RESEND TIMER END -->
+
+          <div class="proceed-option" hidden>
+            <div class="custom-checkbox-container">
+              <label class="custom-checkbox-label" for="skip-verification">
+                <input type="checkbox" id="skip-verification" collapse="#proceed-without-verification" on-change="_toggle">
+                <span class="label-text">[[ _translate('Continue without verifying phone number') ]]</span>
+                <div class="check-indicator"></div>
+              </label>
+            </div>
+            <iron-collapse id="proceed-without-verification">
+              <p>[[ _translate('Failure to verify your phone number may cause delivery delays.') ]]</p>
+              <template is="dom-if" if="[[ opensIndependently ]]">
+                  <div class="submit-field">
+                    <button type="button" class="core-block-cta cta-full-width" on-tap="_skipPhoneVerification">[[ _translate('Skip Phone Verification') ]]<paper-ripple></paper-ripple></button>
+                  </div>
+              </template>
+            </iron-collapse>
+          </div>
+
+        </form>
+      </div>
+      <!-- ENTER CODE END -->
+
+    </div>
+
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'phone-verification-element',
+
+    properties: {
+
+      phoneConfig: {
+        type: Object
+      },
+
+      opensIndependently: {
+        type: Boolean,
+        value: false
+      },
+
+      phoneNumber: {
+        type: String,
+        notify: true
+      },
+
+      otpVerified: {
+        type: Boolean,
+        notify:true
+      },
+
+      ctx: {
+        type: Object
+      },
+
+      phoneNumberView: {
+        type: String,
+        observer: '_phoneNumberChanged'
+      },
+
+      skipPhoneVerification: {
+        type: Boolean,
+        notify: true
+      },
+
+      type: {
+        type: String
+      },
+
+      primaryPhone: {
+        type: String,
+        notify: true
+      }
+    },
+
+    attached: function () {
+      this.validator = new Polymer.IronMeta({ type: 'validator' }).byKey('validation-phone-number');
+      this.validphone= true;
+      this.otpSent = false;
+      this.otpError = false;
+      this.otpVerified = false;
+      this.retryOtp = false;
+      this.validPhoneMessage = {};
+      this.isBilling = this.type == 'billing' ? true : false;
+      if (this.validator) {
+        this.phoneNumberView = this.validator.phoneNumberWithoutCountry(this.phoneNumber);
+      }
+
+      if (this.isBilling) {
+        this.querySelector("#send-otp-container").setAttribute('hidden', true);
+      }
+      if (this.ctx.country == 'sa') {
+        this.querySelector('.checkout-contact-number').classList.add('sa');
+      }
+
+      if (this.primaryPhone) {
+        this.otpSent = true;
+        this.otpVerified = true;
+        this.phoneNumber = this.primaryPhone;
+      }
+
+      this.addEventListener('time-up', function () {
+        this.retryOtp = true;
+        if (this.phoneConfig.skipCounter > 0) {
+          this.phoneConfig.skipCounter--;
+        } else {
+          this.querySelector('.proceed-option').removeAttribute('hidden');
+        }
+      });
+
+      this.addEventListener('iron-form-presubmit', function(event) {
+        event.preventDefault();
+      });
+    },
+
+    _phoneNumberChanged: function (newValue, oldValue) {
+      if (typeof newValue !=='undefined' && newValue !== null && this.validator) {
+        if (newValue.length > 8) {
+          this.validphone= this.validator.validate(newValue, this.phoneConfig);
+          this.validPhoneMessage = this.validator.phoneNumberWithCountry(newValue);
+          this.set("phoneNumber", this.validPhoneMessage.number);
+        }
+        if (newValue.length < 8) {
+          this.validphone= true;
+          this.set("phoneNumber", null);
+        }
+      }
+    },
+
+    _sendOtp: function (event) {
+      this.type = event.target.getAttribute('data-medium') || 'sms';
+      this.validphone= this.validator.validate(this.phoneNumberView, this.phoneConfig);
+      this.validPhoneMessage = this.validator.phoneNumberWithCountry(this.phoneNumberView);
+      this.otpError = false;
+
+      if (this.validphone) {
+        this.otpSent = true;
+        this.fire('otp-request', { phoneNumber: this.phoneNumber, type: this.type });
+      }
+
+      this.set('endTime', this.phoneConfig.retryTimer);
+      this.retryOtp = false;
+      if (this.querySelector('timer-element')) {
+        this.querySelector('timer-element').duration = this.phoneConfig.retryTimer;
+      }
+    },
+
+    _verifyOtp: function () {
+      if (this.validphone) {
+        this.fire('otp-verify', { phoneNumber: this.phoneNumber, verificationCode: this.verificationCode });
+      }
+    },
+
+    _clearPhoneNumber: function () {
+      this.phoneNumberView = null;
+      this.phoneNumber = null;
+      this.set("primaryPhone", null);
+      this.otpSent = false;
+      this.otpError = false;
+      this.otpVerified = false;
+      this.querySelector("#skip-verification").checked = false;
+      this.skipPhoneVerification = false;
+      this.querySelector("#proceed-without-verification").opened = false;
+    },
+
+    _skipPhoneVerification: function() {
+      this.fire('skip-phone-verification', { phone: this.phoneNumber });
+    },
+
+    _clearVerficationCode:function () {
+      this.verificationCode = null;
+      this.otpError = false;
+    },
+
+    _toggle: function (event) {
+      this.querySelector(event.currentTarget.getAttribute('collapse')).toggle();
+      this.set('skipPhoneVerification', !this.skipPhoneVerification);
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    },
+
+    _errorTranslate: function (key) {
+      return window.translate.messaging(key);
+    }
+  });
+
+</script>

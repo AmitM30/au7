@@ -1,0 +1,29 @@
+{
+  "name": "facets-element",
+  "version": "1.0.0",
+  "authors": [
+    "Amit Mangal <amit.mangal@wadi.com>"
+  ],
+  "description": "Widget to display facet options for the listings view",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "listing"
+  ],
+  "main": "facets-element.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "/demo/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  }
+}

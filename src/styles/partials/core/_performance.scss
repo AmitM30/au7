@@ -23,3 +23,22 @@ paper-ripple {
    -ms-perspective: 1000;
    perspective: 1000;
 }
+
+.scrollable,
+#drawer, #main,
+#page-container { 
+    overflow: auto;
+    -webkit-transition-property: top, bottom;
+    transition-property: top, bottom;
+    -webkit-transition-duration: .2s, .2s;
+    transition-duration: .2s, .2s;
+    -webkit-transition-timing-function: linear, linear;
+    transition-timing-function: linear, linear;
+    -webkit-overflow-scrolling: touch;
+    -webkit-transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+}
+
+body {
+    will-change: transform;
+}

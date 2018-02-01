@@ -1,0 +1,110 @@
+<!--
+Widget with tabbing title and products listing option
+
+Example:
+    <tabbed-pages-element></tabbed-pages-element>
+@demo
+-->
+<dom-module id="tabbed-pages-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+
+    :host ul.links.active {
+      display: block;
+    }
+
+  </style>
+
+  <template>
+    <div class="tab-content">
+      <template is="dom-if" if="[[ links.assets ]]" as="link">
+        <div class="links-wrapper">
+          <ul class="links" position$="[[ index ]]">
+            <template is="dom-repeat" items="[[ links.assets ]]" as="link">
+              <li on-tap="_tabAction" link$="[[ _getLink(link.redirectUrl) ]]"><button position$="[[ index ]]">[[ link.title ]]<paper-ripple></paper-ripple></button></li>
+            </template>
+          </ul>
+        </div>
+      </template>
+    </div>
+  </template>
+</dom-module>
+<script>
+
+  Polymer({
+
+    is: 'tabbed-pages-element',
+
+    properties: {
+
+      /**
+       * Products array that needs to be displayed to UI
+       */
+      links: {
+        type: Object
+      },
+
+      /**
+       * Options supported by link element
+       */
+      options: {
+        type: Object,
+        value: function() {
+          return {
+            hidePrevNext: true,
+            hidePagination: false,
+            title: true
+          };
+        }
+      },
+
+      /**
+       * application context
+       */
+      ctx: {
+        type: Object
+      }
+    },
+
+    attached: function () {
+      this._activateFirstLi();
+    },
+
+    _activateFirstLi: function () {
+      // For Safari Touch Devices
+      var $firstLink = this.querySelector('.tab-content ul li');
+      this.fire('load-page-type', { url: $firstLink.getAttribute('link') });
+      this.querySelectorAll('ul.links li').forEach(function (el) { el.classList.remove('active'); });
+      $firstLink.classList.add('active');
+    },
+
+    _getLink: function (link) {
+      return (link && link.indexOf('/') === 0) ? link : '/' + link;
+    },
+
+    _tabAction: function (event) {
+      this.fire('load-page-type', { url: event.currentTarget.getAttribute('link') });
+      this.querySelectorAll('ul.links li').forEach(function (el) { el.classList.remove('active'); });
+      event.currentTarget.classList.add('active');
+    },
+
+    _onClick: function (swiper, event) {
+      var data = {
+        name: event.target.getAttribute('alt'),
+        creative: '',
+        id: '',
+        position: parseInt(event.target.getAttribute('position')) + 1
+      };
+      this.fire('promo-click', data);
+    },
+
+    _translate: function (key) {
+       return window.translate(key);
+    }
+  });
+
+</script>

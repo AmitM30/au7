@@ -1,0 +1,67 @@
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+    <carousel-element></carousel-element>
+@demo
+-->
+
+<dom-module id="messaging-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+    <template is="dom-if" if="[[messages.length]]">
+      <div class="messages-container">
+        <template is="dom-repeat" items="[[ messages ]]" as="message">
+          <span class="message">
+            [[ message ]]
+            <template is="dom-if" if="[[_isNotLastItem(index, messages)]]">
+            ,&nbsp;
+            </template>
+          </span>
+        </template>
+      </div>
+    </template>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'messaging-element',
+
+    properties: {
+
+      /**
+       * Messages that need to be displayed as notification
+       */
+      messages: {
+        type: Object,
+        value: []
+      },
+
+      /**
+       * Options supported by carousel element
+       */
+      options: {
+        type: Object,
+        value: {
+          duration: 3000
+        }
+      }
+    },
+
+    _isNotLastItem: function(index, items) {
+      return (index + 1) === items.length ? false : true;
+    }
+  });
+
+</script>

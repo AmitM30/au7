@@ -1,0 +1,194 @@
+<!--
+Widget with tabbing title and products listing option
+
+Example:
+    <tabbed-links-element></tabbed-links-element>
+@demo
+-->
+<dom-module id="tabbed-links-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+
+    :host ul.links {
+      display: none;
+    }
+
+    :host ul.links.active {
+      display: block;
+    }
+
+    :host .swiper-slide.active .preactive {
+      display: none;
+    }
+
+    :host .swiper-slide .alternate {
+      display: none;
+    }
+
+    :host .swiper-slide.active .alternate {
+      display: block;
+    }
+    
+  </style>
+
+  <template>
+    <template is="dom-if" if="[[ banners.title ]]">
+      <h2>[[banners.title]]</h2>
+    </template>
+    <div class="">
+      <div class="carousel-container">
+        <div class="swiper-container js_frame">
+          <div class="swiper-wrapper js_slides">
+            <template is="dom-repeat" items="[[ banners.assets ]]" as="banner">
+              <div class="swiper-slide js_slide" position$="[[ index ]]" on-tap="_onClick">
+                <img src$="[[ banner.imageUrl ]]" alt="[[ banner.title ]]" class="swiper-lazy preactive" />
+                <img src$="[[ banner.activeImageUrl ]]" alt="[[ banner.title ]]" class="swiper-lazy alternate" />
+                <template is="dom-if" if="[[ banners.assets ]]" as="banner">
+                  <p class="title">[[ banner.title ]]</p>
+                </template>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-content">
+      <template is="dom-repeat" items="[[ banners.assets ]]" as="banner">
+        <ul class="links" position$="[[ index ]]">
+          <template is="dom-repeat" items="[[ banner.links ]]" as="link">
+            <li><button link$="[[ _getLink(link.redirectUrl) ]]" on-tap="_tabAction">[[ link.title ]]<paper-ripple></paper-ripple></button></li>
+          </template>
+        </ul>
+      </template>
+    </div>
+  </template>
+</dom-module>
+<script>
+
+  Polymer({
+
+    is: 'tabbed-links-element',
+
+    properties: {
+
+      /**
+       * Products array that needs to be displayed to UI
+       */
+      banners: {
+        type: Object
+      },
+
+      /**
+       * Options supported by banner element
+       */
+      options: {
+        type: Object,
+        value: function() {
+          return {
+            hidePrevNext: true,
+            hidePagination: false,
+            title: true,
+            hideIndexer: false,
+            sliderOptions: {
+              type: Object
+            }
+          };
+        }
+      },
+
+      /**
+       * application context
+       */
+      ctx: {
+        type: Object
+      }
+    },
+
+    ready: function () {
+      this.internals = {};
+      this.internals.swiperOptions = {
+        classNameSlide: 'swiper-slide',
+        rewind        : true
+      };
+    },
+
+    attached: function () {
+      // Merge default option with element input options
+      Object.assign(this.internals.swiperOptions, this.options.sliderOptions);
+
+      // this.internals.swiperOptions.onLazyImageReady = this._onLazyImageReady.bind(this);
+      // this.internals.swiperOptions.onClick = this._onClick.bind(this);
+
+      this.swiperInstance = window.swiper(this.querySelector('.carousel-container'), this.internals.swiperOptions);
+
+      var _self = this;
+
+      // this.swiperInstance.slideTo(this.internals.swiperOptions.slidesPerView);
+      this.querySelector('ul.links[position="0"]').classList.add('active');
+
+      this.addEventListener('while.swiper.sliding', function () { _self.fire('lazy-load-images', _self); }, { passive: true });
+      this.addEventListener('after.swiper.slide', function (slide) { _self._activateSlide(slide, slide.detail.currentSlide) }, { passive: true });
+
+      this._activateFirstLi();
+    },
+
+    _getLink: function (link) {
+      return (link && link.indexOf('/') === 0) ? link : '/' + link;
+    },
+
+    _activateFirstLi: function () {
+      this.querySelector('.tab-content ul li button').click();
+    },
+
+    _activateSlide: function (slide, position) {
+      var divs = this.querySelectorAll('.swiper-slide');
+      [].forEach.call(divs, function(el) { el.classList.remove('active'); });
+
+      this._activateLinks(slide, position);
+    },
+
+    _activateLinks: function (slide, position) {
+      var el = (slide && slide.target) || this;
+      var divLinks = this.querySelectorAll('ul.links[position]');
+      [].forEach.call(divLinks, function(el) { el.classList.remove('active'); });
+      el.querySelector('.swiper-slide[position="' + position + '"]').classList.add('active');
+      this.querySelector('ul.links[position="' + position +'"]').classList.add('active');
+    },
+
+    _tabAction: function (event) {
+      this.fire('load-listings-products', { url: event.target.getAttribute('link') });
+    },
+
+    _onLazyImageReady: function (swiper, slide, image) {
+      var data= {
+        "name": image.getAttribute('alt'),
+        "creative": "",
+        "id": "",
+        "position": parseInt(image.getAttribute('position')) + 1
+      };
+      this.fire('impressions', data);
+    },
+
+    _onClick: function (event) {
+      var position = event.target.parentNode.getAttribute('position');
+      this._activateSlide(null, position);
+
+      var data = {
+        "name": event.target.getAttribute('alt'),
+        "creative": "",
+        "id": "",
+        "position": position
+      };
+      this.fire('promo-click', data);
+    },
+
+    _translate: function (key) {
+       return window.translate(key);
+	  }
+  });
+
+</script>

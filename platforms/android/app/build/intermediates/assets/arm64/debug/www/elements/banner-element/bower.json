@@ -1,0 +1,29 @@
+{
+  "name": "banner-element",
+  "version": "1.0.0",
+  "authors": [
+    "Ramraj <ram.raj@wadi.com>"
+  ],
+  "description": "An element proving simple banner carousel functionality with support for 1, 2, 3 ...n banners",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "banner"
+  ],
+  "main": "banner-element.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "/demo/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  }
+}

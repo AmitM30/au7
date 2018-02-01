@@ -1,0 +1,96 @@
+<template>
+
+  <section class="checkout-step" id="checkout-step-confirm">
+
+    <div class="checkout-area step-cta-container top">
+      <button class="core-block-cta core-block-cta-lg cta-full-width" click.trigger="moveToPayment()">${'Continue To Payment' | t}<paper-ripple></paper-ripple></button>
+    </div>
+
+    <!-- USER OVERVIEW START -->
+   <!--  <div class="checkout-area">
+      <div class="step-overview">
+        <p>${'Email' | t}: <span class="value">${ user.info.email }</span></p>
+        <button class="step-trigger" tap.trigger="moveToSignin()">${'Edit' | t}</button>
+      </div>
+    </div> -->
+    <!-- USER OVERVIEW END -->
+
+    <!-- SHIPPING OVERVIEW START -->
+    <div class="checkout-area">
+
+      <div class="step-overview">
+        <p>${'Ship to' | t}:</p>
+        <p class="shipping-address">
+          <!-- <span if.bind="cartModel.addresses.shipping.default" class="address-tag">${'Default Address' | t}</span> -->
+          <span class="name">${ cartModel.addresses.shipping.name }</span>
+          <span class="address">
+            ${ cartModel.addresses.shipping.building_street_no },
+            ${ cartModel.addresses.shipping.area },  ${ cartModel.addresses.shipping.landmark }
+          </span>
+          <span class="address">
+            ${ cartModel.addresses.shipping.city }, ${ cartModel.addresses.shipping.country }
+          </span>
+          <span class="contact-number">${ cartModel.addresses.shipping.phone }</span>
+        </p>
+        <p class="gift-wrap" if.bind="cartModel.gift_option === 't'">${'This order will be gift wrapped' | t}</p>
+        <div class="custom-checkbox-container default-shipping" if.bind="!cartModel.addresses.shipping.default && user.info.isLoggedIn">
+          <label class="custom-checkbox-label" for="defaultShipping">
+            <input id="defaultShipping" type="checkbox" change.trigger="makeDefaultShipping()" />
+            <span class="label-text">${ 'Set this address as default' | t }</span>
+            <div class="check-indicator"></div>
+          </label>
+        </div>
+        <button class="step-trigger" tap.trigger="moveToShipping()">${'Edit' | t}</button>
+      </div>
+
+      <gifting-element
+        gift-option.two-way="cartModel.gift_option"
+        gifting-message.two-way="cartModel.gift_message"
+        gifting-toggle.trigger="giftingOption($event)"
+        gifting-amount.bind="cartModel.details.giftwrap.base_fee"
+        ctx.bind="common.ctx"
+      ></gifting-element>
+    </div>
+    <!-- SHIPPING OVERVIEW END -->
+
+    <!-- ITEMS START -->
+    <div class="checkout-area step-overview-container">
+      <div class="cart-items-container">
+        <p class="title">${ 'Review Your Order' | t }:</p>
+        <cart-review-element
+          cartreview.one-way='cartModel.cartReviewData'
+          cartproducts.one-way='cartModel.products'
+          remove-item.trigger='remove($event)'
+          update-quantity.trigger='updateItemQuantity($event)'
+          oositems.one-way='oosItems'
+          ctx.bind='common.ctx'
+          messages.bind='messenger.messages'
+          options.bind='{ "isInCheckoutReview": true, "isShowOverview": false, "isShowCoupon": false }'
+        >
+        </cart-review-element>
+      </div>
+      <coupon-code-element apply-coupon.trigger="checkCoupon($event)" remove-coupon.trigger="removeCoupon()" code.one-way="cartModel.coupon"></coupon-code-element>
+      <div class="cart-invoice-container">
+        <ul class="cart-invoice">
+          <li><span class="heading">${ 'Subtotal' | t }:</span> <span class="value">${ cartModel.cartReviewData.invoice[0].value / 100 } ${ common.ctx.currency }</span></li>
+          <li>
+            <span class="heading">${ 'Shipping' | t }:</span>
+            <span if.bind="cartModel.cartReviewData.invoice[2].value > 0" class="value">${ cartModel.cartReviewData.invoice[2].value / 100 } ${ common.ctx.currency }</span>
+            <span if.bind="cartModel.cartReviewData.invoice[2].value == 0" class="value free">${ 'Free' | t }</span>
+          </li>
+          <li if.bind="cartModel.cartReviewData.invoice[1].value > 0"><span class="heading">${ 'Cash on Delivery Fee' | t }:</span> <span class="value">${ cartModel.cartReviewData.invoice[1].value / 100 } ${ common.ctx.currency }</span></li>
+          <li if.bind="cartModel.cartReviewData.invoice[3].value > 0"><span class="heading">${ 'Coupon' | t }:</span> <span class="value discount">- ${ cartModel.cartReviewData.invoice[3].value / 100 } ${ common.ctx.currency }</span></li>
+          <li if.bind="cartModel.cartReviewData.invoice[4].value > 0"><span class="heading">${ 'Gift Wrap' | t }:</span> <span class="value"> ${ cartModel.cartReviewData.invoice[4].value / 100 } ${ common.ctx.currency }</span></li>
+          <li class="total"><span class="heading">${ 'Total' | t }:</span> <span class="value">${ cartModel.cartReviewData.invoice[5].value / 100 } ${ common.ctx.currency }</span></li>
+        </ul>
+      </div>
+    </div>
+    <!-- ITEMS END -->
+
+    <div class="checkout-area step-cta-container">
+      <button class="core-block-cta core-block-cta-lg cta-full-width" click.trigger="moveToPayment()">${'Continue To Payment' | t}<paper-ripple></paper-ripple></button>
+    </div>
+
+  </section>
+
+</template>

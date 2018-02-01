@@ -1,0 +1,29 @@
+{
+  "name": "category-links-element",
+  "version": "1.0.0",
+  "authors": [
+    "Ramraj <ram.raj@wadi.com>"
+  ],
+  "description": "An element proving category link element functionality with support for 1, 2, 3 ...n Category Links",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "banner"
+  ],
+  "main": "category-links-element",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "/demo/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  }
+}

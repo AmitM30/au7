@@ -1,0 +1,29 @@
+{
+  "name": "footer-info-element",
+  "version": "1.0.0",
+  "authors": [
+    "Ashish Raghav <ashish.raghav@wadi.com>"
+  ],
+  "description": "An element providing footer conten info",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "footer"
+  ],
+  "main": "footer-info-element.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "/demo/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  }
+}

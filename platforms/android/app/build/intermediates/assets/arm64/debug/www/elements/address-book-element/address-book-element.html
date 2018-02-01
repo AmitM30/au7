@@ -1,0 +1,262 @@
+<!--
+User Address Book handler
+
+Example:
+    <address-book-element></address-book-element>
+@demo
+-->
+
+<dom-module id="address-book-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+    <template is="dom-if" if="[[ !loadingNewAddress ]]">
+      <header>
+        <p class="title">[[ _translate('Address Book') ]]</p>
+        <div class="cta-container">
+          <button class="new-address-trigger" on-tap="_addNewAddress">[[ _translate('Add New Address') ]]</button>
+        </div>
+      </header>
+      <ul class="address-book">
+        <template is="dom-if" if="[[ defaultAddress.name ]]">
+          <li class="default-address">
+            <div class="custom-radio-container">
+              <label class="custom-radio-label" for="address">
+                <input type="radio" id="address" name="address" on-change="_shippingAddressChanged" checked$="[[ _isSelectedAddress(defaultAddress.idCustomerAddress) ]]" data-value="[[ defaultAddress ]]">
+                <span class="label-text">
+                  <span class="name">[[ defaultAddress.name ]]</span>
+                  <span class="address">
+                    <template is="dom-if" if="[[ defaultAddress.building_street_no ]]">[[ defaultAddress.building_street_no ]], </template>
+                    <template is="dom-if" if="[[ defaultAddress.area ]]">[[ defaultAddress.area ]], </template>
+                    <template is="dom-if" if="[[ defaultAddress.landmark ]]">[[ defaultAddress.landmark ]], </template>
+                    <template is="dom-if" if="[[ defaultAddress.city ]]">[[ defaultAddress.city ]], </template>
+                    <template is="dom-if" if="[[ defaultAddress.country ]]">[[ defaultAddress.country ]]</template>
+                  </span>
+                  <span class="contact-number">[[ defaultAddress.cellPhone ]]</span>
+                </span>
+                <div class="check-indicator"></div>
+                <paper-ripple></paper-ripple>
+                <div class="cta-container">
+                  <button class="core-block-cta cta-full-width core-block-cta-lg" type="button" on-tap="_moveToSummary">[[ _translate('Continue To Payment') ]]<paper-ripple></paper-ripple></button>
+                </div>
+              </label>
+            </div>
+            <span class="address-tag">[[ _translate('Default Address') ]]</span>
+          </li>
+        </template>
+        <template is="dom-if" if="[[ otherAddresses.length ]]" restamp="true">
+          <template is="dom-repeat" items="[[ otherAddresses ]]" as="others">
+            <li>
+              <div class="custom-radio-container">
+                <label class="custom-radio-label" for="address-[[others.idCustomerAddress]]">
+                  <input type="radio" id="address-[[others.idCustomerAddress]]" checked$="[[ _isSelectedAddress(others.idCustomerAddress) ]]" name="address" on-change="_shippingAddressChanged" data-value="[[ others ]]">
+                  <span class="label-text">
+                    <span class="name">[[ others.name ]]</span>
+                    <span class="address">
+                      <template is="dom-if" if="[[ others.building_street_no ]]">[[ others.building_street_no ]], </template>
+                      <template is="dom-if" if="[[ others.area ]]">[[ others.area ]], </template>
+                      <template is="dom-if" if="[[ others.landmark ]]">[[ others.landmark ]], </template>
+                      <template is="dom-if" if="[[ others.city ]]">[[ others.city ]], </template>
+                      <template is="dom-if" if="[[ others.country ]]">[[ others.country ]]</template>
+                    </span>
+                    <template is="dom-if" if="[[ others.cellPhone ]]">
+                      <span class="contact-number">[[ others.cellPhone ]]</span>
+                    </template>
+                  </span>
+                  <div class="check-indicator"></div>
+                  <paper-ripple></paper-ripple>
+                  <div class="cta-container">
+                    <button class="core-block-cta cta-full-width core-block-cta-lg" type="button" on-tap="_moveToSummary">[[ _translate('Continue To Payment') ]]<paper-ripple></paper-ripple></button>
+                  </div>
+                </label>
+              </div>
+            </li>
+          </template>
+        </template>
+      </ul>
+      <div class="cta-container">
+        <button on-tap="_addNewAddress" class="new-address-trigger">[[ _translate('Add New Address') ]]<paper-ripple></paper-ripple></button>
+      </div>
+    </template>
+    <template is="dom-if" if="[[ loadingNewAddress ]]" restamp="true">
+      <new-address-element
+        new-address="{{ shippingAddress }}"
+        user-primary-phone$="[[ userPrimaryPhone ]]"
+        ctx$="[[ ctx ]]"
+        options='{"title": "New Shipping Address", "opensIndependently": false, "type": "shipping"}'
+        cities-list="[[ citiesList ]]"
+        areas-list="[[ areasList ]]"
+        phone-config="[[ phoneConfig ]]"
+        can-continue="{{ canContinue }}"
+        primary-phone="[[ primaryPhone ]]"
+      ></new-address-element>
+    </template>
+  </template>
+</dom-module>
+
+<script>
+
+  Polymer({
+    is: 'address-book-element',
+
+    properties: {
+
+      /**
+      * User's default address
+      **/
+      defaultAddress: {
+        type: Object,
+        value: function () {
+          return {};
+        },
+        notify: true,
+        // observer: '_defaultAddressChanged'
+      },
+
+      /**
+      * Other address
+      **/
+      otherAddresses: {
+        type: Object,
+        value: function () {
+          return {};
+        },
+        notify: true
+      },
+
+      /**
+      * User shipping address
+      **/
+      shippingAddress: {
+        type: Object,
+        value: function () {
+          return {};
+        },
+        notify: true
+      },
+
+      /**
+      * New Address format
+      **/
+      addressFormat: {
+        type: Object,
+        value: function () {
+          return {};
+        }
+      },
+
+      /**
+      *   Selected address
+      **/
+      selectedAddressId: {
+        type: Object
+      },
+
+      /**
+      * User's primary phone number
+      **/
+      userPrimaryPhone: {
+        type: String
+      },
+
+      /*
+       * Phone configuration
+       */
+       phoneConfig: {
+         type:Object
+       },
+
+       /**
+       * can continue to payment
+       **/
+
+       canContinue: {
+         type: Boolean,
+         value: function () {
+           return {};
+         },
+         notify:true
+       },
+
+      /**
+       * Application context
+       */
+      ctx: {
+        type: Object
+      },
+
+      primaryPhone: {
+        type: String
+      }
+    },
+
+    // Element Lifecycle
+    attached: function () {
+      this.isMobile = window.config.device === 'mobile' ? true : false;
+      // this.isTypeShipping = this.options.type === 'shipping' ? true : false;
+      this.loadingNewAddress = false;
+      var _self = this;
+
+      _self.canContinue = _self.shippingAddress.idCustomerAddress ? true : false;
+
+      this.addEventListener('go-back', function () {
+        _self.loadingNewAddress = false;
+        var selectedAddress = this.querySelector('input[name=address]:checked');
+        _self.shippingAddress = (selectedAddress && selectedAddress.dataValue) ? selectedAddress.dataValue : _self.addressFormat;
+        if (selectedAddress) {
+          selectedAddress.dataValue && _self.set('canContinue', true);
+        }
+      }, { passive: true });
+
+      if (this.defaultAddress && this.defaultAddress.name && !this.shippingAddress.idCustomerAddress) {
+        this.set("shippingAddress", this.defaultAddress);
+        this.set("canContinue", true);
+      }
+    },
+
+    _isSelectedAddress: function (id) {
+      if (this.shippingAddress.idCustomerAddress === id) {
+        this.canContinue = true;
+      }
+      return this.shippingAddress.idCustomerAddress === id ? 'checked' : null;
+    },
+
+    _addNewAddress: function () {
+      this.loadingNewAddress = true;
+      this.shippingAddress = this.addressFormat;
+      // this.canContinue = false;
+    },
+
+    _moveToSummary: function () {
+      this.fire('move-to-summary');
+    },
+
+    _defaultAddressChanged: function () {
+      if (typeof this.defaultAddress !== 'undefined') {
+        this.set("shippingAddress", this.defaultAddress);
+      }
+    },
+
+    _shippingAddressChanged: function (event) {
+      event.preventDefault();
+
+      if (event.currentTarget.dataValue) {
+        var address = event.currentTarget.dataValue;
+          this.set("canContinue", true);
+          this.set("shippingAddress", address);
+          // this.fire('shipping-address-changed', { shippingAddress : this.shippingAddress, idShippingAddress : event.currentTarget.dataValue.idCustomerAddress });
+      }
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+  });
+
+</script>

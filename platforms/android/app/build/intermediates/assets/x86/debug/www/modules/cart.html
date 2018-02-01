@@ -1,0 +1,25 @@
+
+<link rel="import" href="../components/cart.html">
+
+<template>
+  <section class="au-animate" id="page-cart">
+
+    <cart-review-element
+      cartreview.one-way='cartModel.cartReviewData'
+      cartproducts.one-way='cartModel.products'
+      apply-coupon.trigger="checkCoupon($event)"
+      remove-coupon.trigger="removeCoupon($event)"
+      remove-item.trigger='remove($event)'
+      update-quantity.trigger='updateItemQuantity($event)'
+      oositems.one-way='oosItems'
+      ctx.bind='common.ctx'
+      messages.bind="messenger.messages"
+      options.bind='{ "isShowOverview": true, "isShowCoupon": true, "title": "My Cart" }'
+      change-city.trigger="getPromise($event)"
+      cities-list.one-way="config.citiesList"
+      cart-city.two-way="cartModel.addresses.shipping.city"
+    >
+    </cart-review-element>
+
+  </section>
+</template>

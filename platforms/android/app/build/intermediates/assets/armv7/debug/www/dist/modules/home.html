@@ -1,0 +1,106 @@
+
+<template>
+   <section class="au-animate" id="page-home">
+
+    <carousel-element
+      class="component-area"
+      banners.bind='{"assets":[{"redirectUrl":"/catalog?q=dresses","imageUrl":"//b.wadicdn.com/cms/demo/small/top-01.jpg","title":"tab3"},{"redirectUrl":"/catalog?q=home+kitchen","imageUrl":"//b.wadicdn.com/cms/demo/small/top-02.jpg","title":"tab1"},{"redirectUrl":"/catalog?q=samsung+galaxy","imageUrl":"//b.wadicdn.com/cms/demo/small/top-03.jpg","title":"tab2"}]}'
+      options='{
+        "hidePrevNext": true, "hidePagination": false, "hideIndexer": true, "dimensionsRatio": { "width": 640, "height": 400 },
+        "sliderOptions": { "slidesPerView": 1, "centeredSlides": true, "paginationClickable": true }
+      }'
+      ctx.bind='common.ctx'>
+    </carousel-element>
+
+    <category-links-element
+      class="component-area category-links-container"
+      datalinks.bind='{"title":"Shop By Categories","smallcategoryLink":[{"smallimageIcon":"wadicon-iphone","smallImageTitle":"Electronics","smallImageUrl":"/electronics/","smallImageColor":"#A360E1"},{"smallimageIcon":"wadicon-male","smallImageTitle":"Men","smallImageUrl":"/catalog?q=men+clothing","smallImageColor":"#219FEC"},{"smallimageIcon":"wadicon-female","smallImageTitle":"Women","smallImageUrl":"catalog?q=women+clothing","smallImageColor":"#E160B9"},{"smallimageIcon":"wadicon-child","smallImageTitle":"Kids","smallImageUrl":"catalog?q=kids+clothing","smallImageColor":"#E24253"},{"smallimageIcon":"wadicon-lamp","smallImageTitle":"Custom Link","smallImageUrl":"/banners","smallImageColor":"#47D039"},{"smallimageIcon":"wadicon-car","smallImageTitle":"Auto & Sports","smallImageUrl":"catalog?q=automotive","smallImageColor":"#FFB800"}]}'
+      options='{ "columnOptions": 3}'>
+    </category-links-element>
+
+    <banner-element
+      class="component-area"
+      images.bind='{mainBanner:{"path": "//b.wadicdn.com/cms/demo/small/blackbox.jpg", "url": "/catalog?q=blackbox", "title": "Blackbox", "dimensionsRatio": {"width": 592, "height": 212}}}'
+      options='{ "columnOptions": 2 }'
+      ctx.bind='common.ctx'>
+    </banner-element>
+
+    <products-carousel-element
+      class="component-area"
+      options='{ "title": "WOW Deals", "url": "/flash_sale_active/", "hidePagination": true, "hidePrevNext": true, "sliderOptions": { "slidesPerView": 2 } }'
+      load-products.trigger="loadCarouselProducts($event)"
+      ctx.bind='common.ctx'>
+    </products-carousel-element>
+
+    <banner-element
+      class="component-area"
+      images.bind='{"title":"Shop Electronics","mainBanner":{"title":"Electronics Offer","url":"/catalog?q=one+plus","path":"//b.wadicdn.com/cms/demo/small/electronics-main.jpg","dimensionsRatio":{"width":640,"height":400}},"banners":[{"title":"watches","url":"/catalog?q=dslr","path":"//b.wadicdn.com/cms/demo/small/electronics-01.jpg","dimensionsRatio":{"width":320,"height":320}},{"title":"camera","url":"/electronics-cameras_photography-digital_cameras/canon--nikon/?dir=desc","path":"//b.wadicdn.com/cms/demo/small/electronics-02.jpg","dimensionsRatio":{"width":320,"height":320}},{"title":"laptop","url":"/electronics-computers_laptops_storage-laptops/?sort=price&amp;dir=asc&amp;processor_type=intel-core-i3-","path":"//b.wadicdn.com/cms/demo/small/electronics-03.jpg","dimensionsRatio":{"width":320,"height":320}},{"title":"watches","url":"/electronics-mobiles_tablets-mobile_accessories-wearable_devices/?sort=discount","path":"//b.wadicdn.com/cms/demo/small/electronics-04.jpg","dimensionsRatio":{"width":320,"height":320}}]}'
+      options='{ "columnOptions": 2 }'
+      ctx.bind='common.ctx'>
+    </banner-element>
+
+    <products-carousel-element
+      class="component-area"
+      options='{ "title": "Trending Electronics", "url": "/electronics/", "hidePagination": true, "hidePrevNext": true, "sliderOptions": { "slidesPerView": 2 } }'
+      load-products.trigger="loadCarouselProducts($event)"
+      ctx.bind='common.ctx'>
+    </products-carousel-element>
+
+    <banner-element
+      class="component-area"
+      images.bind='{"title":"Shop Fashion","mainBanner":{"title":"Fashion & Beauty Offers","url":"/catalog?q=dresses","path":"//b.wadicdn.com/cms/demo/small/fashion-main.jpg","dimensionsRatio":{"width":640,"height":400}},"banners":[{"title":"watches","url":"/electronics-mobiles_tablets-mobile_accessories-wearable_devices/?sort=discount","path":"//b.wadicdn.com/cms/demo/small/fashion-01.jpg","dimensionsRatio":{"width":320,"height":320}},{"title":"camera","url":"/electronics-cameras_photography-digital_cameras/canon--nikon/?dir=desc","path":"//b.wadicdn.com/cms/demo/small/fashion-02.jpg","dimensionsRatio":{"width":320,"height":320}},{"title":"laptop","url":"/electronics-computers_laptops_storage-laptops/?sort=price&amp;dir=asc&amp;processor_type=intel-core-i3-","path":"//b.wadicdn.com/cms/demo/small/fashion-03.jpg","dimensionsRatio":{"width":320,"height":320}},{"title":"watches","url":"/electronics-mobiles_tablets-mobile_accessories-wearable_devices/?sort=discount","path":"//b.wadicdn.com/cms/demo/small/fashion-04.jpg","dimensionsRatio":{"width":320,"height":320}}]}'
+      options='{ "columnOptions": 2 }'
+      ctx.bind='common.ctx'>
+    </banner-element>
+    <products-carousel-element
+      class="component-area"
+      options='{ "title": "Trending Fashion", "url": "/fashion/", "hidePagination": true, "hidePrevNext": true, "sliderOptions": { "slidesPerView": 2 } }'
+      load-products.trigger="loadCarouselProducts($event)"
+      ctx.bind='common.ctx'>
+    </products-carousel-element>
+
+    <banner-element
+      class="component-area"
+      images.bind='{"title":"Shop Home and Kitchen","mainBanner":{"title":"Home and Kitchen","url":"/catalog?q=home+kitchen","path":"//b.wadicdn.com/cms/demo/small/home-main.jpg","dimensionsRatio":{"width":640,"height":400}},"banners":[{"title":"watches","url":"/electronics-mobiles_tablets-mobile_accessories-wearable_devices/?sort=discount","path":"//b.wadicdn.com/cms/demo/small/home-01.jpg","dimensionsRatio":{"width":320,"height":320}},{"title":"camera","url":"/electronics-cameras_photography-digital_cameras/canon--nikon/?dir=desc","path":"//b.wadicdn.com/cms/demo/small/home-02.jpg","dimensionsRatio":{"width":320,"height":320}},{"title":"laptop","url":"/electronics-computers_laptops_storage-laptops/?sort=price&amp;dir=asc&amp;processor_type=intel-core-i3-","path":"//b.wadicdn.com/cms/demo/small/home-03.jpg","dimensionsRatio":{"width":320,"height":320}},{"title":"watches","url":"/electronics-mobiles_tablets-mobile_accessories-wearable_devices/?sort=discount","path":"//b.wadicdn.com/cms/demo/small/home-04.jpg","dimensionsRatio":{"width":320,"height":320}}]}'
+      options='{ "columnOptions": 2 }'
+      ctx.bind='common.ctx'>
+    </banner-element>
+
+    <products-carousel-element
+      class="component-area"
+      options='{ "title": "Trending Home & Kitchen", "url": "/home_and_kitchen/", "hidePagination": true, "hidePrevNext": true, "sliderOptions": { "slidesPerView": 2 } }'
+      load-products.trigger="loadCarouselProducts($event)"
+      ctx.bind='common.ctx'>
+    </products-carousel-element>
+
+    <banner-element
+      class="component-area"
+      images.bind='{"title":"Gaming & Toys","mainBanner":{"title":"Gaming & Toys","url":"/catalog?q=gaming","path":"//b.wadicdn.com/cms/demo/small/gaming-main.jpg","dimensionsRatio":{"width":640,"height":400}},"banners":[{"title":"watches","url":"/electronics-mobiles_tablets-mobile_accessories-wearable_devices/?sort=discount","path":"//b.wadicdn.com/cms/demo/small/gaming-01.jpg","dimensionsRatio":{"width":320,"height":320}},{"title":"camera","url":"/electronics-cameras_photography-digital_cameras/canon--nikon/?dir=desc","path":"//b.wadicdn.com/cms/demo/small/gaming-02.jpg","dimensionsRatio":{"width":320,"height":320}},{"title":"laptop","url":"/electronics-computers_laptops_storage-laptops/?sort=price&amp;dir=asc&amp;processor_type=intel-core-i3-","path":"//b.wadicdn.com/cms/demo/small/gaming-03.jpg","dimensionsRatio":{"width":320,"height":320}},{"title":"watches","url":"/electronics-mobiles_tablets-mobile_accessories-wearable_devices/?sort=discount","path":"//b.wadicdn.com/cms/demo/small/gaming-04.jpg","dimensionsRatio":{"width":320,"height":320}}]}'
+      options='{ "columnOptions": 2 }'
+      ctx.bind='common.ctx'>
+    </banner-element>
+
+    <products-carousel-element
+      class="component-area"
+      options='{ "title": "Trending Gaming", "url": "/gaming-accessories/", "hidePagination": true, "hidePrevNext": true, "sliderOptions": { "slidesPerView": 2 } }'
+      load-products.trigger="loadCarouselProducts($event)"
+      ctx.bind='common.ctx'>
+    </products-carousel-element>
+
+    <newsletter-signup-element
+      ctx.bind='common.ctx'
+      newsletter.two-way="common.newsletterCustomer"
+      submit-form.trigger='newsletterSignUp($event)'>
+    </newsletter-signup-element>
+
+    <footer-info-element
+      footer.bind='config.footer.footer'
+      nav.bind='config.footer.nav'
+      cs.bind="config.locale.setting.cs"
+      ctx.bind='common.ctx'
+      change-language.trigger="common.changeLanguage()"
+      change-country.trigger="common.changeCountry()">
+    </footer-info-element>
+
+  </section> 
+</template>

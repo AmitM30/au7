@@ -1,0 +1,28 @@
+<script>
+  Polymer({
+    is: 'validation-form-fields',
+    behaviors: [
+      Polymer.IronValidatorBehavior
+    ],
+    validate: function(value) {
+      
+      if (typeof value == "undefined") {
+        return false;
+      }
+
+      if (typeof value == "string") {
+        return value.trim().length > 2 ? true : false;
+      }
+
+      if (isNaN(value)) {
+        return false;
+      }
+
+      if (typeof value == "number") {
+        return true;
+      }
+
+      return false;
+    }
+  });
+</script>

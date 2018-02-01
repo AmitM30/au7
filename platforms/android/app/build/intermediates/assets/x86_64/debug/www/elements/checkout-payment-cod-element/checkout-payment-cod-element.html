@@ -1,0 +1,78 @@
+<!--
+SKU details element
+
+Example:
+    <checkout-payment-cod-element></checkout-payment-cod-element>
+@demo
+-->
+
+<dom-module id="checkout-payment-cod-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+    <template is="dom-if" if="[[ _isSelectedMethod(selectedMethod) ]]" restamp="true">
+      <div class$="collapsible-area [[ _isSelectedMethod(selectedMethod) ]]" id="payment-cod-container">
+        <div class="checkout-payment-cod-container">
+          <p>[[ _translate('_codFeeMessage01') ]] <strong>[[ _calculate(codCharges) ]] [[ ctx.currency ]]</strong> [[ _translate('_codFeeMessage02') ]]</p>
+          <p><span id="payment-prepay" on-tap="_changePaymentMethod">[[ _translate('Save') ]] <strong>[[_calculate(codCharges) ]] [[ ctx.currency ]]</strong> [[ _translate('by using debit/credit card instead') ]]</span></p>
+        </div>
+      </div>
+    </template>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+    is: 'checkout-payment-cod-element',
+
+    properties: {
+      codCharges: {
+        type: Number
+      },
+
+      ctx: {
+        type:Object
+      },
+
+      selectedMethod: {
+        type: String
+      },
+
+      canPlaceOrder: {
+        type: Boolean,
+      }
+    },
+
+
+    // Element Lifecycle
+    attached: function() {
+      this._isSelectedMethod(this.selectedMethod);
+    },
+
+    _isSelectedMethod: function(selectedMethod) {
+      this.canPlaceOrder = (selectedMethod === 'cod');
+      return (selectedMethod === 'cod') ? true : false;
+    },
+
+    _calculate: function(val) {
+      return val/100;
+    },
+
+    _changePaymentMethod: function() {
+      this.fire('payment-method-prepay');
+    },
+
+    _translate: function(key) {
+      return window.translate(key);
+    }
+  });
+
+</script>

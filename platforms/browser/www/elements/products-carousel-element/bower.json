@@ -1,0 +1,29 @@
+{
+  "name": "products-carousel-element",
+  "version": "1.0.0",
+  "authors": [
+    "Amit M <amit.mangal@wadi.com>"
+  ],
+  "description": "An element providing products carousel support",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "products carousel"
+  ],
+  "main": "products-carousel-element.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "/demo/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  }
+}

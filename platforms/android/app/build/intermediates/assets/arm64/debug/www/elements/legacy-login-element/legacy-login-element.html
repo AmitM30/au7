@@ -1,0 +1,196 @@
+<!--
+Login / legacy-login module
+
+Example:
+    <legacy-login-element submit.trigger="loginUser()" user.two-way="user.info" options='{ "title": "My Account" }'></legacy-login-element>
+@demo
+-->
+
+<dom-module id="legacy-login-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+
+    <validation-email></validation-email>
+    <validation-password></validation-password>
+
+    <!-- USER IS LOGGED ON START -->
+    <div hidden$="[[ !user.email ]]">
+      <div class="checkout-area">
+          <div class="step-overview">
+            <p>[[ _translate('Email') ]]: <span class="value">[[ user.email ]]</span></p>
+            <button on-tap="_clearEnteredEmail">[[ _translate('Change') ]]</button>
+          </div>
+          <template is="dom-if" if="[[user.firstname]]">
+            <div class="checkout-highlight-memo">
+              <p>[[ _translate('Welcome back') ]]<span> [[user.firstname]]!</span></p>
+            </div>
+          </template>
+          <a class="core-block-cta core-block-cta-lg cta-full-width" href="/checkout/shipping">[[ _translate('Continue to shipping') ]]</a>
+      </div>
+    </div>
+    <!-- USER IS LOGGED ON END -->
+
+    <!-- USER IS NOT LOGGED ON START -->
+    <div hidden$="[[ user.email ]]">
+      <!-- PROCEED WITH EMAIL START -->
+      <div class="checkout-area">
+          <!-- EMAIL ADDRESS START -->
+            <p class="title" hidden$="[[!isMobile]]">[[ _translate('Sign In or Continue As Guest') ]]:</p>
+            <form id="guestForm" is="iron-form" method="GET" novalidate on-submit="_continueAsGuest">
+              <div class="input-field">
+                <div class="input-container with-clear">
+                  <input id="checkout-email" class$="validity-[[ validEmail ]]" is="iron-input" bind-value="{{ loginEmail }}" type="email" placeholder="[[ _translate('Email') ]]" />
+                  <template is="dom-if" if="[[ loginEmail.length ]]" restamp="true">
+                    <a on-tap="_clearEmailField" class="field-clear"><i class="wadicon-cancel"></i></a>
+                  </template>
+                  <p class="input-helper-message" hidden$="[[ validEmail ]]"><i class="wadicon-alert"></i>[[ _translate('Please enter a valid email address') ]]</p>
+                </div>
+              </div>
+              <div class="input-field">
+                <div class="input-container">
+                  <div class="proceed-option">
+                    <div class="custom-checkbox-container">
+                      <label class="custom-checkbox-label" for="skip-login">
+                        <input type="checkbox" id="skip-login" collapse="#havePassword" on-change="_toggleSignInForm" />
+                        <span class="label-text">[[ _translate('I already have an account with Wadi') ]]</span>
+                        <div class="check-indicator"></div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button class="core-block-cta core-block-cta-lg cta-full-width" hidden$="[[ !isContinueAsGuest ]]" disabled$="[[ !loginEmail.length ]]" type="submit">[[ _translate('Continue As Guest') ]]<paper-ripple></paper-ripple></button>
+            </form>
+          <!-- EMAIL ADDRESS END -->
+
+          <!-- ENTER PASSWORD AND LOGIN START -->
+          <iron-collapse id="havePassword">
+            <form id="loginForm" is="iron-form" method="GET" novalidate on-submit="_onSubmit">
+              <div class="input-field">
+                <div class="input-container with-clear">
+                  <input class$="validity-{{validPassword}}" is="iron-input" bind-value="{{ loginPassword }}" on-input="_clearPasswordValidation" type="password" placeholder="[[ _translate('Password') ]]" />
+                  <template is="dom-if" if="[[ loginPassword.length ]]" restamp="true">
+                    <a on-tap="_clearPasswordField" class="field-clear"><i class="wadicon-cancel"></i></a>
+                  </template>
+                  <p class="input-helper-message" hidden$="[[validPassword]]"><i class="wadicon-alert"></i>[[_translate('Please enter your password')]]</p>
+                </div>
+              </div>
+              <button class="core-block-cta core-block-cta-lg cta-full-width" disabled$="[[ !loginPassword.length ]]" type="submit">[[ _translate('Sign In') ]]<paper-ripple></paper-ripple></button>
+            </form>
+            <div class="helper-options">
+              <forget-password-element email="[[ loginEmail ]]"></forget-password-element>
+            </div>
+          </iron-collapse>
+          <!-- ENTER PASSWORD AND LOGIN END -->
+
+      </div>
+      <!-- PROCEED WITH EMAIL END -->
+
+    </div>
+    <!-- USER IS NOT LOGGED ON END -->
+
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'legacy-login-element',
+
+    properties: {
+
+      /**
+       * Products array that needs to be displayed to UI
+       */
+      user: {
+        type: Object,
+        value: function () {
+          return { };
+        }
+      },
+
+      /**
+       * Model to pass username and password
+       */
+      userCreds: {
+        type: Object
+      }
+    },
+
+    attached: function () {
+      this.validatorEmail = new Polymer.IronMeta({type: 'validator'}).byKey('validation-email');
+      this.validatorPassword = new Polymer.IronMeta({type: 'validator'}).byKey('validation-password');
+      this.validEmail = true;
+      this.validPassword = true;
+      this.isContinueAsGuest = true;
+      this.isMobile = window.config.device === 'mobile' ? true : false;
+
+      guestForm.addEventListener('iron-form-presubmit', function (event) {
+        event.preventDefault();
+      });
+
+      loginForm.addEventListener('iron-form-presubmit', function (event) {
+        event.preventDefault();
+      });
+    },
+
+    _onSubmit: function(event) {
+      this.validEmail = this.validatorEmail.validate(this.loginEmail);
+      this.validPassword = this.validatorPassword.validate(this.loginPassword);
+      if (this.validEmail && this.validPassword) {
+        this.set("userCreds.email", this.loginEmail);
+        this.set("userCreds.password", this.loginPassword);
+        this.fire('login');
+      }
+    },
+
+    _clearEnteredEmail: function() {
+      this.set('loginEmail', '');
+      this.set('user.email', null);
+      this.fire('logout');
+    },
+
+    _clearPasswordValidation: function() {
+      this.validPassword = true;
+    },
+
+    _toggleSignInForm: function (event) {
+      this.querySelector(event.currentTarget.getAttribute('collapse')).toggle();
+      this.set('isContinueAsGuest', !this.isContinueAsGuest);
+    },
+
+    _continueAsGuest: function () {
+      this.validEmail = this.validatorEmail.validate(this.loginEmail);
+      if (this.validEmail) {
+        this.fire('guest-login', { email: this.loginEmail });
+      }
+    },
+
+    _clearEmailField: function () {
+      this.set('loginEmail', '');
+      this.set('validEmail', true);
+    },
+
+    _clearPasswordField: function () {
+      this.set('loginPassword', '');
+    },
+
+    _getDomain: function () {
+      return window.location.host.split('.')[1];
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+  });
+
+</script>

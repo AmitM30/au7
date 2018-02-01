@@ -1,0 +1,260 @@
+<!--
+Widget to add carousel banners with title and navigation option
+
+Example:
+    <carousel-element></carousel-element>
+@demo
+-->
+<dom-module id="carousel-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+
+    :host .swiper-indexer ul li {
+      display: inline-block;
+    }
+  </style>
+
+  <template>
+
+    <template is="dom-if" if="[[ options.title ]]" restamp="true">
+      <h2>[[ options.title ]]</h2>
+    </template>
+    
+
+    <div class="carousel-container">
+
+      <div class="swiper-container js_frame">
+        <div class="swiper-wrapper js_slides">
+          <template is="dom-repeat" items="[[ banners.assets ]]" as="banner" index-as="i">
+            <div class="swiper-slide js_slide">
+              <!-- NO RATIO GIVEN SO STATIC -->
+              <template is="dom-if" if="[[ !options.dimensionsRatio ]]" restamp="true">
+                <a href$="[[ _getLink(banner.redirectUrl) ]]">
+                  <template is="dom-if" if="[[ _firstBanner(i) ]]" restamp="true">
+                    <img src$="https://[[ banner.imageUrl ]]" on-load="_onLazyImageReady" on-click="_onClick" alt="[[ banner.title ]]" index$="[[ i ]]" class="swiper-lazy first" data-creative$="[[ banner.creative ]]" data-id$="[[ banner.id ]]" />
+                  </template>
+                  <template is="dom-if" if="[[ !_firstBanner(i) ]]" restamp="true">
+                    <img lazy-src$="https://[[ banner.imageUrl ]]" on-load="_onLazyImageReady" on-click="_onClick" alt="[[ banner.title ]]" index$="[[ i ]]" class="swiper-lazy rest" data-creative$="[[ banner.creative ]]" data-id$="[[ banner.id ]]" />
+                    <div class="swiper-lazy-preloader"></div>
+                  </template>
+                </a>
+              </template>
+              <!-- IF RATIO IS GIVEN AS OPTION - TO PREVENT REFLOW -->
+              <template is="dom-if" if="[[ options.dimensionsRatio ]]" restamp="true">
+                <a class="prevent-reflow" style$="padding-bottom: [[_intrinsicRatio(options.dimensionsRatio.width, options.dimensionsRatio.height)]]%" href="[[ _getLink(banner.redirectUrl) ]]">
+                  <template is="dom-if" if="[[ _firstBanner(i) ]]" restamp="true">
+                    <img src$="https://[[ banner.imageUrl ]]" on-load="_onLazyImageReady" on-click="_onClick" alt="[[ banner.title ]]" index$="[[ i ]]" class="swiper-lazy first" data-creative$="[[ banner.creative ]]" data-id$="[[ banner.id ]]" />
+                  </template>
+                  <template is="dom-if" if="[[ !_firstBanner(i) ]]" restamp="true">
+                    <img lazy-src$="https://[[ banner.imageUrl ]]" on-load="_onLazyImageReady" on-click="_onClick" alt="[[ banner.title ]]" index$="[[ i ]]" class="swiper-lazy rest" data-creative$="[[ banner.creative ]]" data-id$="[[ banner.id ]]" />
+                    <div class="swiper-lazy-preloader"></div>
+                  </template>
+                </a>
+              </template>
+
+              <template is="dom-if" if="[[options.showTextContent]]">
+                <div>
+                  <p class="heading">[[banner.title]]</p>
+                  <p class="content">[[banner.content]]</p>
+                </div>
+              </template>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- CONTROLS -->
+      <div class="swiper-button-prev js_prev" hidden$="[[options.hidePrevNext]]"></div>
+      <div class="swiper-button-next js_next" hidden$="[[options.hidePrevNext]]"></div>
+      <ul class="swiper-pagination js_dots" hidden$="[[options.hidePagination]]"></ul>
+
+      <!-- INDEXER/MENU LINKS -->
+      <template is="dom-if" if="[[ !options.hideIndexer ]]" restamp="true">
+        <div class="swiper-indexer">
+          <ul id="carousel-menu-link-container">
+            <template is="dom-repeat" items="[[ banners.assets ]]" as="banner" index-as="i">
+              <li><a class="menu-link" href="javascript:void(0)" on-tap="_moveToSlide" index$="[[i]]">[[ banner.title ]]</a></li>
+            </template>
+          </ul>
+        </div>
+      </template>
+    </div>
+
+
+  </template>
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'carousel-element',
+
+    properties: {
+
+      /**
+       * Products array that needs to be displayed to UI
+       */
+      banners: {
+        type: Object
+      },
+
+      /**
+       * Options supported by banner element
+       */
+      options: {
+        type: Object,
+        value: function() {
+          return {
+            showTextContent: false,
+            hidePrevNext: true,
+            hidePagination: false,
+            title: true,
+            hideIndexer: false,
+            sliderOptions: {
+              type: Object
+            }
+          };
+        }
+      },
+
+      /**
+       * application context
+       */
+      ctx: {
+        type: Object,
+        value: {
+          lang: 'en',
+          country: 'sa'
+        }
+      }
+    },
+
+    ready: function () {
+      this.internals = {};
+      this.internals.swiperOptions = {
+        rewind        : true,
+        autoplay      : 5000
+      };
+    },
+
+    attached: function () {
+      this.MAX_WIDTH = 1920;
+      this.isFlashSale = (typeof this.productflash !== "undefined" ? true : false);
+      for(prop in this.options) {
+        if(this.options.hasOwnProperty(prop) && typeof this.options[prop] === "string") {
+          if (this.options[prop] === "true") {
+            this.set("options."+ prop, true);
+          } else if (this.options[prop] === "false") {
+            this.set("options."+ prop, false);
+          }
+        }
+      }
+
+      // do this before initializing the swiper.
+      this._setwidgetPosition();
+
+      // Merge default option with element input options
+      Object.assign(this.internals.swiperOptions, this.options);
+      if (window.swiper && this.querySelector('.carousel-container')) {
+        this.swiperInstance = window.swiper(this.querySelector('.carousel-container'), this.internals.swiperOptions);
+      }
+
+      var _self = this;
+      this.addEventListener('while.swiper.sliding', function () { _self.fire('lazy-load-images', _self); }, { passive: true });
+      this.addEventListener('after.swiper.slide', function (e) {
+        _self._slideToIndex(e.detail.currentSlide);
+      }, { passive: true });
+
+      // ADD ACTIVE CLASS TO FIRST MENU LINK
+      window.setTimeout(function () {
+        if (_self.querySelector('#carousel-menu-link-container')) { _self._slideToIndex(0); };
+      }, 100);
+    },
+
+    _setwidgetPosition: function () {
+      var maxWidth = Math.min(document.body.clientWidth, this.MAX_WIDTH);
+      var elPos = this._getElementPos(this);
+      var offset = (document.body.clientWidth - this.MAX_WIDTH) > 0 ? elPos.x / 2 : elPos.x;
+      if (this.classList.contains('wide-banners')) {
+        this.style.width = maxWidth + 'px';
+        if (this.ctx.lang === 'en') {
+          this.style.marginLeft =  (-1 * offset) + 'px';
+        } else {
+          this.style.marginRight = (-1 * offset) + 'px';
+        }
+      }
+    },
+
+    _getLink: function (link) {
+      return (link && link.indexOf('/') === 0) ? link : '/' + link;
+    },
+
+    _moveToSlide: function (e) {
+      [].forEach.call(this.getElementsByClassName('menu-link'), function(el) { el.classList.remove('active'); });
+      e.target.classList.add('active');
+      this.swiperInstance.slideTo(parseInt(e.currentTarget.attributes['index'].value));
+    },
+
+    _slideToIndex: function (i) {
+      var els = this.getElementsByClassName('menu-link');
+      var _self = this;
+      if (els && els.length > 0) {
+        [].forEach.call(_self.getElementsByClassName('menu-link'), function(el) { el.classList.remove('active'); });
+        this.querySelector('#carousel-menu-link-container').querySelectorAll('.menu-link')[i].classList.add('active')
+      }
+    },
+
+    _intrinsicRatio: function (width, height) {
+      return (height / width) * 100;
+    },
+
+    json: function (data) {
+      return JSON.stringify(data);
+    },
+
+    _onLazyImageReady: function (event) {
+      var image = event.currentTarget;
+      var targetHref = image.parentNode.tagName === 'A' ? image.parentNode.getAttribute('href') : '';
+      var creative = image.getAttribute('src').split('/').pop();
+      this.fire('promo-view', {
+        name: image.getAttribute('data-id') || creative,
+        id: (image.getAttribute('data-id') || creative) + '|' + targetHref.split('?')[0],
+        creative: image.getAttribute('src').split('/').pop(),
+        position: '|' + 'carousel_slot' + '|' + (parseInt(image.getAttribute('index')) + 1)
+      });
+    },
+
+    _onClick: function (event) {
+      var image = event.currentTarget;
+      var targetHref = image.parentNode.tagName === 'A' ? image.parentNode.getAttribute('href') : '';
+      var creative = image.getAttribute('src').split('/').pop();
+      this.fire('promo-click', {
+        name: image.getAttribute('data-id') || creative,
+        id: (image.getAttribute('data-id') || creative) + '|' + targetHref.split('?')[0],
+        creative: image.getAttribute('src').split('/').pop(),
+        position: '|' + 'carousel_slot' + '|' + (parseInt(image.getAttribute('index')) + 1)
+      });
+    },
+
+    _firstBanner: function (i) {
+      return i == 0;
+    },
+
+    _getElementPos: function (el) {
+      for (var lx=0, ly=0;
+          el != null;
+          lx += el.offsetLeft, ly += el.offsetTop, el = el.offsetParent);
+      return {x: lx, y: ly};
+    },
+
+    _translate: function (key) {
+       return window.translate(key);
+	  }
+  });
+
+</script>

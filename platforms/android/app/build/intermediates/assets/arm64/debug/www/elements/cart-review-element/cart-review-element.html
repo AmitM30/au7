@@ -1,0 +1,710 @@
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+    <newsletter-signup-element></newsletter-signup-element>
+@demo
+-->
+
+<dom-module id="cart-review-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+
+    <!-- WHEN IN SIDEBAR - CLOSE & SCRIM -->
+    <template is="dom-if" if="[[options.isInSideBar]]">
+      <div class="scrim"  on-tap="_hideSideBarCart"></div>
+      <button class="sidebar-tab" on-tap="_hideSideBarCart">[[ _translate('Hide') ]]</button>
+    </template>
+
+    <!-- CART EMPTY START-->
+    <template is="dom-if" if="[[!cartproducts.length]]" restamp="true">
+      <div class="site-width-container">
+        <div class="cart-empty-container">
+          <p>[[ _translate('Your cart is currently empty') ]]</p>
+          <a class="core-block-cta core-block-cta-lg cta-full-width" href="/">[[ _translate('Start Shopping') ]]</a>
+        </div>
+      </div>
+    </template>
+    <!-- CART EMPTY END-->
+
+    <!-- CART HAS PRODUCTS START -->
+
+    <div class="site-width-container no-padding">
+      <div class="cart-review-wrapper">
+
+        <template is="dom-if" if="[[cartproducts.length]]">
+
+          <!-- HEADER START -->
+          <template is="dom-if" if="[[options.title]]">
+            <header class="cart-header">
+              <h1>[[ _translate(options.title) ]] <span>([[cartproducts.length]] [[ _translate('Items') ]])</span></h1>
+              <template is="dom-if" if="[[!isMobile]]">
+                <div class="cta-container">
+                  <a href="/checkout" class="core-block-cta cta-full-width core-block-cta-secondary">[[ _translate('Checkout Now') ]]<span>[[ _totalCost(cartreview.invoice) ]] [[ ctx.currency ]]</span><paper-ripple></paper-ripple></a>
+                </div>
+              </template>
+              <template is ="dom-if" if="[[ isMobile ]]">
+                  <template is="dom-if" if="[[!showChangeCity]]">
+                    <p class="link-button-container">
+                      <span>[[ _translate('Shipping To') ]]:</span>
+                      <span> [[ _getCityLabel(cartCity) ]] </span>
+                      <button class="link-button" on-tap="_changeCity">[[ _translate('Change City') ]]</button>
+                    </p>
+                  </template>
+                  <template is="dom-if" if="[[showChangeCity]]">
+                    <form class="select-city-form">
+                      <div class="input-field">
+                        <label>[[ _translate('City') ]]</label>
+                        <div class="input-container">
+                          <input-suggest-element suggest-name="city" data-list="[[ citiesList ]]" data-selected="{{ cartCity }}" view-value="{{ selectedCityValue }}"></input-suggest-element>
+                        </div>
+                      </div>
+                    </form>
+                  </template>
+              </template>
+            </header>
+            <!-- <template is ="dom-if" if="[[ !isMobile ]]">
+                <template is="dom-if" if="[[!showChangeCity]]">
+                  <p class="link-button-container">
+                    <button class="link-button" on-tap="_changeCity">[[ _translate('Change City') ]]</button>
+                    <span> [[ cartCity ]] </span>
+                  </p>
+                </template>
+                <template is="dom-if" if="[[showChangeCity]]">
+                  <form class="select-city-form">
+                    <div class="input-field">
+                      <label>[[ _translate('City') ]]</label>
+                      <div class="input-container">
+                        <input-suggest-element suggest-name="city" data-list="[[ citiesList ]]" data-selected="{{ cartCity }}"></input-suggest-element>
+                      </div>
+                    </div>
+                  </form>
+                </template>
+            </template> -->
+          </template>
+          <!-- HEADER END -->
+
+          <messaging-element messages="[[messages]]" hidden$="[[!messages.length]]"></messaging-element>
+
+          
+          <!-- MOBILE SHIPPING MONITOR START -->
+          <!-- <template is="dom-if" if="[[isMobile]]" restamp="true">
+            <template is="dom-if" if="[[!options.isInCheckoutReview]]" restamp="true">
+                <div class="shipping-fee-monitor">
+                  <template is="dom-if" if="[[shippingDifferenceisFree]]" restamp="true">
+                    <p class="free-delivery">[[_translate('Congrats you are getting')]] <span>[[_translate('free shipping')]]</span> [[_translate('with this order!')]]</p>
+                  </template>
+                  <template is="dom-if" if="[[!shippingDifferenceisFree]]" restamp="true">
+                    <p><strong>[[_translate('Want Free Shipping?')]]</strong>[[_translate('Spend only')]] [[shippingDifferenceRemaining]] [[ctx.currency]] [[_translate('more!')]]</p>
+                    <div class="progress-bar">
+                      <span class="progress" style$="width: [[shippingDifferencePercentage]]%"></span>
+                    </div>
+                    <a class="shop-more-link">[[_translate("Let's Shop")]]</a>
+                  </template>
+                </div>
+            </template>
+          </template> -->
+          <!-- MOBILE SHIPPING MONITOR END -->
+
+          <!-- CART PRODUCTS LISTING START -->
+          <ul class="cart-products">
+            <template is="dom-repeat" items="[[cartproducts]]" as="item">
+              <li class="cart-product">
+
+                <!-- REMOVE ITEM -->
+                <button class="cart-product-remove" on-tap="_removeItem" data-sku$="[[item.data.selectedSimple.selectedSupplier.sku]]" i$="[[ index ]]"><i class="wadicon-delete"></i><span>[[_translate('Remove From Cart')]]</span></button>
+
+                <!-- PRODUCT IMAGE -->
+                <a class="image-container" href="/[[ item.data.link ]]">
+                  <img src$="[[ _getProductImage(item.data.maxImages, item.data.imageKey) ]]" alt$="[[ item.data.name ]]" on-load="_productImageLoaded">
+                  <div class="core-product-image-preloader"><i class="wadicon-spinner wadicon-spin"></i></div>
+                  <template is="dom-if" if="[[item.data.selectedSimple.selectedSupplier.specialPrice]]" restamp="true">
+                    <p class="discount-tag">[[ _perc(item.data.selectedSimple.selectedSupplier.price, item.data.selectedSimple.selectedSupplier.specialPrice) ]]% [[ _translate('off') ]]</p>
+                  </template>
+                </a>
+
+                <div class="details-container">
+                  <!-- CORE INFO -->
+                  <div class="core-info-container">
+                    <!-- ELECTRONIC PRODUCT HEADER -->
+                    <template is="dom-if" if="[[_isElectronics(item)]]">
+                      <p class="item-name" itemprop="name">
+                        <span class="title clamp"> [[ item.data.name_desc.brand ]] [[ item.data.name_desc.name ]]</span>
+                        <span class="subtitle clamp">[[ item.data.name_desc.subtitle ]]</span>
+                      </p>
+                    </template>
+                    <!-- NON ELECTRONIC PRODUCT HEADER -->
+                    <template is="dom-if" if="[[!_isElectronics(item)]]">
+                      <p class="item-name" itemprop="name">
+                        [[ item.data.name_desc.brand ]]
+                        <span class="subtitle">
+                          <span>[[ item.data.name_desc.name ]]</span>
+                          <template is="dom-if" if="[[item.data.name_desc.subtitle]]">
+                            <span>[[ item.data.name_desc.subtitle ]]</span>
+                          </template>
+                        </span>
+                      </p>
+                    </template>
+                    <template is="dom-if" if="[[options.isInCheckoutReview]]">
+                      <p class="delivery-estimate">
+                        [[ _getDeliveryPromise(item.data.selectedSimple.selectedSupplier.delivery_info, showChangeCity) ]]
+                      </p>
+                    </template>
+                    <p class="item-size">[[_translate('Size')]]: <span>[[ item.data.selectedSimple.size ]]</span></p>
+                    <!-- SUPPORTING ITEM MESSAGES E.G. SHIPPING, GIFT WRAP, RETURNABLE -->
+                    <template is="dom-if" if="[[!isMobile]]">
+                      <div class="support-info-container">
+                        <template is="dom-if" if="[[item.data.gift_wrap]]" restamp="true">
+                          <p class="gift-wrap">[[ _translate('Gift wrap available') ]]</p>
+                        </template>
+                        <p class="delivery-estimate">
+                          [[ _getDeliveryPromise(item.data.selectedSimple.selectedSupplier.delivery_info, showChangeCity) ]]
+                        </p>
+                        <!-- <p class="delivery-estimate">
+                          [[ _translate('Ships by') ]] [[ item.data.selectedSimple.selectedSupplier.shipped_by_date ]] -
+                           [[ _translate('Delivered by') ]] [[ item.data.selectedSimple.selectedSupplier.delivered_by_date ]]
+                        </p> -->
+                        <template is="dom-if" if="[[item.data.non_returnable]]" restamp="true">
+                          <p class="product-warning">[[ _translate('This item cannot be exchanged or returned') ]]</p>
+                        </template>
+                      </div>
+                    </template>
+                  </div>
+                  <!-- QUANTITY SELECTOR -->
+                  <div class="quantity-container">
+                    <label>[[ _translate('Quantity') ]]:</label>
+                    <div class="custom-select-container">
+                      <select on-change="_updateQuantity" data-sku$="[[item.data.selectedSimple.selectedSupplier.sku]]">
+                        <template is="dom-repeat" items="[[item.data.quantityOptions]]" as="option" restamp="true">
+                          <option value="[[ option ]]" selected$="[[ _isSelectedQuantity(item.data.selectedSimple.selectedSupplier.sku, option) ]]">[[ option ]]</option>
+                        </template>
+                      </select>
+                    </div>
+                  </div>
+                  <!-- PRICE -->
+                  <!-- SALE PRICE -->
+                   <template is="dom-if" if="[[item.data.selectedSimple.selectedSupplier.specialPrice]]" restamp="true">
+                    <p class="core-product-price cart-price">
+                      <span class="pre-reduction">[[ item.data.selectedSimple.selectedSupplier.price ]] [[ ctx.currency ]]</span>
+                      <span class="selling-price">[[ item.data.selectedSimple.selectedSupplier.specialPrice ]] [[ ctx.currency ]]</span>
+                      <span class="discount-tag"> [[_translate('Save')]]&nbsp;[[ _minus(item.data.selectedSimple.selectedSupplier.price, item.data.selectedSimple.selectedSupplier.specialPrice) ]]&nbsp;[[ ctx.currency ]]&nbsp;([[ _perc(item.data.selectedSimple.selectedSupplier.price, item.data.selectedSimple.selectedSupplier.specialPrice) ]]%)</span>
+                      <span class="tax-info">[[ item.data.selectedSimple.selectedSupplier.tax_info ]]</span>
+                    </p>
+                  </template>
+                  <!-- NORMAL PRICE -->
+                  <template is="dom-if" if="[[!item.data.selectedSimple.selectedSupplier.specialPrice]]" restamp="true">
+                    <p class="core-product-price cart-price">
+                      <span class="selling-price">[[ item.data.selectedSimple.selectedSupplier.price ]] [[ ctx.currency ]]</span>
+                      <span class="tax-info">[[ item.data.selectedSimple.selectedSupplier.tax_info ]]</span>
+                    </p>
+                  </template>
+                </div>
+
+                <!-- MOBILE SUPPORTING ITEM MESSAGES E.G. SHIPPING, GIFT WRAP, RETURNABLE -->
+                <template is="dom-if" if="[[isMobile]]">
+                  <div class="support-info-container">
+                    <template is="dom-if" if="[[item.data.gift_wrap]]" restamp="true">
+                      <template is="dom-if" if="[[!options.isInCheckoutReview]]">
+                        <p class="gift-wrap">[[ _translate('Gift wrap available') ]]</p>
+                      </template>
+                    </template>
+                    <p class="delivery-estimate">
+                        [[ _getDeliveryPromise(item.data.selectedSimple.selectedSupplier.delivery_info, showChangeCity) ]]
+                    </p>
+                    <!-- <p class="delivery-estimate">
+                      [[ _translate('Ships by') ]] [[ item.data.selectedSimple.selectedSupplier.shipped_by_date ]] -
+                       [[ _translate('Delivered by') ]] [[ item.data.selectedSimple.selectedSupplier.delivered_by_date ]]
+                    </p>     -->
+                    <template is="dom-if" if="[[item.data.non_returnable]]" restamp="true">
+                      <p class="product-warning">[[ _translate('This item cannot be exchanged or returned') ]]</p>
+                    </template>
+                  </div>
+                </template>
+
+              </li>
+            </template>
+          </ul>
+          <!-- CART PRODUCTS LISTING END -->
+        </template>
+
+        <template is="dom-if" if="[[ oositems.length ]]">
+            <ul class="cart-products oos-items">
+              <li class="title">[[ _translate('_cartOOSItemMessage') ]]</li>
+              <template is="dom-repeat" items="[[ oositems ]]" as="oos">
+                <li class="cart-product">
+                  <a class="image-container" href$="[[ oos.data.link ]]">
+                    <img src$="[[ _getProductImage(oos.data.maxImages, oos.data.imageKey) ]]" alt$="[[ oos.data.name ]]" />
+                  </a>
+                  <template is="dom-if" if="[[_isElectronics(oos)]]">
+                    <p class="item-name" itemprop="name">
+                      [[ oos.data.name_desc.brand ]] [[ oos.data.name_desc.name ]]
+                      <span class="subtitle">[[ oos.data.name_desc.subtitle ]]</span>
+                    </p>
+                  </template>
+                  <!-- NON ELECTRONIC PRODUCT HEADER -->
+                  <template is="dom-if" if="[[!_isElectronics(oos)]]">
+                    <p class="item-name" itemprop="name">
+                      [[ oos.data.name_desc.brand ]]
+                      <span class="subtitle">
+                        <span>[[ oos.data.name_desc.name ]]</span>
+                        <template is="dom-if" if="[[oos.data.name_desc.subtitle]]">
+                          <span>[[ oos.data.name_desc.subtitle ]]</span>
+                        </template>
+                      </span>
+                    </p>
+                  </template>
+                  <!--[[ oos.data.name ]]-->
+                </li>
+              </template>
+            </ul>
+        </template>
+
+        <template is="dom-if" if="[[cartproducts.length]]">
+
+          <!-- MOBILE CERTIFICATION AND SECURITY LOGOS START -->
+          <template is="dom-if" if="[[isMobile]]">
+            <template is="dom-if" if="[[!options.isInCheckoutReview]]">
+              <!-- PAYMENT METHODS & CERTIFICATION -->
+              <div class="checkout-info-wrapper">
+                <div class="checkout-info-container">
+                  <p>[[_translate('Payment Methods')]]:</p>
+                  <ul class="payment-methods">
+                    <li class="visa">Visa</li>
+                    <li class="mastercard">Mastercard</li>
+                    <li class="cod">Cash On Delivery</li>
+                  </ul>
+                </div>
+                <div class="checkout-info-container">
+                  <p>[[_translate('Full Security')]]:</p>
+                  <ul class="checkout-certification">
+                    <li class="visa">Verified by Visa</li>
+                    <li class="mastercard">Mastercard Securecode</li>
+                    <li class="trustwave">Trustwave</li>
+                  </ul>
+                </div>
+              </div>
+            </template>
+          </template>
+          <!-- MOBILE CERTIFICATION AND SECURITY LOGOS END -->
+
+          <!-- CART OVERVIEW PANEL START -->
+          <template is="dom-if" if="[[ options.isShowOverview ]]" restamp>
+            <div class="cart-overview-container">
+              <template is="dom-if" if="[[ options.changeCityRequired ]]">
+                <template is ="dom-if" if="[[ !isMobile ]]">
+                  <template is="dom-if" if="[[!showChangeCity]]">
+                    <p class="link-button-container">
+                      <span>[[ _translate('Shipping To') ]]:</span>
+                      <span> [[ _getCityLabel(cartCity) ]] </span>
+                      <button class="link-button" on-tap="_changeCity">[[ _translate('Change City') ]]</button>
+                    </p>
+                  </template>
+                  <template is="dom-if" if="[[showChangeCity]]">
+                    <form class="select-city-form">
+                      <div class="input-field">
+                        <label>[[ _translate('City') ]]</label>
+                        <div class="input-container">
+                          <input-suggest-element suggest-name="city" data-list="[[ citiesList ]]" data-selected="{{ cartCity }}" view-value="{{ selectedCityValue }}"></input-suggest-element>
+                        </div>
+                      </div>
+                    </form>
+                  </template>
+                </template>
+              </template>
+
+              <!-- DESKTOP SHIPPING MONITOR START -->
+              <!-- <template is="dom-if" if="[[!isMobile]]" restamp="true">
+                <template is="dom-if" if="[[!options.isInCheckoutReview]]" restamp="true">
+                  <div class="shipping-fee-monitor">
+                    <template is="dom-if" if="[[shippingDifferenceisFree]]" restamp="true">
+                      <p class="free-delivery">[[_translate('Congrats you are getting')]] <span>[[_translate('free shipping')]]</span> [[_translate('with this order!')]]</p>
+                    </template>
+                    <template is="dom-if" if="[[!shippingDifferenceisFree]]" restamp="true">
+                      <p><strong>[[_translate('Want Free Shipping?')]]</strong>[[_translate('Spend only')]] [[shippingDifferenceRemaining]] [[ctx.currency]] [[_translate('more!')]]</p>
+                      <div class="progress-bar">
+                        <span class="progress" style$="width: [[shippingDifferencePercentage]]%"></span>
+                      </div>
+                      <a href="/" class="shop-more-link">[[_translate("Let's Shop")]]</a>
+                    </template>
+                  </div>
+                </template>
+              </template> -->
+              <!-- DESKTOP SHIPPING MONITOR END -->
+
+              <!-- CART INVOICES START -->
+              <div class="cart-invoice-container">
+                <template is="dom-if" if="[[isMobile]]" restamp="true">
+                  <a class="cart-invoice-trigger" collapse="#subtotalsCollapse" on-click="_toggle">[[ _translate('View Subtotals / Use Coupon Code') ]] </a>
+                </template>
+                <iron-collapse id="subtotalsCollapse" opened="[[!isMobile]]">
+                  <!-- INVOICE -->
+                  <ul class="cart-invoice">
+                    <template is="dom-repeat" items="[[cartreview.invoice]]" as="invoice">
+                      <template is="dom-if" if="[[_invoiceHandler(invoice.type, invoice.value)]]">
+                        <li class$="[[invoice.type]]">
+                          <span class="heading">[[ _translate(invoice.type) ]]:</span>
+                          <template is="dom-if" if="[[_shippingIsFree(invoice.type, invoice.value)]]" restamp="true">
+                            <span class="value free">[[ _translate('Free') ]]</span>
+                          </template>
+                          <template is="dom-if" if="[[!_shippingIsFree(invoice.type, invoice.value)]]" restamp="true">
+                            <span class="value">
+                              <template is="dom-if" if="[[ _isDiscount(invoice.type) ]]">- </template>
+                              [[ _divide(invoice.value, 100) ]] [[ ctx.currency ]]
+                            </span>
+                          </template>
+                        </li>
+                      </template>
+                    </template>
+                    <li class="total">
+                      <span class="heading">[[ _translate('total') ]]:</span>
+                        <span class="value">
+                          [[ _divide(cartreview.invoice.7.value, 100) ]] [[ ctx.currency ]]
+                        </span>
+                    </li>
+                  </ul>
+
+                  <!-- MOBILE COUPON CODE START -->
+                  <template is="dom-if" if="[[isMobile]]">
+                    <template is="dom-if" if="[[ options.isShowCoupon ]]" restamp>
+                      <coupon-code-element code="{{ cartreview.coupon }}"></coupon-code-element>
+                    </template>
+                  </template>
+                  <!-- MOBILE COUPON CODE END -->
+
+                </iron-collapse>
+              </div>
+              <!-- CART INVOICES END -->
+
+              <!-- CTA & COUPON MESSAGE -->
+              <div class="cta-container">
+                <template is="dom-if" if="[[!isMobile]]">
+                  <template is="dom-if" if="[[ options.isShowCoupon ]]" restamp>
+                    <coupon-code-element code="{{ cartreview.coupon }}"></coupon-code-element>
+                  </template>
+                </template>
+                <template is="dom-if" if="[[!options.isInCheckoutReview]]">
+                  <a href="/checkout" on-click="_checkoutNow" class="core-block-cta core-block-cta-lg core-block-cta-secondary cta-full-width">[[ _translate('Checkout') ]]<span>[[ _totalCost(cartreview.invoice) ]] [[ ctx.currency ]]</span><paper-ripple></paper-ripple></a>
+                </template>
+              </div>
+
+              <!-- DESKTOP CERTIFICATION AND SECURITY LOGOS START -->
+              <template is="dom-if" if="[[!options.isInCheckoutReview]]">
+                <template is="dom-if" if="[[!options.isInSideBar]]">
+                  <template is="dom-if" if="[[!isMobile]]">
+                    <!-- PAYMENT METHODS & CERTIFICATION -->
+                    <div class="checkout-info-wrapper">
+                      <div class="checkout-info-container">
+                        <p>[[_translate('Payment Methods')]]:</p>
+                        <ul class="payment-methods">
+                          <li class="visa">Visa</li>
+                          <li class="mastercard">Mastercard</li>
+                          <li class="cod">Cash On Delivery</li>
+                        </ul>
+                      </div>
+                      <div class="checkout-info-container">
+                        <p>[[_translate('Full Security')]]:</p>
+                        <ul class="checkout-certification">
+                          <li class="visa">Verified by Visa</li>
+                          <li class="mastercard">Mastercard Securecode</li>
+                          <li class="trustwave">Trustwave</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </template>
+                </template>
+              </template>
+              <!-- DESKTOP CERTIFICATION AND SECURITY LOGOS END -->
+
+            </div>
+          </template>
+          <!-- CART OVERVIEW PANEL END -->
+        </template>
+
+      </div>
+    </div> <!-- END .site-width-container -->
+
+    <!-- CART HAS PRODUCTS END -->
+
+  </template>
+</template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'cart-review-element',
+
+    properties: {
+      cartproducts: {
+        type: Object,
+        notify: true,
+        value: function () {
+          return [];
+        },
+        observer: '_cartproductsChanged'
+      },
+
+      cartreview: {
+        type: Object,
+        observer: '_cartreviewChanged'
+      },
+
+      oositems: {
+        type: Object,
+        observer: '_oosItemsChanged'
+      },
+
+      options: {
+        type: Object,
+        value: {
+          title: {
+            type: String,
+            value: 'My Cart'
+          },
+          isShowOverview: {
+            type: Boolean,
+            value: true
+          },
+          isShowCoupon: {
+            type: Boolean,
+            value: true
+          },
+          isInCheckoutReview: {
+            type: Boolean,
+            value: false
+          },
+          changeCityRequired: {
+            type: Boolean,
+            value: false
+          }
+        }
+      },
+
+      /**
+       * app context
+       */
+      ctx: {
+        type: Object
+      },
+
+      cartCity: {
+        type: String,
+        value:'',
+        observer: '_citiesObserver'
+      },
+
+      citiesList: {
+        type: Array,
+        value: []
+      },
+
+      showChangeCity: {
+        type: Boolean,
+        value: false
+      },
+
+      cityLabel: {
+        type: String,
+        value: ''
+      },
+
+      selectedCityValue: {
+        type: String,
+        value: ''
+      }
+    },
+
+    attached: function () {
+      this.options.isShowOverview = this.options.isShowOverview === undefined ? true : this.options.isShowOverview;
+      this.options.isShowCoupon = this.options.isShowCoupon === undefined ? true : this.options.isShowCoupon;
+      this.options.isInCheckoutReview = this.options.isInCheckoutReview === undefined ? false : this.options.isInCheckoutReview;
+      this.options.isInSideBar = this.options.isInSideBar === undefined ? false : this.options.isInSideBar;
+      this.isMobile = window.config.device === 'mobile' ? true : false;
+
+      // DUMMY UNTIL CONFIGURED IN API
+      this.freeShippingMinSpend = 1000;
+      this._freeShippingDifference();
+
+      var _self = this;
+      window.addEventListener('hide-blanket', function () { _self._hideSideBarCart() });
+    },
+
+    _oosItemsChanged: function (val) { },
+
+    _cartreviewChanged: function (val) {
+      if (Object.keys(val.items).length < 1) {
+        this._hideSideBarCart();
+      }
+      // if (val && Object.keys(val).length > 0 && this.cartproducts && this.cartproducts.length) {
+        // this.fire('cart-load', { products: this.cartproducts, review: this.cartreview });
+      // }
+    },
+
+    _hideSideBarCart: function () {
+      // e.currentTarget.parentNode.classList.remove('showing');
+      this.classList.remove('showing');
+      var blanket = document.querySelector('#mainNavScrim');
+      if (blanket) {
+        blanket.classList.remove('active');
+      }
+    },
+
+    _isElectronics: function(item) {
+      return item.data && item.data.attributes && item.data.attributes.attribute_set === 'electronics' ? true : false;
+    },
+
+    _cartproductsChanged: function (val) {
+      // CARINE CAN YOU SORT THIS ON MOBILE PLEASE
+      // if (val && val.length > 0 && this.options.isInCheckoutReview) {
+      //   setTimeout(function () {
+      //     var ellipsis = Ellipsis();
+      //   }, 0);
+      // }
+      if (val && val.length > 0) {
+        this._freeShippingDifference();
+      }
+    },
+
+    _getProductImage: function (numImages, key) {
+      return (numImages && numImages > 0) ? 'https://' + this.ctx.cdn + '/product/' + key + '/1-catalog.jpg' : '/dist/images/product-default-catalog-' + this.ctx.lang + '.png';
+    },
+
+    _updateQuantity: function(e) {
+      this.fire('update-quantity', { sku: e.target.getAttribute('data-sku'), quantity: e.target.value });
+    },
+
+    _checkoutNow: function () {
+      // this.fire('checkout-now');
+    },
+
+    json: function (data) {
+      return JSON.stringify(data);
+    },
+
+    _minus: function (a, b) {
+      return a - b;
+    },
+
+    _perc: function (price, specialP) {
+      return Math.ceil(((price - specialP) / price) * 100);
+    },
+
+    _divide: function (a, b) {
+      return a / b;
+    },
+
+    _invoiceHandler: function (type, value) {
+      return ((value !== '0' || type === 'shipping') && type !== 'total_usd' && type !== 'grand_total' && type !== 'total') ? true : false;
+    },
+
+    _freeShippingDifference: function() {
+      if (this.cartreview) {
+        for (i = 0; i < this.cartreview.invoice.length; i++) {
+          if (this.cartreview.invoice[i].type === 'total') {
+            var total = this.cartreview.invoice[i].value / 100;
+            this.shippingDifferenceRemaining = this.freeShippingMinSpend - total;
+            if (this.shippingDifferenceRemaining > 0) {
+              this.shippingDifferenceisFree = false;
+              this.shippingDifferencePercentage = (total / this.freeShippingMinSpend) * 100;
+            } else {
+              this.shippingDifferenceisFree = true;
+            }
+            return;
+          }
+        }
+      }
+    },
+
+    _shippingIsFree: function (type, value) {
+      return (value === '0' && type === 'shipping') ? true : false;
+    },
+
+    _productImageLoaded: function (e) {
+      e.target.classList.add('loaded');
+    },
+
+    _removeItem: function (e) {
+      var el = e.target.parentNode; // Chrome, Webkit
+      var index = el.getAttribute('i') || e.target.getAttribute('i');
+      this.fire('remove-item', {
+        item: {
+          sku: el.getAttribute('data-sku') || e.target.getAttribute('data-sku'),
+          vendor: this.cartproducts[index] && this.cartproducts[index].data.selectedSimple.selectedSupplier.vendor_code
+        },
+        product: this.cartproducts[index] && this.cartproducts[index].data
+      });
+    },
+
+    _totalCost: function (invoice) {
+      if (!invoice) { return; }
+      for (i=0; i < invoice.length; i++) {
+        if (invoice[i].type === 'total') {
+          return this._divide(invoice[i].value, 100);
+        }
+      }
+    },
+
+    _isDiscount: function (type) {
+      return type === 'discount' || type === 'wallet';
+    },
+
+    _toggle: function (event) {
+      var node = event.currentTarget.getAttribute('collapse');
+      this.querySelector(node).toggle();
+      event.currentTarget.classList.toggle('opened');
+    },
+
+    _isSelectedQuantity: function (sku, option) {
+        this.querySelector('select[data-sku="' + sku + '"]').value = this.cartreview.items[sku].quantity;
+        return (this.cartreview.items && this.cartreview.items[sku].quantity == option) ? 'selected' : null;
+    },
+
+    _getDomain: function () {
+      return '//checkout.' + window.location.hostname.split('.')[1] + '.com';
+    },
+
+    _isTotal: function(type) {
+      return type === 'total';
+    },
+
+    _citiesObserver: function(newVal, oldVal) {
+      if (this.cartCity) {
+          this.fire('change-city', { destination: this.cartCity });
+      }
+    },
+
+    _changeCity: function() {
+      this.showChangeCity = !this.showChangeCity;
+    },
+
+    _getDeliveryPromise: function(text, showChangeCity) {
+      return text;
+    },
+
+    _getCityLabel: function(cartCity) {
+      if (cartCity) {
+        var cityLabel = this.citiesList.find(
+          function(city) {
+            return city.value.toLowerCase() === cartCity.toLowerCase();
+          }
+        );
+
+        return cityLabel && cityLabel.label;
+      }
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+  });
+
+</script>

@@ -111,23 +111,23 @@
 
 /* CSS3-Animations */
 @-webkit-keyframes popInRight {
-    0%   { transform: translate3d(100%, 0, 0); box-shadow: -2px 0px 4px rgba(0, 0, 0, 0.4); }
-    100% { transform: translate3d(0, 0, 0); box-shadow: -2px 0px 4px rgba(0, 0, 0, 0.4); }
+    0%   { transform: translate3d(100%, 0, 0); }
+    100% { transform: translate3d(0, 0, 0); }
 }
 
 @keyframes popInRight {
-    0%   { transform: translate3d(100%, 0, 0); box-shadow: -2px 0px 4px rgba(0, 0, 0, 0.4); }
-    100% { transform: translate3d(0, 0, 0); box-shadow: -2px 0px 4px rgba(0, 0, 0, 0.4); }
+    0%   { transform: translate3d(100%, 0, 0); }
+    100% { transform: translate3d(0, 0, 0); }
 }
 
 @-webkit-keyframes popInLeft {
-    0%   { transform: translate3d(-100%, 0, 0); box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.4); }
-    100% { transform: translate3d(0, 0, 0); box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.4); }
+    0%   { transform: translate3d(-100%, 0, 0); }
+    100% { transform: translate3d(0, 0, 0); }
 }
 
 @keyframes popInLeft {
-    0%   { transform: translate3d(-100%, 0, 0); box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.4); }
-    100% { transform: translate3d(0, 0, 0); box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.4); }
+    0%   { transform: translate3d(-100%, 0, 0); }
+    100% { transform: translate3d(0, 0, 0); }
 }
 
 @-webkit-keyframes popOutLeft {

@@ -1,0 +1,212 @@
+<!--
+Small site navigation menu
+
+Example:
+    <small-nav-element></small-nav-element>
+@demo
+-->
+<dom-module id="small-nav-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+    <content></content>
+    <template is="dom-if" if="[[options.colorTheme]]"> 
+      <div style$="border-top:2px solid [[options.colorTheme]];"></div>
+    </template>
+
+    <div class="small-nav-flex">
+    
+      <!-- MAIN NAV -->
+      <template is="dom-if" if="[[options.mainNav]]" restamp="true">
+        <!-- LEVEL 01 -->
+        <ul class="level-01">
+          <template is="dom-repeat" items="[[ nav.menu ]]" as="navigation">
+            <li>
+              <!-- LINK ITEM -->
+              <template is="dom-if" if="[[ !navigation.children ]]">
+                <a href="[[ navigation.url ]]">
+                  <template is="dom-if" if="[[ navigation.icon ]]">
+                    <i class$="[[navigation.icon]]"></i>
+                  </template>
+                  [[ navigation.title ]]
+                </a>
+              </template>
+              <!-- LEVEL 02 -->
+              <template is="dom-if" if="[[ navigation.children ]]" as="subNavLevelTitle">
+                <span class$="category [[ _hasNolink(navigation.url) ]]" >
+                  <a href="[[ navigation.url ]]">
+                      <template is="dom-if" if="[[ navigation.icon ]]">
+                        <i class$="[[navigation.icon]]"></i>
+                      </template>
+                      [[ navigation.title ]]
+                  </a>
+              </span>
+                <!-- LEVEL 02 CONTENT -->
+                <iron-collapse id="collapse1" opened="true">
+                  <ul class="level-02">
+                    <template is="dom-repeat" items="[[ navigation.children ]]" as="subNavLevelOne">
+                      <li>
+                        <template is="dom-if" if="[[ !subNavLevelOne.children ]]">
+                          <a href="[[ subNavLevelOne.url ]]">
+                              <template is="dom-if" if="[[ subNavLevelOne.icon ]]">
+                                  <i class$="[[subNavLevelOne.icon]]"></i>
+                              </template>
+                            [[ subNavLevelOne.title ]]
+                          </a>
+                        </template>
+                        <!-- LEVEL 03 -->
+                        <template is="dom-if" if="[[ subNavLevelOne.children ]]">
+                          <span class="parent-link" collapse="#collapse2" on-click="_toggle">
+                            <i class$="[[subNavLevelOne.icon]]"></i>
+                            [[ subNavLevelOne.title ]]
+                          </span>
+                          <!-- LEVEL 03 CONTENT -->
+                          <iron-collapse id="collapse2">
+                            <ul class="level-03">
+                              <template is="dom-repeat" items="[[ subNavLevelOne.children ]]" as="subNavLevelTwo">
+                              <li>
+                                <template is="dom-if" if="[[ !subNavLevelTwo.children ]]">
+                                  <a href="[[ subNavLevelTwo.url ]]">[[ subNavLevelTwo.title ]]</a>
+                                </template>
+                                <!-- LEVEL 04 -->
+                                <template is="dom-if" if="[[ subNavLevelTwo.children ]]">
+                                  <span class="parent-link" collapse="#collapse3" on-click="_toggle">[[ subNavLevelTwo.title ]]</span>
+                                  <!-- LEVEL 04 CONTENT-->
+                                  <iron-collapse id="collapse3">
+                                    <ul class="level-04">
+                                    <template is="dom-repeat" items="[[ subNavLevelTwo.children ]]" as="subNavLevelThree">
+                                      <li>
+                                        <a href="[[ subNavLevelThree.url ]]">[[ subNavLevelThree.title ]]</a>
+                                      </li>
+                                    </template>
+                                    </ul>
+                                  </iron-collapse>
+                                </template>
+                                 <!-- LEVEL 04 END -->
+                              </li>
+                              </template>
+                            </ul>
+                          </iron-collapse>
+                        </template>
+                        <!-- LEVEL 03 END -->
+                      </li>
+                    </template>
+                  </ul>
+                </iron-collapse>
+              </template>
+              <!-- LEVEL 02 END -->
+            </li>
+          </template>
+        </ul>
+        <!-- LEVEL 01 END -->
+      </template>
+
+      <!-- SIMPLE NAVIGATION ELEMENT THAT TOGGLES -->
+      <template is="dom-if" if="[[!options.mainNav]]" restamp="true">
+        <!-- LEVEL 01 -->
+        <ul class="level-01">
+          <template is="dom-repeat" items="[[ nav.menu ]]" as="navigation">
+            <li>
+              <!-- LINK ITEM -->
+              <template is="dom-if" if="[[ !navigation.children ]]">
+                <a href="[[ navigation.url ]]">
+                  [[ navigation.title ]]
+                </a>
+              </template>
+              <!-- LEVEL 02 -->
+              <template is="dom-if" if="[[ navigation.children ]]">
+                <template is="dom-if" if="[[isMobile]]" restamp="true">
+                  <span class="parent-link" collapse="#collapse1" on-click="_toggle">[[ navigation.title ]]</span>
+                </template>
+                <template is="dom-if" if="[[!isMobile]]" restamp="true">
+                  <template is="dom-if" if="[[!navigation.url]]" restamp="true">
+                    <span class="title" style$="color: [[navigation.colorTheme]];">[[ navigation.title ]]</span>
+                  </template>
+                  <template is="dom-if" if="[[navigation.url]]" restamp="true">
+                    <a href="[[ navigation.url ]]" style$="color: [[navigation.colorTheme]];">[[ navigation.title ]]</a>
+                  </template>
+                </template>
+                <!-- LEVEL 02 CONTENT -->
+                <iron-collapse id="collapse1" opened="[[!isMobile]]">
+                  <ul class="level-02">
+                    <template is="dom-repeat" items="[[ navigation.children ]]" as="subNavLevelOne">
+                      <li>
+                        <template is="dom-if" if="[[ !subNavLevelOne.children ]]">
+                          <a href="[[ subNavLevelOne.url ]]">[[ subNavLevelOne.title ]]</a>
+                        </template>
+                      </li>
+                    </template>
+                  </ul>
+                </iron-collapse>
+              </template>
+              <!-- LEVEL 02 END -->
+            </li>
+          </template>
+        </ul>
+        <!-- LEVEL 01 END -->
+      </template>
+    </div>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'small-nav-element',
+
+    behaviors: [
+      Polymer.IronResizableBehavior
+    ],
+
+    properties: {
+
+      /**
+       * navigation json object to be displayed
+       */
+      nav: {
+        type: Object
+      },
+
+      /**
+       * Options supported by small navigation element
+       */
+      options: {
+        type: Object
+      },
+
+      /**
+       * application context
+       */
+      ctx: {
+        type: Object
+      }
+    },
+
+    attached: function () {
+      this.isMobile = window.config && window.config.device !== 'mobile' ? false : true;
+    },
+
+    json: function (data) {
+      return JSON.stringify(data);
+    },
+
+    _hasNolink: function (url) {
+      return !url ? 'nolink': '';
+    },
+    
+    _toggle: function (event) {
+      var node = event.currentTarget.getAttribute('collapse');
+      event.currentTarget.parentNode.querySelector(node).toggle();
+      event.currentTarget.classList.toggle('opened');
+    }
+  });
+
+</script>

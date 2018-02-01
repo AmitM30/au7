@@ -1,0 +1,29 @@
+{
+  "name": "products-listing-element",
+  "version": "1.0.0",
+  "authors": [
+    "Ashish Raghav <ashish.raghav@wadi.com>"
+  ],
+  "description": "Widget to display products as listing, supporting list and grid views",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "listing"
+  ],
+  "main": "products-listing-element.html",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "ignore": [
+    "/.*",
+    "/test/",
+    "/demo/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  }
+}

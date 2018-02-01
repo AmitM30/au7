@@ -1,0 +1,117 @@
+<!--
+SKU details element
+
+Example:
+    <pdp-support-details-element></pdp-support-details-element>
+@demo
+-->
+
+<dom-module id="pdp-support-details-element">
+
+  <style>
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <template>
+  
+      <section class="pdp-section-area">
+
+        <!-- OVERVIEW -->
+        <template is="dom-if" if="[[isMobile]]" restamp="true">
+          <template is="dom-if" if="[[ productdetails.highlights.length ]]" restamp="true">
+            <div class="details-module">
+              <h2>[[ _translate('Overview') ]]</h2>
+              <ul class="highlights">
+                <template is="dom-repeat" items="[[ productdetails.highlights ]]" as="highlight">
+                  <li>[[highlight]]</li>
+                </template>
+              </ul>
+            </div>
+          </template>
+        </template>
+
+        <template is="dom-if" if="[[ !outofstock ]]">
+          <div class="quick-details-container">
+
+            <!-- PAYMENT -->
+            <template is="dom-if" if="[[ !productdetails.is_prepaid ]]" restamp="true">
+              <div class="support-details-module">
+                <p class="title cod">[[_translate('Cash On Delivery')]]</p>
+                <p>[[_translate('This item is eligible for cash on delivery.')]]</p>
+              </div>
+            </template>
+            <template is="dom-if" if="[[ productdetails.is_prepaid ]]" restamp="true">
+              <div class="support-details-module">
+                <p class="title prepaid">[[_translate('Prepaid Item Only')]]</p>
+                <p>[[_translate('This item can only be purchased using a debit/credit card or voucher.')]]</p>
+              </div>
+            </template>
+
+            <!-- GIFT WRAP -->
+            <template is="dom-if" if="[[ productdetails.gift_wrap ]]" restamp="true">
+              <div class="support-details-module">
+                <p class="title giftwrap">[[_translate('Gift Wrap')]]</p>
+                <p>[[_translate('You can select this option during checkout.')]]</p>
+              </div>
+            </template>
+
+            <!-- OFFERS -->
+            <!-- <template is="dom-if" if="[[ productdetails.ribbon.desc ]]" restamp="true">
+              <div class="support-details-module">
+                <p class="title offers">[[ _translate('Offers') ]]</p>
+                <p>[[productdetails.ribbon.desc]]</p>
+              </div>
+            </template> -->
+
+            <!-- WADI USPS -->
+            <div class="support-details-module">
+              <p class="title promise">[[_translate('Wadi Promise')]]</p>
+              <ul>
+                <li>[[ _translate('14 Day Free Returns') ]]</li>
+                <li>[[ _translate('100% Secure Payments') ]]</li>
+                <li>[[ _translate('100% Authentic') ]]</li>
+              </ul>
+            </div>
+
+          </template>
+        </div>
+      </section>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+    is: 'pdp-support-details-element',
+
+    properties: {
+
+      /**
+       * Application context
+       */
+      ctx: {
+        type: Object
+      },
+
+      outofstock: {
+        type: Boolean,
+        value: false
+      }
+    },
+
+    // Element Lifecycle
+    attached: function () {
+      this.isMobile = window.config.device === 'mobile' ? true : false;
+      this.isAE = this.ctx.country === 'ae' ? true : false;
+    },
+
+    _translate: function (key) {
+      return window.translate(key);
+    }
+  });
+
+</script>
